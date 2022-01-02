@@ -59,6 +59,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'v2/erpapi/<controller:\w+>/<action:\w+>/' => 'erpapi/<controller>/<action>',
             ],
         ],
         

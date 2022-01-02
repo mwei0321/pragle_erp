@@ -14,6 +14,7 @@ namespace app\controllers\erpapi;
 use Yii;
 use app\controllers\InitController;
 use GuzzleHttp\Psr7\ServerRequest;
+use phpDocumentor\Reflection\DocBlock\Serializer;
 use system\common\{ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
 use system\beans\kpi\KpiBeans;
@@ -116,6 +117,13 @@ class KpiController extends InitController
         return $this->reJson([]);
     }
 
+    
+    function actionYear(KpiBeans $kpiParams) {
+        $year = ServiceFactory::getInstance("Kpi")->getKpiYears($kpiParams);
+
+        return $this->reJson($year);
+    }
+
     /**
      * 写入部门动作KPI
      *
@@ -149,7 +157,7 @@ class KpiController extends InitController
     function actionUpmarketingkpi(KpiBeans $kpiParams)
     {
         // 参数过滤
-        if (!$kpiParams->kpi_data) {
+        if (!$kpiParams->group_kpi && !$kpiParams->staff_kpi) {
             return $this->reJson([], '参数错误!', 400);
         }
         $kpiParams->year = $kpiParams->year ?: date('Y');

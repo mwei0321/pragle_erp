@@ -13,6 +13,7 @@ namespace system\services\kpi;
 use yii\db\Query;
 use system\common\{TableMap, ServiceFactory, HelperFuns};
 use system\beans\kpi\KpiBeans;
+use yii\bootstrap4\Tabs;
 
 class KpiServices
 {
@@ -28,7 +29,7 @@ class KpiServices
     function getDepartmentAndStaffMarketingKpi(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'department_id,group_id,year,month,target,completed';
+        $field = 'department_id,group_id,year,GROUP_CONCAT(`target`) as `target`,GROUP_CONCAT(`completed`) as `completed`';
 
         // 构建条件
         $query = (new Query())->select($field)
@@ -40,22 +41,25 @@ class KpiServices
             ]);
 
         // 查出所有
-        $group = $query->orderBy('month ASC')->all();
+        $group = $query->groupBy('group_id,year')
+                    ->orderBy('month ASC')
+                    ->all();
         if (!$group) {
             return [];
         }
+        $kpiParams->group_ids = array_column($group,'group_id');
 
         // 分组处理
-        $group = HelperFuns::classifyMergeArray($group, 'group_id');
-        $staff = [];
-        foreach ($group as $v) {
-            // 提取分组下的员工
-            $groupId = $v[0]['group_id'] ?? 0;
-            if ($groupId > 0) {
-                $kpiParams->group_id = $groupId;
-                $staffKpi = $this->getGroupInStaffMarketingKpi($kpiParams);
-                ($staffKpi && is_array($staffKpi)) && $staff = array_merge($staff, $staffKpi);
-            }
+        foreach($group as $k => $v) {
+            $group[$k]['target'] = explode(',',$v['target']);
+            $group[$k]['completed'] = explode(',',$v['completed']);
+        }
+
+        // 员工
+        $staff = $this->getGroupInStaffMarketingKpi($kpiParams);
+        foreach($staff as $k => $v) {
+            $staff[$k]['target'] = explode(',',$v['target']);
+            $staff[$k]['completed'] = explode(',',$v['completed']);
         }
 
         return [
@@ -75,18 +79,20 @@ class KpiServices
     function getGroupInStaffMarketingKpi(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'sk.target,sk.staff_id,sk.month,sk.year,sk.completed,u.username,u.first_name,u.last_name';
+        $field = 'sk.staff_id,sk.year,u.username,u.first_name,u.last_name,GROUP_CONCAT(`sk`.`target`) as `target`,GROUP_CONCAT(`sk`.`completed`) as `completed`';
 
         // 提取数据
         $list = (new Query())->select($field)
             ->from(TableMap::StaffMarketingKpi . ' as sk')
-            ->leftJoin(TableMap::GroupMember . ' as gm', 'gm.target_id = sk.staff_id')
             ->leftJoin(TableMap::Staff . ' as u', 'u.id = sk.staff_id')
+            ->leftJoin(TableMap::GroupMember.' as gm','gm.target_id = u.id')
             ->where([
                 'sk.year'          => $kpiParams->year,
                 'sk.enterprise_id' => $kpiParams->enterprise_id,
-                'gm.group_id'      => $kpiParams->group_id,
-            ])->orderBy('sk.month ASC')
+            ])
+            ->andWhere(['in','gm.group_id',$kpiParams->group_ids])
+            ->groupBy('gm.group_id,sk.year')
+            ->orderBy('sk.month ASC')
             ->all();
 
         return $list;
@@ -175,6 +181,14 @@ class KpiServices
         }
 
         return $query->orderBy("sa.month ASC")->all();
+    }
+
+    function getKpiYears(KpiBeans $kpiParams) {
+        $year = (new Query())->select("year")
+                    ->from(TableMap::DepartmentGroupMarketingKpi)
+                    ->groupBy('year')
+                    ->all();
+        return $year ? array_column($year,'year') : [];
     }
 
     /**
@@ -286,59 +300,76 @@ class KpiServices
         $dbObj = ServiceFactory::getInstance('BaseDB', TableMap::DepartmentGroupMarketingKpi);
 
         // 查询是否插入过
-        $isExist = $dbObj->getCount(['department_id' => $kpiParams->department_id]);
+        $isExist = $dbObj->getCount([
+            'department_id' => $kpiParams->department_id,
+            'year' => $kpiParams->year,
+        ]);
 
         // 开启事务
         $connection = \Yii::$app->db->beginTransaction();
 
         // 更新数据
-        foreach ($kpiParams->kpi_data as $val) {
-            // 部门 KPI 入库
-            foreach ($val['group_kpi'] as $v) {
-                $group['enterprise_id'] = $kpiParams->enterprise_id;
-                $group['department_id'] = $kpiParams->department_id;
-                $group['year']          = $kpiParams->year;
-                $group['month']         = $v['month'];
-                $group['target']        = $v['target'];
-                $group['group_id']      = $val['group_id'];
-                if (intval($v['id']) > 0) {
-                    $group['utime'] = time();
-                    $result = $dbObj->updateById($v['id'], $group);
-                } elseif ($isExist < 1) {
-                    $group['ctime'] = time();
-                    $result = $dbObj->insert($group);
-                } else {
-                    $kpiParams->errCode = 6001;
-                    return false;
-                }
-                // 判断是否成功
-                if ($result === false) {
-                    //失败回滚
-                    $connection->rollback();
-                    return false;
+        if(count($kpiParams->group_kpi) > 0) {
+            foreach ($kpiParams->group_kpi as $key => $val) {
+                // 部门 KPI 入库
+                $month = 1;
+                foreach ($val as $v) {
+                    $group['enterprise_id'] = $kpiParams->enterprise_id;
+                    $group['department_id'] = $kpiParams->department_id;
+                    $group['year']          = $kpiParams->year;
+                    $group['month']         = $month;
+                    $group['target']        = $v;
+                    $group['group_id']      = $key;
+                    if ($isExist > 0) {
+                        $group['utime'] = time();
+                        $result = $dbObj->update([
+                            'group_id' => $key,
+                            'year' => $kpiParams->year,
+                            'month' => $month,
+                        ], $group);
+                    } else {
+                        $group['ctime'] = time();
+                        $result = $dbObj->insert($group);
+                    }
+                    // 判断是否成功
+                    if ($result === false) {
+                        //失败回滚
+                        $connection->rollback();
+                        return false;
+                    }
+                    $month++;
                 }
             }
+        }
 
-            /************* 部门下的员工KPI ****************************************/
-            foreach ($val['staff_kpi'] as $v) {
-                $staff['enterprise_id'] = $kpiParams->enterprise_id;
-                $staff['year']          = $kpiParams->year;
-                $staff['month']         = $v['month'];
-                $staff['target']        = $v['target'];
-                $staff['staff_id']      = $v['staff_id'];
-                if (intval($v['id']) > 0) {
-                    $staff['utime'] = time();
-                    $result = $dbObj->updateById($v['id'], $staff, TableMap::StaffMarketingKpi);
-                } else {
-                    $staff['ctime'] = time();
-                    $result = $dbObj->insert($staff, TableMap::StaffMarketingKpi);
-                }
-
-                // 判断是否成功
-                if ($result === false) {
-                    //失败回滚
-                    $connection->rollback();
-                    return false;
+        /************* 部门下的员工KPI ****************************************/
+        if(count($kpiParams->staff_kpi) > 0) {
+            $month = 1;
+            foreach ($kpiParams->staff_kpi as $key => $val) {
+                foreach($val as $v) {
+                    $staff['enterprise_id'] = $kpiParams->enterprise_id;
+                    $staff['year']          = $kpiParams->year;
+                    $staff['month']         = $month;
+                    $staff['target']        = $v;
+                    $staff['staff_id']      = $key;
+                    if ($isExist > 0) {
+                        $staff['utime'] = time();
+                        $result = $dbObj->update([
+                            'staff_id' => $key,
+                            'year' => $kpiParams->year,
+                            'month' => $month,
+                        ], $staff, TableMap::StaffMarketingKpi);
+                    } else {
+                        $staff['ctime'] = time();
+                        $result = $dbObj->insert($staff, TableMap::StaffMarketingKpi);
+                    }
+                    // 判断是否成功
+                    if ($result === false) {
+                        //失败回滚
+                        $connection->rollback();
+                        return false;
+                    }
+                    $month++;
                 }
             }
         }

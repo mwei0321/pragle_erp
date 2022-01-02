@@ -80,7 +80,7 @@
             //     return true;
             // }
             //只能测试用
-            if(in_array($_SERVER['HTTP_HOST'],['api.pe.com','pe.com']) || isset($_REQUEST['debug']) && $_REQUEST['debug'] == 'mw'){
+            if(in_array($_SERVER['HTTP_HOST'],['api.pe.com','pe.com','erp.com']) || isset($_REQUEST['debug']) && $_REQUEST['debug'] == 'mw'){
                 $this->enterpriseId = 1;
                 $this->userId       = 1;
                 return true;

@@ -124,7 +124,7 @@
          * @Author MaWei
          * @Link   http://www.mawei.live
          */
-        function update($_data,$_condition,$_tableName = null){
+        function update($_condition,$_data,$_tableName = null){
             $tableName = $_tableName ? $_tableName : $this->tableName;
             return \Yii::$app->db->createCommand()
                         ->update($tableName, $_data, $_condition)
