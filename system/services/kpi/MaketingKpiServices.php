@@ -4,16 +4,15 @@
  * kpi
  * @Author: mawei
  * @Date:   2021-12-23
- * @Last Modified by:   mawei
- * @Last Modified time: 2021-12-23
+ * @Last Modified by: MaWei
+ * @Last Modified time: 2022-01-06 10:42:19
  */
 
 namespace system\services\kpi;
 
 use yii\db\Query;
-use system\common\{TableMap, ServiceFactory, HelperFuns};
+use system\common\{TableMap, ServiceFactory};
 use system\beans\kpi\KpiBeans;
-use yii\bootstrap4\Tabs;
 
 class KpiServices
 {
@@ -42,24 +41,24 @@ class KpiServices
 
         // 查出所有
         $group = $query->groupBy('group_id,year')
-                    ->orderBy('month ASC')
-                    ->all();
+            ->orderBy('month ASC')
+            ->all();
         if (!$group) {
             return [];
         }
-        $kpiParams->group_ids = array_column($group,'group_id');
+        $kpiParams->group_ids = array_column($group, 'group_id');
 
         // 分组处理
-        foreach($group as $k => $v) {
-            $group[$k]['target'] = explode(',',$v['target']);
-            $group[$k]['completed'] = explode(',',$v['completed']);
+        foreach ($group as $k => $v) {
+            $group[$k]['target'] = explode(',', $v['target']);
+            $group[$k]['completed'] = explode(',', $v['completed']);
         }
 
         // 员工
         $staff = $this->getGroupInStaffMarketingKpi($kpiParams);
-        foreach($staff as $k => $v) {
-            $staff[$k]['target'] = explode(',',$v['target']);
-            $staff[$k]['completed'] = explode(',',$v['completed']);
+        foreach ($staff as $k => $v) {
+            $staff[$k]['target'] = explode(',', $v['target']);
+            $staff[$k]['completed'] = explode(',', $v['completed']);
         }
 
         return [
@@ -74,7 +73,7 @@ class KpiServices
      * @param  \system\beans\kpi\KpiBeans $kpiParams
      * date: 2021-12-28 21:42:42
      * @author  <mawei.live>
-     * @return void
+     * @return array
      */
     function getGroupInStaffMarketingKpi(KpiBeans $kpiParams)
     {
@@ -85,12 +84,12 @@ class KpiServices
         $list = (new Query())->select($field)
             ->from(TableMap::StaffMarketingKpi . ' as sk')
             ->leftJoin(TableMap::Staff . ' as u', 'u.id = sk.staff_id')
-            ->leftJoin(TableMap::GroupMember.' as gm','gm.target_id = u.id')
+            ->leftJoin(TableMap::GroupMember . ' as gm', 'gm.target_id = u.id')
             ->where([
                 'sk.year'          => $kpiParams->year,
                 'sk.enterprise_id' => $kpiParams->enterprise_id,
             ])
-            ->andWhere(['in','gm.group_id',$kpiParams->group_ids])
+            ->andWhere(['in', 'gm.group_id', $kpiParams->group_ids])
             ->groupBy('gm.group_id,sk.year')
             ->orderBy('sk.month ASC')
             ->all();
@@ -125,166 +124,23 @@ class KpiServices
         return $query->orderBy("year DESC,month ASC")->all();
     }
 
-    /**
-     * 返回员工动作KPI列表
-     * @param  KpiBeans $kpiParams 条件
-     * @return [type] [description]
-     * @Date   2021-12-23T11:08:53+0800
-     * @Author MaWei <1123265518@qq.com>
-     * @Link   http://mawei.live
-     */
-    function getStaffActionKpi(KpiBeans $kpiParams)
-    {
-        // 字段
-        $field = 'sa.id,sa.cycle,sa.action_id,sa.action_value,sa.action_type,sa.staff_id,sa.year';
-
-        // 构建条件
-        $query = (new Query())->select($field)
-            ->from(TableMap::StaffActionKpi . ' as sa')
-            ->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
-            ->where([
-                'sa.staff_id' => $kpiParams->staff_id,
-            ]);
-
-        // 年搜索
-        if ($kpiParams->year > 0) {
-            $query->where(['year' => $kpiParams->year]);
-        }
-
-        return $query->all();
-    }
 
     /**
-     * 获取部门动作kpi
+     * 返回KPI历史年份列表
      *
      * @param  \system\beans\kpi\KpiBeans $kpiParams
-     * date: 2021-12-28 22:33:15
+     * date: 2022-01-06 10:28:05
      * @author  <mawei.live>
-     * @return void
+     *
+     * @return array
      */
-    function getDepartmentAction(KpiBeans $kpiParams)
+    function getKpiYears(KpiBeans $kpiParams)
     {
-        // 字段
-        $field = 'sa.action_id,sa.action_value,sa.action_type,sa.staff_id,sa.year';
-
-        // 构建条件
-        $query = (new Query())->select($field)
-            ->from(TableMap::DepartmentActionKpi . ' as sa')
-            ->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
-            ->where([
-                'sa.staff_id' => $kpiParams->staff_id,
-            ]);
-
-        // 年搜索
-        if ($kpiParams->year > 0) {
-            $query->where(['year' => $kpiParams->year]);
-        }
-
-        return $query->orderBy("sa.month ASC")->all();
-    }
-
-    function getKpiYears(KpiBeans $kpiParams) {
         $year = (new Query())->select("year")
-                    ->from(TableMap::DepartmentGroupMarketingKpi)
-                    ->groupBy('year')
-                    ->all();
-        return $year ? array_column($year,'year') : [];
-    }
-
-    /**
-     * 员工动作KPI
-     * @param  KpiBeans $kpiParams [description]
-     * @return [type] [description]
-     * @Date   2021-12-23T15:13:18+0800
-     * @Author MaWei <1123265518@qq.com>
-     * @Link   http://mawei.live
-     */
-    function updateStaffActionKpi(KpiBeans $kpiParams)
-    {
-        // 初始化数据库
-        $dbObj = ServiceFactory::getInstance('BaseDB', TableMap::StaffActionKpi);
-
-        // 查询是否插入过
-        $isExist = $dbObj->getCount(['staff_id' => $kpiParams->staff_id]);
-
-        // 开启事务
-        $connection = \Yii::$app->db->beginTransaction();
-
-        // 数据入库
-        foreach ($kpiParams->kpi_data as $v) {
-            $action['enterprise_id'] = $kpiParams->enterprise_id;
-            $action['action_id']     = $v['action_id'];
-            $action['action_value']  = $v['action_value'];
-            $action['action_type']   = $v['action_type'];
-            // 入库
-            if (intval($v['id']) > 0) {
-                $action['utime'] = time();
-                $result = $dbObj->updateById($v['id'], $action);
-            } else {
-                $action['ctime'] = time();
-                $result = $dbObj->insert($action);
-            }
-        }
-
-        // 判断是否成功
-        if ($result === false) {
-            //失败回滚
-            $connection->rollback();
-            return false;
-        }
-
-        // 提交事务
-        $connection->commit();
-
-        return true;
-    }
-
-    /**
-     * 部门动作KPI入库
-     *
-     * @param  \system\beans\kpi\KpiBeans $kpiParams
-     * date: 2021-12-28 23:13:59
-     * @author  <mawei.live>
-     * @return void
-     */
-    function updateDepartmentActionKpi(KpiBeans $kpiParams)
-    {
-        // 初始化数据库
-        $dbObj = ServiceFactory::getInstance('BaseDB', TableMap::StaffActionKpi);
-
-        // 查询是否插入过
-        $isExist = $dbObj->getCount(['staff_id' => $kpiParams->staff_id]);
-
-        // 开启事务
-        $connection = \Yii::$app->db->beginTransaction();
-
-        // 数据入库
-        foreach ($kpiParams->kpi_data as $v) {
-            $action['enterprise_id'] = $kpiParams->enterprise_id;
-            $action['action_id']     = $v['action_id'];
-            $action['action_value']  = $v['action_value'];
-            $action['action_type']   = $v['action_type'];
-            // 入库
-            if (intval($v['id']) > 0) {
-                $action['utime'] = time();
-                $result = $dbObj->updateById($v['id'], $action);
-            } else {
-                $action['ctime'] = time();
-                $result = $dbObj->insert($action);
-            }
-        }
-
-        // 判断是否成功
-        if ($result === false) {
-            //失败回滚
-            $connection->rollback();
-            return false;
-        }
-
-        // 提交事务
-        $connection->commit();
-
-        return true;
+            ->from(TableMap::DepartmentGroupMarketingKpi)
+            ->groupBy('year')
+            ->all();
+        return $year ? array_column($year, 'year') : [];
     }
 
     /**
@@ -309,7 +165,7 @@ class KpiServices
         $connection = \Yii::$app->db->beginTransaction();
 
         // 更新数据
-        if(count($kpiParams->group_kpi) > 0) {
+        if (count($kpiParams->group_kpi) > 0) {
             foreach ($kpiParams->group_kpi as $key => $val) {
                 // 部门 KPI 入库
                 $month = 1;
@@ -343,10 +199,10 @@ class KpiServices
         }
 
         /************* 部门下的员工KPI ****************************************/
-        if(count($kpiParams->staff_kpi) > 0) {
+        if (count($kpiParams->staff_kpi) > 0) {
             $month = 1;
             foreach ($kpiParams->staff_kpi as $key => $val) {
-                foreach($val as $v) {
+                foreach ($val as $v) {
                     $staff['enterprise_id'] = $kpiParams->enterprise_id;
                     $staff['year']          = $kpiParams->year;
                     $staff['month']         = $month;

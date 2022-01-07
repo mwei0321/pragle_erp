@@ -285,7 +285,7 @@
 
 #### 7. 企业员工动作KPI列表
 
-请求地址：`/erp/department/upstaffaction`
+请求地址：`/erp/kpi/upstaffaction`
 
 请求方式：`post`
 
@@ -309,6 +309,28 @@
     "data": []
 }
 ```
+
+#### 8. 动作项KPI列表
+
+请求地址：`/erp/kpi/getkpiactionlist`
+
+请求方式：`get`
+
+请求参数：无
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "message": "ok",
+    "data": []
+}
+```
+
+
+
+
 
 ### 客户&营销页面接口说明
 
