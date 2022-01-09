@@ -14,7 +14,7 @@ use yii\db\Query;
 use system\common\{TableMap, ServiceFactory};
 use system\beans\kpi\KpiBeans;
 
-class KpiServices
+class MaketingKpiServices
 {
 
     /**

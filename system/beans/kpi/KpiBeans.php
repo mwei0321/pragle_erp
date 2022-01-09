@@ -17,7 +17,8 @@ class KpiBeans extends BaseBean
     public $department_id = 0;
     public $staff_id      = 0;
     public $year          = '';
-    public $group_kpi      = [];
-    public $staff_kpi      = [];
-    public $group_ids      = [];
+    public $type          = 1;
+    public $group_kpi     = [];
+    public $staff_kpi     = [];
+    public $group_ids     = [];
 }

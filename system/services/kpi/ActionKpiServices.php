@@ -25,13 +25,34 @@ class ActionKpiServices
     function getKpiActionOptionList(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'id,project_name title,index,group_id,parent_id,rank,interior_rank';
+        $field = 'id,project_name title,index,group_id,parent_id,state,rank,interior_rank';
 
         // 提取记录
-        $list = (new Query())->select($field)
+        $query = (new Query())->select($field)
             ->from(TableMap::Config)
-            ->where(['in', 'ground_id', [6, 13, 15]])
-            ->orderBy('group_id ASC,index ASC')
+            ->where([
+                'and',
+                ['in', 'group_id', [6, 15]],
+                ['>', 'parent_id', '0']
+            ]);
+
+        if ($kpiParams->type == 1) {
+            $query->orWhere([
+                'and',
+                ['group_id' => 13],
+                ['in', 'state', [1, 3]]
+            ]);
+        } elseif ($kpiParams->type == 2) {
+            $query->orWhere([
+                'and',
+                ['group_id' => 13],
+                ['in', 'state', [2, 3]]
+            ]);
+        } else {
+            return [];
+        }
+
+        $list = $query->orderBy('group_id ASC,index ASC')
             ->all();
 
         return $list;
