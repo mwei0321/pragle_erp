@@ -156,10 +156,7 @@ class MaketingKpiServices
         $dbObj = ServiceFactory::getInstance('BaseDB', TableMap::DepartmentGroupMarketingKpi);
 
         // 查询是否插入过
-        $isExist = $dbObj->getCount([
-            'department_id' => $kpiParams->department_id,
-            'year' => $kpiParams->year,
-        ]);
+
 
         // 开启事务
         $connection = \Yii::$app->db->beginTransaction();
@@ -167,8 +164,14 @@ class MaketingKpiServices
         // 更新数据
         if (count($kpiParams->group_kpi) > 0) {
             foreach ($kpiParams->group_kpi as $key => $val) {
-                // 部门 KPI 入库
+                // 查询是否已插入过
+                $isExist = $dbObj->getCount([
+                    'department_id' => $kpiParams->department_id,
+                    'year'          => $kpiParams->year,
+                    'group_id'      => $key,
+                ]);
                 $month = 1;
+                // 部门 KPI 入库
                 foreach ($val as $v) {
                     $group['enterprise_id'] = $kpiParams->enterprise_id;
                     $group['department_id'] = $kpiParams->department_id;
@@ -200,20 +203,26 @@ class MaketingKpiServices
 
         /************* 部门下的员工KPI ****************************************/
         if (count($kpiParams->staff_kpi) > 0) {
-            $month = 1;
             foreach ($kpiParams->staff_kpi as $key => $val) {
+                $month = 1;
+                // 查询是否已插入过
+                $isExist = $dbObj->getCount([
+                    'staff_id' => $key,
+                    'year'     => $kpiParams->year,
+                ], TableMap::StaffMarketingKpi);
                 foreach ($val as $v) {
                     $staff['enterprise_id'] = $kpiParams->enterprise_id;
                     $staff['year']          = $kpiParams->year;
                     $staff['month']         = $month;
                     $staff['target']        = $v;
                     $staff['staff_id']      = $key;
+                    // 入库
                     if ($isExist > 0) {
                         $staff['utime'] = time();
                         $result = $dbObj->update([
                             'staff_id' => $key,
-                            'year' => $kpiParams->year,
-                            'month' => $month,
+                            'year'     => $kpiParams->year,
+                            'month'    => $month,
                         ], $staff, TableMap::StaffMarketingKpi);
                     } else {
                         $staff['ctime'] = time();
