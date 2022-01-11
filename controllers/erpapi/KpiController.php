@@ -5,13 +5,14 @@
  * @Author: MaWei
  * @Date:   2021-12-22
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-01-10 11:36:15
+ * @Last Modified time: 2022-01-11 23:15:39
  */
 
 namespace app\controllers\erpapi;
 
 use app\controllers\InitController;
-use system\common\{ServiceFactory};
+use phpDocumentor\Reflection\DocBlock\Serializer;
+use system\common\{ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
 use system\beans\kpi\KpiBeans;
 
@@ -83,6 +84,49 @@ class KpiController extends InitController
         }
 
         return $this->reJson([]);
+    }
+
+    /**
+     * 删除部门下组的KPI
+     * date: 2022-01-11 22:43:10
+     * @author  <mawei.live>
+     * @return void
+     */
+    function actionDelgroupmarketing(KpiBeans $kpiParams)
+    {
+        if ($kpiParams->id < 1) {
+            return $this->reJson([], '参数错误!', 400);
+        }
+
+        // 删除记录
+        $result = ServiceFactory::getInstance("BaseDB")->delById($kpiParams->id, [], TableMap::DepartmentGroupMarketingKpi, true);
+        if (!$result) {
+            return $this->reJson([], '删除失败!', 400);
+        }
+
+        return $this->reJson();
+    }
+
+    /**
+     * 删除员工kpi定义
+     * @param  KpiBeans $kpiParams
+     * date: 2022-01-11 22:55:22
+     * @author  <mawei.live>
+     * @return void
+     */
+    function actionDelstaffmarketing(KpiBeans $kpiParams)
+    {
+        if ($kpiParams->id < 1) {
+            return $this->reJson([], '参数错误!', 400);
+        }
+
+        // 删除记录
+        $result = ServiceFactory::getInstance("BaseDB")->delById($kpiParams->id, [], TableMap::StaffMarketingKpi, true);
+        if (!$result) {
+            return $this->reJson([], '删除失败!', 400);
+        }
+
+        return $this->reJson();
     }
 
     //------->>>>>>>------动作KPI------<<<<<<<------>>>>---MaWei@2022-01-06 10:57----<<<<----//
@@ -192,5 +236,49 @@ class KpiController extends InitController
         }
 
         return $this->reJson([]);
+    }
+
+    /**
+     * 删除员工动作目标kpi
+     * @param  KpiBeans $kpiParams
+     * date: 2022-01-11 23:14:33
+     * @author  <mawei.live>
+     * @return void
+     */
+    function actionDelstaffaction(KpiBeans $kpiParams)
+    {
+        if ($kpiParams->id < 1) {
+            return $this->reJson([], '参数错误!', 400);
+        }
+
+        // 删除记录
+        $result = ServiceFactory::getInstance("BaseDB")->delById($kpiParams->id, [], TableMap::StaffActionKpi, true);
+        if (!$result) {
+            return $this->reJson([], '删除失败!', 400);
+        }
+
+        return $this->reJson();
+    }
+
+    /**
+     * 删除部门动作目标kpi
+     * @param  KpiBeans $kpiParams
+     * date: 2022-01-11 23:14:59
+     * @author  <mawei.live>
+     * @return void
+     */
+    function actionDeldepartmentaction(KpiBeans $kpiParams)
+    {
+        if ($kpiParams->id < 1) {
+            return $this->reJson([], '参数错误!', 400);
+        }
+
+        // 删除记录
+        $result = ServiceFactory::getInstance("BaseDB")->delById($kpiParams->id, [], TableMap::DepartmentActionKpi, true);
+        if (!$result) {
+            return $this->reJson([], '删除失败!', 400);
+        }
+
+        return $this->reJson();
     }
 }
