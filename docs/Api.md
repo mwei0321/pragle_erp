@@ -198,11 +198,15 @@
     ],
     "page": []
 }
+
+[{'cycle':12,'action_id':1,'department_id':1},{'cycle':12,'action_id':1,'department_id':1}]
+
+{'cycle':12,'department_id':[1,2],'action_id':[1,2]}
 ```
 
 
 
-#### 5. 部门员工 KPI 写入更新
+#### 5. 部门员工销售 KPI 写入更新
 
 地址：`/erpapi/kpi/upmarketingkpi`
 
@@ -256,7 +260,7 @@
 }
 ```
 
-#### 6. 企业部门动作KPI列表
+#### 6. 企业部门动作KPI写入
 
 请求地址：`/erpapi/kpi/updepartmentaction`
 
@@ -283,7 +287,7 @@
 }
 ```
 
-#### 7. 企业员工动作KPI列表
+#### 7. 企业员工动作KPI写入
 
 请求地址：`/erpapi/kpi/upstaffaction`
 
