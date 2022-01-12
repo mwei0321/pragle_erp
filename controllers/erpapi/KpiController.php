@@ -203,9 +203,10 @@ class KpiController extends InitController
     function actionUpstaffaction(KpiBeans $kpiParams)
     {
         // 参数过滤
-        if (!$kpiParams->kpi_data) {
+        if (!$kpiParams->staff || !$kpiParams->action) {
             return $this->reJson([], '参数错误!', 400);
         }
+        $kpiParams->enterprise_id = $this->enterpriseId;
 
         // 更新入库
         if (!ServiceFactory::getInstance("ActionKpiSrv")->updateStaffActionKpi($kpiParams)) {
@@ -226,9 +227,10 @@ class KpiController extends InitController
     function actionUpdepartmentaction(KpiBeans $kpiParams)
     {
         // 参数过滤
-        if (!$kpiParams->kpi_data) {
+        if (!$kpiParams->action || !$kpiParams->department) {
             return $this->reJson([], '参数错误!', 400);
         }
+        $kpiParams->enterprise_id = $this->enterpriseId;
 
         // 更新入库
         if (!ServiceFactory::getInstance("ActionKpiSrv")->updateDepartmentActionKpi($kpiParams)) {

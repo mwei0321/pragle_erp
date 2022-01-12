@@ -11,6 +11,7 @@ namespace system\services\kpi;
 use yii\db\Query;
 use system\common\{TableMap, ServiceFactory};
 use system\beans\kpi\KpiBeans;
+use yii\bootstrap4\Tabs;
 
 class ActionKpiServices
 {
@@ -78,6 +79,20 @@ class ActionKpiServices
             ->where([
                 'sa.staff_id' => $kpiParams->staff_id,
             ]);
+        // 关键字
+        if ($kpiParams->keyword) {
+            $query->where(['like', 'name', "%" . $kpiParams->keyword . "%"]);
+        }
+
+        // 动作
+        if ($kpiParams->action > 0) {
+            $query->where(['in', 'action_id', $kpiParams->action]);
+        }
+
+        // 员工
+        if ($kpiParams->staff_id) {
+            $query->where(['staff_id' => $kpiParams->staff_id]);
+        }
 
         // 年搜索
         if ($kpiParams->year > 0) {
@@ -108,6 +123,21 @@ class ActionKpiServices
                 'sa.staff_id' => $kpiParams->staff_id,
             ]);
 
+        // 关键字
+        if ($kpiParams->keyword) {
+            $query->where(['like', 'name', "%" . $kpiParams->keyword . "%"]);
+        }
+
+        // 动作
+        if ($kpiParams->action) {
+            $query->where(['in', 'action_id', $kpiParams->action]);
+        }
+
+        // 部门
+        if ($kpiParams->department) {
+            $query->where(['in', 'department_id', $kpiParams->department]);
+        }
+
         // 年搜索
         if ($kpiParams->year > 0) {
             $query->where(['year' => $kpiParams->year]);
@@ -127,42 +157,49 @@ class ActionKpiServices
      */
     function updateStaffActionKpi(KpiBeans $kpiParams)
     {
-        // 初始化数据库
-        $dbObj = ServiceFactory::getInstance('BaseDB', TableMap::StaffActionKpi);
+        // 判断参数
+        if (!$kpiParams->action || !$kpiParams->staff) {
+            return 0;
+        }
 
-        // 查询是否插入过
-        $isExist = $dbObj->getCount(['staff_id' => $kpiParams->staff_id]);
+        // 实例化对象
+        $srvObj = ServiceFactory::getInstance("BaseDB", TableMap::StaffActionKpi);
 
         // 开启事务
         $connection = \Yii::$app->db->beginTransaction();
 
         // 数据入库
-        foreach ($kpiParams->kpi_data as $v) {
-            $action['enterprise_id'] = $kpiParams->enterprise_id;
-            $action['action_id']     = $v['action_id'];
-            $action['action_value']  = $v['action_value'];
-            $action['action_type']   = $v['action_type'];
-            // 入库
-            if (intval($v['id']) > 0) {
-                $action['utime'] = time();
-                $result = $dbObj->updateById($v['id'], $action);
-            } else {
-                $action['ctime'] = time();
-                $result = $dbObj->insert($action);
+        foreach ($kpiParams->staff as $val) {
+            $data                  = [];
+            $data['enterprise_id'] = $kpiParams->enterprise_id;
+            $data['year']          = $kpiParams->year;
+            $data['name']          = $kpiParams->name;
+            $data['cycle']         = $kpiParams->cycle;
+            $data['staff_id']      = $val;
+            foreach ($kpiParams->action as $v) {
+                $data['action_id']    = $v['id'];
+                $data["action_value"] = $v["value"];
+                // 查询是否有记录
+                if ($id = $srvObj->getFieldValByCondition(['staff_id' => $val, "action_id" => $v['id'], "year" => $kpiParams->year], 'id')) {
+                    $data["utime"] = time();
+                    $result        = $srvObj->updateById($id, $data);
+                } else {
+                    $data["ctime"] = time();
+                    $result        = $srvObj->insert($data);
+                }
+                // 判断是否成功
+                if ($result === false) {
+                    //失败回滚
+                    $connection->rollback();
+                    return 0;
+                }
             }
-        }
-
-        // 判断是否成功
-        if ($result === false) {
-            //失败回滚
-            $connection->rollback();
-            return false;
         }
 
         // 提交事务
         $connection->commit();
 
-        return true;
+        return 1;
     }
 
     /**
@@ -175,41 +212,47 @@ class ActionKpiServices
      */
     function updateDepartmentActionKpi(KpiBeans $kpiParams)
     {
-        // 初始化数据库
-        $dbObj = ServiceFactory::getInstance('BaseDB', TableMap::StaffActionKpi);
+        // 判断参数
+        if (!$kpiParams->action || !$kpiParams->staff) {
+            return 0;
+        }
 
-        // 查询是否插入过
-        $isExist = $dbObj->getCount(['staff_id' => $kpiParams->staff_id]);
+        // 实例化对象
+        $srvObj = ServiceFactory::getInstance("BaseDB", TableMap::DepartmentActionKpi);
 
         // 开启事务
         $connection = \Yii::$app->db->beginTransaction();
 
         // 数据入库
-        foreach ($kpiParams->kpi_data as $v) {
-            $action['enterprise_id'] = $kpiParams->enterprise_id;
-            $action['action_id']     = $v['action_id'];
-            $action['action_value']  = $v['action_value'];
-            $action['action_type']   = $v['action_type'];
-            // 入库
-            if (intval($v['id']) > 0) {
-                $action['utime'] = time();
-                $result = $dbObj->updateById($v['id'], $action);
-            } else {
-                $action['ctime'] = time();
-                $result = $dbObj->insert($action);
+        foreach ($kpiParams->department as $val) {
+            $data                  = [];
+            $data['enterprise_id'] = $kpiParams->enterprise_id;
+            $data['year']          = $kpiParams->year;
+            $data['name']          = $kpiParams->name;
+            $data['cycle']         = $kpiParams->cycle;
+            $data['department_id']      = $val;
+            foreach ($kpiParams->action as $v) {
+                $data['action_id']    = $v;
+                // 查询是否有记录
+                if ($id = $srvObj->getFieldValByCondition(['staff_id' => $val, 'action_id' => $v, "year" => $kpiParams->year], 'id')) {
+                    $data["utime"] = time();
+                    $result        = $srvObj->updateById($id, $data);
+                } else {
+                    $data["ctime"] = time();
+                    $result        = $srvObj->insert($data);
+                }
+                // 判断是否成功
+                if ($result === false) {
+                    //失败回滚
+                    $connection->rollback();
+                    return 0;
+                }
             }
-        }
-
-        // 判断是否成功
-        if ($result === false) {
-            //失败回滚
-            $connection->rollback();
-            return false;
         }
 
         // 提交事务
         $connection->commit();
 
-        return true;
+        return 1;
     }
 }
