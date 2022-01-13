@@ -35,9 +35,12 @@ class MaketingKpiServices
             ->from(TableMap::DepartmentGroupMarketingKpi)
             ->where([
                 'enterprise_id' => $kpiParams->enterprise_id,
-                'department_id' => $kpiParams->department_id,
                 'year'          => $kpiParams->year,
             ]);
+        // 部门
+        if ($kpiParams->department_id) {
+            $query->where(['in', 'department_id', explode(',', $kpiParams->department_id)]);
+        }
 
         // 查出所有
         $group = $query->groupBy('group_id,year')

@@ -102,6 +102,12 @@ class ActionKpiServices
         return $query->all();
     }
 
+    function getlist(KpiBeans $kpiParams)
+    {
+        if ($kpiParams->aa) {
+        }
+    }
+
     /**
      * 获取部门动作kpi
      *
