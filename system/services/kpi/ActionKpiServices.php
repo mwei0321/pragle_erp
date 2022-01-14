@@ -11,7 +11,6 @@ namespace system\services\kpi;
 use yii\db\Query;
 use system\common\{TableMap, ServiceFactory};
 use system\beans\kpi\KpiBeans;
-use yii\bootstrap4\Tabs;
 
 class ActionKpiServices
 {
@@ -119,7 +118,7 @@ class ActionKpiServices
     function getDepartmentAction(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'sa.action_id,sa.action_value,sa.action_type,sa.staff_id,sa.year';
+        $field = 'sa.action_id,sa.cycle,sa.action_value,sa.action_type,sa.staff_id,sa.year';
 
         // 构建条件
         $query = (new Query())->select($field)
@@ -219,8 +218,8 @@ class ActionKpiServices
     function updateDepartmentActionKpi(KpiBeans $kpiParams)
     {
         // 判断参数
-        if (!$kpiParams->action || !$kpiParams->staff) {
-            return 0;
+        if (!$kpiParams->action || !$kpiParams->department) {
+            return -1;
         }
 
         // 实例化对象
@@ -240,7 +239,7 @@ class ActionKpiServices
             foreach ($kpiParams->action as $v) {
                 $data['action_id']    = $v;
                 // 查询是否有记录
-                if ($id = $srvObj->getFieldValByCondition(['staff_id' => $val, 'action_id' => $v, "year" => $kpiParams->year], 'id')) {
+                if ($id = $srvObj->getFieldValByCondition(['department_id' => $val, 'action_id' => $v, "year" => $kpiParams->year], 'id')) {
                     $data["utime"] = time();
                     $result        = $srvObj->updateById($id, $data);
                 } else {
@@ -251,7 +250,7 @@ class ActionKpiServices
                 if ($result === false) {
                     //失败回滚
                     $connection->rollback();
-                    return 0;
+                    return -2;
                 }
             }
         }

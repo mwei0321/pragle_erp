@@ -11,7 +11,6 @@
 namespace app\controllers\erpapi;
 
 use app\controllers\InitController;
-use phpDocumentor\Reflection\DocBlock\Serializer;
 use system\common\{ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
 use system\beans\kpi\KpiBeans;
@@ -228,10 +227,9 @@ class KpiController extends InitController
     {
         // 参数过滤
         if (!$kpiParams->action || !$kpiParams->department) {
-            return $this->reJson([], '参数错误!', 400);
+            return $this->reJson([$kpiParams], '参数错误!', 400);
         }
         $kpiParams->enterprise_id = $this->enterpriseId;
-
         // 更新入库
         if (!ServiceFactory::getInstance("ActionKpiSrv")->updateDepartmentActionKpi($kpiParams)) {
             return $this->reJson([$kpiParams->errCode], $kpiParams->errMsg, 400);

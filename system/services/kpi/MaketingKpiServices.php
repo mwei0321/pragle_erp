@@ -28,7 +28,7 @@ class MaketingKpiServices
     function getDepartmentAndStaffMarketingKpi(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'department_id,group_id,year,GROUP_CONCAT(`target`) as `target`,GROUP_CONCAT(`completed`) as `completed`';
+        $field = 'department_id,group_id,year,GROUP_CONCAT(`target` ORDER BY `month` ASC) as `target`,GROUP_CONCAT(`completed` ORDER BY `month` ASC) as `completed`';
 
         // 构建条件
         $query = (new Query())->select($field)
@@ -37,14 +37,31 @@ class MaketingKpiServices
                 'enterprise_id' => $kpiParams->enterprise_id,
                 'year'          => $kpiParams->year,
             ]);
+
+        // 提取当前部门和下一级部门
+        if ($kpiParams->department_id > 0) {
+            $groupIds = (new Query())->from(TableMap::Group)
+                ->select('id')
+                ->where([
+                    'type'      => 2,
+                    'parent_id' => $kpiParams->department_id,
+                ])
+                ->all();
+            $kpiParams->group_ids = $groupIds ? array_column($groupIds, 'id') : [];
+        }
+
         // 部门
         if ($kpiParams->department_id) {
-            $query->where(['in', 'department_id', explode(',', $kpiParams->department_id)]);
+            $query->andWhere(['department_id' => $kpiParams->department_id]);
+        }
+
+        // 组
+        if ($kpiParams->group_ids) {
+            $query->andWhere(['in', 'group_id', $kpiParams->group_ids]);
         }
 
         // 查出所有
-        $group = $query->groupBy('group_id,year')
-            ->orderBy('month ASC')
+        $group = $query->groupBy('group_id')
             ->all();
         if (!$group) {
             return [];
