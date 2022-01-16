@@ -60,18 +60,18 @@ class MaketingKpiServices
             $query->andWhere(['in', 'group_id', $kpiParams->group_ids]);
         }
 
-        // 查出所有
+        // 查出所
         $group = $query->groupBy('group_id')
             ->all();
-        if (!$group) {
-            return [];
-        }
-        $kpiParams->group_ids = array_column($group, 'group_id');
 
         // 分组处理
-        foreach ($group as $k => $v) {
-            $group[$k]['target'] = explode(',', $v['target']);
-            $group[$k]['completed'] = explode(',', $v['completed']);
+        if ($group && is_array($group)) {
+            foreach ($group as $k => $v) {
+                $group[$k]['target'] = explode(',', $v['target']);
+                $group[$k]['completed'] = explode(',', $v['completed']);
+            }
+        } else {
+            $group = [];
         }
 
         // 员工
@@ -98,7 +98,7 @@ class MaketingKpiServices
     function getGroupInStaffMarketingKpi(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'sk.staff_id,sk.year,u.username,u.first_name,u.last_name,GROUP_CONCAT(`sk`.`target`) as `target`,GROUP_CONCAT(`sk`.`completed`) as `completed`';
+        $field = 'sk.staff_id,sk.year,u.username,u.first_name,u.last_name,GROUP_CONCAT(`sk`.`target` ORDER BY `month` ASC ) as `target`,GROUP_CONCAT(`sk`.`completed` ORDER BY `month` ASC) as `completed`';
 
         // 提取数据
         $list = (new Query())->select($field)
@@ -109,8 +109,8 @@ class MaketingKpiServices
                 'sk.year'          => $kpiParams->year,
                 'sk.enterprise_id' => $kpiParams->enterprise_id,
             ])
-            ->andWhere(['in', 'gm.group_id', $kpiParams->group_ids])
-            ->groupBy('gm.group_id,sk.year')
+            ->andWhere(['in', 'gm.group_id', $kpiParams->department_id])
+            ->groupBy('sk.staff_id')
             ->orderBy('sk.month ASC')
             ->all();
 

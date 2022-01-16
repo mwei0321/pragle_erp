@@ -163,6 +163,9 @@ class KpiController extends InitController
         // 提取列表
         $list = ServiceFactory::getInstance("ActionKpiSrv")->getStaffActionKpi($kpiParams);
 
+        // 分页
+        $this->page = $kpiParams->pageRaw;
+
         return $this->reJson($list);
     }
 
@@ -180,13 +183,11 @@ class KpiController extends InitController
         $kpiParams->year          = $kpiParams->year ?: date('Y');
         $kpiParams->enterprise_id = $this->enterpriseId;
 
-        // 部门参数过滤
-        if ($kpiParams->department_id < 1) {
-            return $this->reJson([$kpiParams->department_id], 'param error', 400);
-        }
-
         // 提取数据
         $list = ServiceFactory::getInstance("ActionKpiSrv")->getDepartmentActionKpi($kpiParams);
+
+        // 分页处理
+        $this->page = $kpiParams->pageRaw;
 
         return $this->reJson($list);
     }
@@ -252,7 +253,7 @@ class KpiController extends InitController
         }
 
         // 删除记录
-        $result = ServiceFactory::getInstance("BaseDB")->delById($kpiParams->id, [], TableMap::StaffActionKpi, true);
+        $result = ServiceFactory::getInstance("BaseDB", TableMap::StaffActionKpi)->delById($kpiParams->id, ["del_time" => time()]);
         if (!$result) {
             return $this->reJson([], '删除失败!', 400);
         }
@@ -274,7 +275,7 @@ class KpiController extends InitController
         }
 
         // 删除记录
-        $result = ServiceFactory::getInstance("BaseDB")->delById($kpiParams->id, [], TableMap::DepartmentActionKpi, true);
+        $result = ServiceFactory::getInstance("BaseDB", TableMap::DepartmentActionKpi)->delById($kpiParams->id, ["del_time" => time()]);
         if (!$result) {
             return $this->reJson([], '删除失败!', 400);
         }

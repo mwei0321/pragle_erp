@@ -27,5 +27,6 @@ class KpiBeans extends BaseBean
     public $group_ids     = [];
     public $staff         = [];
     public $department    = [];
-    public $action        = [];
+    public $action        = null;
+    public $timeFormat    = "Y-m-d H:i";
 }

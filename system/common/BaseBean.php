@@ -14,16 +14,16 @@ use system\common\BeanInterface;
 class BaseBean implements BeanInterface
 {
     // 分页
-    public $page      = 1;
-    public $count     = 0;
-    public $offset    = 0;
-    public $limit     = 0;
-    public $pageSize  = 10;
-    public $totalPage = 0;
-    public $pageRaw   = [];
+    public $page       = 1;
+    public $count      = 0;
+    public $offset     = 0;
+    public $limit      = 0;
+    public $page_size  = 10;
+    public $total_page = 0;
+    public $pageRaw    = [];
     // 错误
-    public $errCode   = 0;
-    public $errMsg    = '';
+    public $errCode    = 0;
+    public $errMsg     = '';
 
     /**
      * 分页处理
@@ -32,24 +32,27 @@ class BaseBean implements BeanInterface
      * @Author MaWei <1123265518@qq.com>
      * @Link   http://mawei.live
      */
-    function page()
+    function page($_count = null)
     {
+        // 总记录数
+        $_count && $this->count = $_count;
+
         // 页码过滤
         if ($this->page < 1) {
             $this->page = 1;
         }
         // 总页数
-        $this->totalPage = ceil((intval($this->count) / $this->pageSize));
+        $this->total_page = ceil((intval($this->count) / $this->page_size));
         // 分页偏移量
-        $this->offset    = ($this->page - 1) * $this->pageSize;
-        $this->limit     = $this->pageSize;
+        $this->offset    = ($this->page - 1) * $this->page_size;
+        $this->limit     = $this->page_size;
         // 分布信息
         $this->pageRaw = [
-            'count'     => $this->count,
-            'totalPage' => $this->totalPage,
-            'offset'    => $this->offset,
-            'limit'     => $this->limit,
-            'page'      => $this->page,
+            'count'      => $this->count,
+            'total_page' => $this->total_page,
+            'offset'     => $this->offset,
+            'limit'      => $this->limit,
+            'page'       => $this->page
         ];
 
         return $this->pageRaw;

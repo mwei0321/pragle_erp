@@ -1,5 +1,6 @@
 <?php
-/*
+
+/* 动作KPI服务
  * @Author: MaWei 
  * @Date: 2022-01-06 10:35:44 
  * @Last Modified by: MaWei
@@ -69,42 +70,55 @@ class ActionKpiServices
     function getStaffActionKpi(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'sa.id,sa.cycle,sa.action_id,sa.action_value,sa.action_type,sa.staff_id,sa.year';
+        $field = 'sa.id,sa.name,sa.cycle,sa.action_id,sa.action_value,sa.action_type,sa.staff_id,sa.year,sa.ctime,sa.utime';
 
         // 构建条件
         $query = (new Query())->select($field)
             ->from(TableMap::StaffActionKpi . ' as sa')
             ->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
             ->where([
-                'sa.staff_id' => $kpiParams->staff_id,
+                "del_time" => 0,
             ]);
+
         // 关键字
         if ($kpiParams->keyword) {
-            $query->where(['like', 'name', "%" . $kpiParams->keyword . "%"]);
+            $query->andWhere(['like', 'name', "%" . $kpiParams->keyword . "%"]);
         }
 
         // 动作
-        if ($kpiParams->action > 0) {
-            $query->where(['in', 'action_id', $kpiParams->action]);
+        if ($kpiParams->action) {
+            $kpiParams->action = explode(',', $kpiParams->action);
+            $query->andWhere(['in', 'action_id', $kpiParams->action]);
         }
 
         // 员工
         if ($kpiParams->staff_id) {
-            $query->where(['staff_id' => $kpiParams->staff_id]);
+            $query->andWhere(['staff_id' => $kpiParams->staff_id]);
         }
 
         // 年搜索
         if ($kpiParams->year > 0) {
-            $query->where(['year' => $kpiParams->year]);
+            $query->andWhere(['year' => $kpiParams->year]);
         }
 
-        return $query->all();
-    }
+        // 分页
+        $kpiParams->page($query->count());
 
-    function getlist(KpiBeans $kpiParams)
-    {
-        if ($kpiParams->aa) {
+        // 排序提取
+        $list = $query->orderBy("utime DESC")
+            ->limit($kpiParams->limit)
+            ->offset($kpiParams->offset)
+            ->all();
+
+        // 是否格式化时间
+        if ($kpiParams->timeFormat) {
+            foreach ($list as $k => $v) {
+                $list[$k]["utime"] = $v["utime"] ? date($kpiParams->timeFormat, $v["utime"]) : "";
+                $list[$k]["ctime"] = date($kpiParams->timeFormat, $v["ctime"]);
+            }
         }
+
+        return $list;
     }
 
     /**
@@ -115,40 +129,58 @@ class ActionKpiServices
      * @author  <mawei.live>
      * @return array
      */
-    function getDepartmentAction(KpiBeans $kpiParams)
+    function getDepartmentActionKpi(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'sa.action_id,sa.cycle,sa.action_value,sa.action_type,sa.staff_id,sa.year';
+        $field = 'sa.action_id,sa.name,sa.cycle,sa.department_id,sa.year,sa.utime,sa.ctime';
 
         // 构建条件
         $query = (new Query())->select($field)
             ->from(TableMap::DepartmentActionKpi . ' as sa')
             ->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
             ->where([
-                'sa.staff_id' => $kpiParams->staff_id,
+                "del_time" => 0
             ]);
 
         // 关键字
         if ($kpiParams->keyword) {
-            $query->where(['like', 'name', "%" . $kpiParams->keyword . "%"]);
+            $query->andWhere(['like', 'name', "%" . $kpiParams->keyword . "%"]);
         }
 
         // 动作
         if ($kpiParams->action) {
-            $query->where(['in', 'action_id', $kpiParams->action]);
+            $kpiParams->action = explode(',', $kpiParams->action);
+            $query->andWhere(['in', 'action_id', $kpiParams->action]);
         }
 
         // 部门
         if ($kpiParams->department) {
-            $query->where(['in', 'department_id', $kpiParams->department]);
+            $query->andWhere(['in', 'department_id', $kpiParams->department]);
         }
 
         // 年搜索
         if ($kpiParams->year > 0) {
-            $query->where(['year' => $kpiParams->year]);
+            $query->andWhere(['year' => $kpiParams->year]);
         }
 
-        return $query->orderBy("sa.month ASC")->all();
+        // 分页
+        $kpiParams->page($query->count());
+
+        // 排序提取
+        $list = $query->orderBy("utime DESC")
+            ->limit($kpiParams->limit)
+            ->offset($kpiParams->offset)
+            ->all();
+
+        // 是否格式化时间
+        if ($kpiParams->timeFormat) {
+            foreach ($list as $k => $v) {
+                $list[$k]["utime"] = $v["utime"] ? date($kpiParams->timeFormat, $v["utime"]) : "";
+                $list[$k]["ctime"] = date($kpiParams->timeFormat, $v["ctime"]);
+            }
+        }
+
+        return $list;
     }
 
 
