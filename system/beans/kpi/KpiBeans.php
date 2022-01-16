@@ -19,6 +19,7 @@ class KpiBeans extends BaseBean
     public $department_id = null; // 部门ID
     public $staff_id      = 0; // 员工ID
     public $type          = 1; // 类型 （1.个人 2.团队）
+    public $cycle         = 0; // 周期
     public $year          = ''; // 年
     public $name          = ''; // 名称
     public $keyword       = ''; // 关键字

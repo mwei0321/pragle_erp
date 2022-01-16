@@ -81,7 +81,12 @@ class ActionKpiServices
 
         // 关键字
         if ($kpiParams->keyword) {
-            $query->andWhere(['like', 'name', "%" . $kpiParams->keyword . "%"]);
+            $query->andWhere(['like', 'name', $kpiParams->keyword]);
+        }
+
+        // 周期
+        if ($kpiParams->cycle) {
+            $query->andWhere(['cycle' => $kpiParams->cycle]);
         }
 
         // 动作
@@ -138,19 +143,23 @@ class ActionKpiServices
     function getDepartmentActionKpi(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'sa.action_id,sa.name,sa.cycle,sa.department_id,sa.year,sa.utime,sa.ctime';
+        $field = 'sa.id,sa.action_id,sa.name,sa.cycle,sa.department_id,sa.year,sa.utime,sa.ctime';
 
         // 构建条件
         $query = (new Query())->select($field)
             ->from(TableMap::DepartmentActionKpi . ' as sa')
-
             ->where([
                 "del_time" => 0
             ]);
 
         // 关键字
         if ($kpiParams->keyword) {
-            $query->andWhere(['like', 'name', "%" . $kpiParams->keyword . "%"]);
+            $query->andWhere(['like', 'name', $kpiParams->keyword]);
+        }
+
+        // 周期
+        if ($kpiParams->cycle) {
+            $query->andWhere(['cycle' => $kpiParams->cycle]);
         }
 
         // 动作

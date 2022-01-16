@@ -163,10 +163,10 @@ class KpiController extends InitController
         // 提取列表
         $list = ServiceFactory::getInstance("ActionKpiSrv")->getStaffActionKpi($kpiParams);
 
-        // 分页
-        $this->page = $kpiParams->pageRaw;
-
-        return $this->reJson($list);
+        return $this->reJson([
+            'items' => $list,
+            'count' => $kpiParams->count,
+        ]);
     }
 
     /**
@@ -186,10 +186,10 @@ class KpiController extends InitController
         // 提取数据
         $list = ServiceFactory::getInstance("ActionKpiSrv")->getDepartmentActionKpi($kpiParams);
 
-        // 分页处理
-        $this->page = $kpiParams->pageRaw;
-
-        return $this->reJson($list);
+        return $this->reJson([
+            'items' => $list,
+            'count' => $kpiParams->count,
+        ]);
     }
 
     /**
