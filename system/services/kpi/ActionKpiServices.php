@@ -75,7 +75,6 @@ class ActionKpiServices
         // 构建条件
         $query = (new Query())->select($field)
             ->from(TableMap::StaffActionKpi . ' as sa')
-            ->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
             ->where([
                 "del_time" => 0,
             ]);
@@ -101,11 +100,18 @@ class ActionKpiServices
             $query->andWhere(['year' => $kpiParams->year]);
         }
 
+        // 总条数
+        $count = $query->count();
+        if ($count < 1) {
+            return [];
+        }
+
         // 分页
-        $kpiParams->page($query->count());
+        $kpiParams->page($count);
 
         // 排序提取
         $list = $query->orderBy("utime DESC")
+            ->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
             ->limit($kpiParams->limit)
             ->offset($kpiParams->offset)
             ->all();
@@ -137,7 +143,7 @@ class ActionKpiServices
         // 构建条件
         $query = (new Query())->select($field)
             ->from(TableMap::DepartmentActionKpi . ' as sa')
-            ->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
+
             ->where([
                 "del_time" => 0
             ]);
@@ -163,11 +169,18 @@ class ActionKpiServices
             $query->andWhere(['year' => $kpiParams->year]);
         }
 
+        // 总条数
+        $count = $query->count();
+        if ($count < 1) {
+            return [];
+        }
+
         // 分页
-        $kpiParams->page($query->count());
+        $kpiParams->page($count);
 
         // 排序提取
         $list = $query->orderBy("utime DESC")
+            ->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
             ->limit($kpiParams->limit)
             ->offset($kpiParams->offset)
             ->all();

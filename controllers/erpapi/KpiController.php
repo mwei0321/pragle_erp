@@ -158,7 +158,7 @@ class KpiController extends InitController
     {
         // 参数处理
         !$kpiParams->year && $kpiParams->year = date('Y');
-        intval($kpiParams->staff_id) < 1 && $kpiParams->staff_id = $this->userId;
+        // intval($kpiParams->staff_id) < 1 && $kpiParams->staff_id = $this->userId;
 
         // 提取列表
         $list = ServiceFactory::getInstance("ActionKpiSrv")->getStaffActionKpi($kpiParams);

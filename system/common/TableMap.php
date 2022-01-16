@@ -20,7 +20,7 @@ class TableMap
 	const StaffDepartment             = 'user_department';
 	const StaffActionKpi              = 'staff_action_kpi';
 	const StaffMarketingKpi           = 'staff_marketing_kpi';
-	const DepartmentGroupMarketingKpi = 'department_group_marketing_kpi';
+	const DepartmentGroupMarketingKpi = 'department_marketing_kpi';
 	const Group                       = 'group';
 	const GroupMember                 = 'group_member';
 }
