@@ -141,6 +141,7 @@
 | staff_id  | integer | 否   | 1    | 员工kpi,不传默认当前用户 |
 | keyword   | string  | 否   | name | 名称搜索                 |
 | action    | string  | 否   | 1,2  | 动作,多个动作逗号隔开    |
+| cycle     | integer | 否   | 1    | 周期                     |
 | page      | integer | 是   | 1    | 页数                     |
 | page_size | integer | 否   | 10   | 每页条数                 |
 
@@ -183,6 +184,7 @@
 | keyword    | string  | 否   | name  | 名称搜索              |
 | department | array   | 否   | [1,2] | 部门ID                |
 | action     | string  | 否   | 1,2   | 动作,多个动作逗号隔开 |
+| cycle      | integer | 否   | 1     | 周期                  |
 | page       | integer | 是   | 1     | 页数                  |
 | page_size  | integer | 否   | 10    | 每页条数              |
 
