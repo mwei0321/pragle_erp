@@ -5,7 +5,7 @@
  * @Author: MaWei
  * @Date:   2021-12-22
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-01-11 23:15:39
+ * @Last Modified time: 2022-01-17 23:06:00
  */
 
 namespace app\controllers\erpapi;
@@ -237,6 +237,14 @@ class KpiController extends InitController
         }
 
         return $this->reJson([]);
+    }
+
+    function actionUpaction(KpiBeans $kpiParams)
+    {
+        if ($kpiParams->id < 1) {
+            return $this->reJson([$kpiParams], '参数错误!', 400);
+        }
+        $kpiParams->enterprise_id = $this->enterpriseId;
     }
 
     /**

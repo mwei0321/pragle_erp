@@ -4,8 +4,8 @@
  * 表名定义
  * @Author: MaWei
  * @Date:   2021-10-26
- * @Last Modified by:   mawei
- * @Last Modified time: 2021-12-23
+ * @Last Modified by: MaWei
+ * @Last Modified time: 2022-01-17 23:30:41
  */
 
 namespace system\common;
@@ -23,4 +23,5 @@ class TableMap
 	const DepartmentGroupMarketingKpi = 'department_marketing_kpi';
 	const Group                       = 'group';
 	const GroupMember                 = 'group_member';
+	const Follow                      = "follow_info";
 }

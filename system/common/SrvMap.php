@@ -18,6 +18,7 @@ class SrvMap
     // service
     public $MaketingKpiSrv = 'system\services\kpi\MaketingKpiServices';
     public $ActionKpiSrv   = 'system\services\kpi\ActionKpiServices';
+    public $KpiRecordSrv   = 'system\services\kpi\KpiRecordServices';
 
 
     // 引用旧的代码
