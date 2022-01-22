@@ -17,6 +17,7 @@ class ActionKpiServices
 {
     /**
      * config.group_id (6.对客户营销动作 13.针对员工的动作 15.系统自动统计加分项)
+     *  1为个人，2为团队，3为个人和团队
      * 返回KPI动作项列表
      * @param  \system\beans\kpi\KpiBeans $kpiParams
      * date: 2022-01-06 11:01:29
@@ -37,13 +38,14 @@ class ActionKpiServices
                 ['>', 'parent_id', '0']
             ]);
 
+        // 个人
         if ($kpiParams->type == 1) {
             $query->orWhere([
                 'and',
                 ['group_id' => 13],
                 ['in', 'state', [1, 3]]
             ]);
-        } elseif ($kpiParams->type == 2) {
+        } elseif ($kpiParams->type == 2) { // 团队
             $query->orWhere([
                 'and',
                 ['group_id' => 13],

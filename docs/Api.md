@@ -455,6 +455,80 @@
 
 
 
+### 动作跟进
+
+#### 1. 动作跟进列表
+
+地址：`/erpapi/follow/getlist`
+
+方式：`get`
+
+请求参数：
+
+| 参数名     | 类型 | 必需 | 值   | 说明                   |
+| ---------- | ---- | ---- | ---- | ---------------------- |
+| type       | int  | 是   | 1    | 类型 （1.个人 2.团队） |
+| department | int  | 否   | 1    | 部门                   |
+| action     | int  | 否   | 1    | 动作列表               |
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": {
+        "items": [
+            {
+                "id": "1",
+                "user_id": "1",
+                "enterprise_id": "1",
+                "department_id": "1",
+                "action_id": "1",
+                "description": "sssssssssssssss",
+                "type": "1",
+                "follow_time": "0",
+                "utime": "0",
+                "ctime": "0"
+            },
+        ],
+        "count": "2"
+    },
+    "page": []
+}
+```
+
+
+
+#### 2. 动作跟进写入
+
+请求地址：`/erpapi/kpi/updepartmentaction`
+
+请求方式：`post`
+
+请求参数：
+
+| 参数名        | 类型 | 必需 | 值   | 说明                   |
+| ------------- | ---- | ---- | ---- | ---------------------- |
+| type          | int  | 是   | 1    | 类型 （1.个人 2.团队） |
+| user_id       | int  | 是   | 1    | 跟进人                 |
+| action_id     | int  | 是   | 2    | 动作id                 |
+| enterprise_id | int  | 是   | 1    | 企业id                 |
+| department_id | int  | 否   | 0    | 部门 type=2时,否=0     |
+| content       | text | 否   |      | 跟进内容               |
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "message": "ok",
+    "data": []
+}
+```
+
+####
+
 
 
 ### 客户&营销页面接口说明

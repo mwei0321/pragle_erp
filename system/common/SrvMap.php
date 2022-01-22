@@ -16,9 +16,10 @@ class SrvMap
     public $BaseDB = 'system\common\BaseDB';
 
     // service
-    public $MaketingKpiSrv = 'system\services\kpi\MaketingKpiServices';
-    public $ActionKpiSrv   = 'system\services\kpi\ActionKpiServices';
-    public $KpiRecordSrv   = 'system\services\kpi\KpiRecordServices';
+    public $MaketingKpiSrv  = 'system\services\kpi\MaketingKpiServices';
+    public $ActionKpiSrv    = 'system\services\kpi\ActionKpiServices';
+    public $KpiRecordSrv    = 'system\services\kpi\KpiRecordServices';
+    public $ActionFollowSrv = 'system\services\follow\ActionFollowServices';
 
 
     // 引用旧的代码

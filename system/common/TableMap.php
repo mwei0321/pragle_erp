@@ -24,4 +24,5 @@ class TableMap
 	const Group                       = 'group';
 	const GroupMember                 = 'group_member';
 	const Follow                      = "follow_info";
+	const ActionFollow                = "action_follow";
 }

@@ -65,15 +65,26 @@ class BaseBean implements BeanInterface
      * @Author MaWei <1123265518@qq.com>
      * @Link   http://mawei.live
      */
-    function toArray()
+    function toArray($_this = true)
     {
-        $ref = new \ReflectionClass(get_called_class());
+        $className = get_called_class();
+        $ref = new \ReflectionClass($className);
         $propArr = $ref->getProperties();
         $attrArr = [];
-        foreach ($propArr as $obj) {
-            $name = $obj->getName();
-            $value = $this->$name ?? '';
-            $attrArr[$name] = is_string($value) ? $this->_text($value) : $value;
+        if ($_this) {
+            foreach ($propArr as $obj) {
+                if ($obj->class == $className) {
+                    $name = $obj->name;
+                    $value = $this->$name ?? '';
+                    $attrArr[$name] = is_string($value) ? $this->_text($value) : $value;
+                }
+            }
+        } else {
+            foreach ($propArr as $obj) {
+                $name = $obj->getName();
+                $value = $this->$name ?? '';
+                $attrArr[$name] = is_string($value) ? $this->_text($value) : $value;
+            }
         }
         return $attrArr;
     }
