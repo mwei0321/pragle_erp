@@ -1,17 +1,17 @@
 <?php
 
-/* 动作跟进
+/* 积分
  * @Author: MaWei 
- * @Date: 2022-01-06 10:35:44 
+ * @Date: 2022-01-23 21:17:21 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-01-23 21:18:21
+ * @Last Modified time: 2022-01-23 21:46:34
  */
 
-namespace system\beans\follow;
+namespace system\beans\score;
 
 use system\common\BaseBean;
 
-class FollowBeans extends BaseBean
+class ScoreBeans extends BaseBean
 {
     public $id            = 0;
     public $type          = 1; // 类型 （1.个人 2.团队）
@@ -19,7 +19,4 @@ class FollowBeans extends BaseBean
     public $action_id     = 0;
     public $enterprise_id = 0; // 企业ID
     public $department_id = null; // 部门ID
-    public $content       = ''; // 跟进内容
-    public $utime         = 0; // 更新时间
-    public $ctime         = 0; // 创建时间
 }

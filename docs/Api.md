@@ -453,6 +453,66 @@
 }
 ```
 
+### 图表排行
+
+#### 1. 团队 / 个人销售KPI条形图排行
+
+请求地址：`erpapi/score/marketingbarchat`
+
+请求方式：`get`
+
+请求参数：
+
+| 参数名   | 类型   | 必需 | 值   | 说明                 |
+| -------- | ------ | ---- | ---- | -------------------- |
+| type     | int    | 是   | 1    | 类型 (1.团队 2.个人) |
+| year     | string | 是   | 2022 | 年份                 |
+| staff_id | int    | 否   | 1    | type=2时,必传        |
+
+返回参数：
+
+团队
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": [
+        {
+            "name": "All Dept.", // 部门名称
+            "department_id": "40232", // 部门ID
+            "target": "48.00", // 部门目标
+            "completed": "0.00" // 部门完成
+        },
+    ],
+}
+```
+
+
+
+个人
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": [
+        {
+            "first_name": "Andrew", // 姓
+            "last_name": "Ye", // 名
+            "staff_id": "90486", // 员工ID
+            "month": "1", // 月份
+            "target": "12.00", // 目标
+            "completed": "0.00" // 完成
+        },
+    ]
+}
+```
+
+###
+
+
+
 
 
 ### 动作跟进
@@ -475,7 +535,7 @@
 
 ```json
 {
-    "code": 200,
+    "code": 200, 
     "msg": "return success!",
     "data": {
         "items": [

@@ -32,7 +32,7 @@ class MaketingKpiServices
 
         // 构建条件
         $query = (new Query())->select($field)
-            ->from(TableMap::DepartmentGroupMarketingKpi)
+            ->from(TableMap::DepartmentMarketingKpi)
             ->where([
                 'enterprise_id' => $kpiParams->enterprise_id,
                 'year'          => $kpiParams->year,
@@ -157,7 +157,7 @@ class MaketingKpiServices
     function getKpiYears(KpiBeans $kpiParams)
     {
         $year = (new Query())->select("year")
-            ->from(TableMap::DepartmentGroupMarketingKpi)
+            ->from(TableMap::DepartmentMarketingKpi)
             ->groupBy('year')
             ->all();
         return $year ? array_column($year, 'year') : [];
@@ -173,7 +173,7 @@ class MaketingKpiServices
     function updateDepartmentAndStaffMarketingKpi(KpiBeans $kpiParams)
     {
         // 初始化数据库
-        $dbObj = ServiceFactory::getInstance('BaseDB', TableMap::DepartmentGroupMarketingKpi);
+        $dbObj = ServiceFactory::getInstance('BaseDB', TableMap::DepartmentMarketingKpi);
 
         // 查询是否插入过
 

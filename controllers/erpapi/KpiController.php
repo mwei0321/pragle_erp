@@ -98,7 +98,7 @@ class KpiController extends InitController
         }
 
         // 删除记录
-        $result = ServiceFactory::getInstance("BaseDB")->delById($kpiParams->id, [], TableMap::DepartmentGroupMarketingKpi, true);
+        $result = ServiceFactory::getInstance("BaseDB")->delById($kpiParams->id, [], TableMap::DepartmentMarketingKpi, true);
         if (!$result) {
             return $this->reJson([], '删除失败!', 400);
         }
@@ -289,5 +289,43 @@ class KpiController extends InitController
         }
 
         return $this->reJson();
+    }
+
+    //------->>>>>>>------排行图表------<<<<<<<&&&&>>>>>>---MaWei@2022-01-23 19:17----<<<<<<----//
+
+    /**
+     * 销售条图表
+     * @param  KpiBeans $kpiParams
+     * date: 2022-01-23 20:06:14
+     * @author  <mawei.live>
+     * @return void
+     */
+    function actionMarketingbarchat(KpiBeans $kpiParams)
+    {
+        // 年初始化
+        $kpiParams->year          = $kpiParams->year ?: date('Y');
+        $kpiParams->enterprise_id = $this->enterpriseId;
+
+        // 提取列表
+        switch ($kpiParams->type) {
+                // 部门
+            case 1:
+                $list = ServiceFactory::getInstance("KpiGraphicSrv")->getDepartmentMarketingBarChat($kpiParams);
+                break;
+                // 个人
+            case 2:
+                if ($kpiParams->staff_id < 1) {
+                    return $this->reJson([], '参数错误!', 400);
+                }
+                $list = ServiceFactory::getInstance("KpiGraphicSrv")->getStaffMarketingBarChat($kpiParams);
+                break;
+
+            default:
+                $list = [];
+                break;
+        }
+
+
+        return $this->reJson($list);
     }
 }

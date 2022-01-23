@@ -19,6 +19,8 @@ class SrvMap
     public $MaketingKpiSrv  = 'system\services\kpi\MaketingKpiServices';
     public $ActionKpiSrv    = 'system\services\kpi\ActionKpiServices';
     public $KpiRecordSrv    = 'system\services\kpi\KpiRecordServices';
+    public $KpiGraphicSrv   = 'system\services\graphic\KpiGraphicServices';
+    public $ScoreGraphiSrv  = 'system\services\graphic\ScroeGraphicServices';
     public $ActionFollowSrv = 'system\services\follow\ActionFollowServices';
 
 
