@@ -5,7 +5,7 @@
  * @Author: MaWei
  * @Date:   2021-12-22
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-01-17 23:06:00
+ * @Last Modified time: 2022-01-25 22:58:42
  */
 
 namespace app\controllers\erpapi;
@@ -14,6 +14,7 @@ use app\controllers\InitController;
 use system\common\{ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
 use system\beans\follow\FollowBeans;
+use system\beans\score\FollowScoreBeans;
 
 class FollowController extends InitController
 {
@@ -60,18 +61,35 @@ class FollowController extends InitController
         $data = $followParams->toArray();
         unset($data['id']);
 
+        // 事务
+
         // 入库
         if ($followParams->id > 0) {
             $data['utime'] = time();
             unset($date['ctime']);
             $result = $dbObj->updateById($followParams->id, $data);
         } else {
-            $data['ctime'] = time();
-            $result = $dbObj->insert($data);
+            $data['ctime']    = time();
+            $result           = $dbObj->insert($data);
+            $followParams->id = $result;
         }
         // 提取列表
         if ($result === false) {
             return $this->reJson([$result], "write fail", 400);
+        }
+
+        // 积分入库
+        $scoreBeans             = new FollowScoreBeans();
+        $scoreBeans->enterprise = $this->enterpriseId;
+        $scoreBeans->staff_id   = $this->userId;
+        $scoreBeans->action_id  = $followParams->action_id;
+        $scoreBeans->obj_id     = $followParams->id;
+        $scoreBeans->type       = 1;
+
+        // 添加对应积分
+        $result = ServiceFactory::getInstance("FollowScoreSrv")->addActionFollowScore($scoreBeans);
+        if ($result) {
+            return $this->reJson([], "fail", 400);
         }
 
         return $this->reJson();

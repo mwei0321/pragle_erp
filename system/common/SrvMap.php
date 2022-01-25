@@ -22,6 +22,7 @@ class SrvMap
     public $KpiGraphicSrv   = 'system\services\graphic\KpiGraphicServices';
     public $ScoreGraphiSrv  = 'system\services\graphic\ScroeGraphicServices';
     public $ActionFollowSrv = 'system\services\follow\ActionFollowServices';
+    public $FollowScoreSrv  = 'system\services\score\FollowScoreServices';
 
 
     // 引用旧的代码
