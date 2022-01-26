@@ -41,7 +41,7 @@ class FollowController extends InitController
     /**
      * 部门员工kpi列表
      * 
-     * @param  KpiBeans $kpiParams [description]
+     * @param  FollowBeans $followParams [description]
      * @return [type] [description]
      * @Date   2021-12-23T17:39:36+0800
      * @Author MaWei <1123265518@qq.com>
@@ -51,8 +51,19 @@ class FollowController extends InitController
     {
         // 参数过滤
         if ($followParams->action_id < 1) {
-            return $this->reJson([$followParams->department_id], 'param error', 400);
+            return $this->reJson([$followParams->toArray()], 'param error', 400);
         }
+
+        // 部门id过滤
+        if ($followParams->type == 2 && intval($followParams->department_id) < 1) {
+            return $this->reJson([$followParams->toArray()], 'param error', 400);
+        }
+
+        $followParams->enterprise_id = $this->enterpriseId;
+        $followParams->staff_id      = $this->userId;
+
+        // 跟进时间
+        $followParams->follow_time = $followParams->follow_time ? strtotime($followParams->follow_time) : time();
 
         // DB
         $dbObj = ServiceFactory::getInstance("BaseDB", TableMap::ActionFollow);
@@ -61,7 +72,8 @@ class FollowController extends InitController
         $data = $followParams->toArray();
         unset($data['id']);
 
-        // 事务
+        // 开启事务
+        $connection = \Yii::$app->db->beginTransaction();
 
         // 入库
         if ($followParams->id > 0) {
@@ -75,22 +87,30 @@ class FollowController extends InitController
         }
         // 提取列表
         if ($result === false) {
+            // 失败回滚
+            $connection->rollback();
             return $this->reJson([$result], "write fail", 400);
         }
 
         // 积分入库
-        $scoreBeans             = new FollowScoreBeans();
-        $scoreBeans->enterprise = $this->enterpriseId;
-        $scoreBeans->staff_id   = $this->userId;
-        $scoreBeans->action_id  = $followParams->action_id;
-        $scoreBeans->obj_id     = $followParams->id;
-        $scoreBeans->type       = 1;
+        $scoreBeans                = new FollowScoreBeans();
+        $scoreBeans->enterprise_id = $this->enterpriseId;
+        $scoreBeans->staff_id      = $this->userId;
+        $scoreBeans->department_id = $followParams->department_id;
+        $scoreBeans->action_id     = $followParams->action_id;
+        $scoreBeans->obj_id        = $followParams->id;
+        $scoreBeans->type          = $followParams->type;
 
         // 添加对应积分
         $result = ServiceFactory::getInstance("FollowScoreSrv")->addActionFollowScore($scoreBeans);
-        if ($result) {
-            return $this->reJson([], "fail", 400);
+        if ($result < 1) {
+            // 失败回滚
+            $connection->rollback();
+            return $this->reJson([$result], "write fail", 400);
         }
+
+        // 提交事务
+        $connection->commit();
 
         return $this->reJson();
     }

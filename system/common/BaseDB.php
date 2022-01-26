@@ -217,10 +217,10 @@ class BaseDB
      * @Author MaWei
      * @Link   http://www.mawei.live
      */
-    function increment($_field, $_condition, $_tableName = null, $_step = 1)
+    function increment($_field, $_condition, $_tableName = null, $_step = 1, $_set = null)
     {
         $tableName = $_tableName ? $_tableName : $this->tableName;
-        $sql = "UPDATE `{$tableName}` SET `{$_field}`=`{$_field}` + {$_step} WHERE {$_condition}";
+        $sql = "UPDATE `{$tableName}` SET `{$_field}`=`{$_field}` + {$_step} " . ($_set ? ",{$_set}" : '') . " WHERE {$_condition}";
         return \Yii::$app->db->createCommand($sql)->execute();
     }
 

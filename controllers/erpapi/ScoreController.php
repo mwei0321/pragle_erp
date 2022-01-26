@@ -27,5 +27,17 @@ class ScoreController extends InitController
      */
     function actionGetbarchat(ScoreBeans $scoreParams)
     {
+
+        if ($scoreParams->type == 1) {
+            // 提取排行
+            $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getStaffScore($scoreParams);
+        } else {
+            // 提取排行
+            $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getDepartmentScore($scoreParams);
+        }
+
+
+
+        return $this->reJson([$result]);
     }
 }

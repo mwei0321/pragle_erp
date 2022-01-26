@@ -85,7 +85,7 @@ class InitController extends Controller
         //只能测试用
         if (in_array($_SERVER['HTTP_HOST'], ['api.pe.com', 'pe.com', 'erp.com']) || isset($_REQUEST['debug']) && $_REQUEST['debug'] == 'mw') {
             $this->enterpriseId = 1;
-            $this->userId       = 1;
+            $this->userId       = 90486;
             return true;
         }
         //验证TOKEN

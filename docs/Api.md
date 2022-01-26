@@ -562,7 +562,7 @@
 
 #### 2. 动作跟进写入
 
-请求地址：`/erpapi/kpi/updepartmentaction`
+请求地址：`/erpapi/follow/update`
 
 请求方式：`post`
 
@@ -571,7 +571,7 @@
 | 参数名        | 类型 | 必需 | 值   | 说明                   |
 | ------------- | ---- | ---- | ---- | ---------------------- |
 | type          | int  | 是   | 1    | 类型 （1.个人 2.团队） |
-| user_id       | int  | 是   | 1    | 跟进人                 |
+| staff_id      | int  | 是   | 1    | 跟进人                 |
 | action_id     | int  | 是   | 2    | 动作id                 |
 | enterprise_id | int  | 是   | 1    | 企业id                 |
 | department_id | int  | 否   | 0    | 部门 type=2时,否=0     |
