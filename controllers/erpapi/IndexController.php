@@ -13,30 +13,34 @@ use Yii;
 use Closure;
 use app\controllers\InitController;
 use yii\web\Controller;
-use services\common\{ServiceFactory,TableMap};
+use services\common\{ServiceFactory, TableMap};
 use services\traits\BindBeanParamsTrait;
 use services\beans\KpiBeans;
 
 
-class ab {
+class ab
+{
 
-    function dd(object $da) {
+    function dd(object $da)
+    {
         var_dump($da->aa);
     }
 }
 
-class at {
-
+class at
+{
 }
 
-class IndexController extends Controller {
+class IndexController extends Controller
+{
 
     use BindBeanParamsTrait;
 
-    function actionIndex(KpiBeans $kpiData) {
+    function actionIndex(KpiBeans $kpiData)
+    {
         $request = Yii::$app->request;
 
-        $obj = (object)['aa' => 1,'bb' => 2];
+        $obj = (object)['aa' => 1, 'bb' => 2];
         $obj->aa = 11;
         $obj->bb = 222;
         var_dump($obj);
@@ -46,10 +50,10 @@ class IndexController extends Controller {
         $abobj = new ab();
         $abobj->dd($obj);
 
-         exit(); 
-        
+        exit();
+
         // var_dump($kpiData);
-        
+
         // 初始化数据库
         // $dbObj = ServiceFactory::getSrvObj('BaseDB',TableMap::Config);
 
@@ -58,8 +62,6 @@ class IndexController extends Controller {
         // exit();
 
 
-        return $this->reJson(['a'=> 1111]);
+        return $this->reJson(['a' => 1111]);
     }
-
-
 }

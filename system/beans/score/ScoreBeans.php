@@ -14,6 +14,7 @@ use system\common\BaseBean;
 class ScoreBeans extends BaseBean
 {
     public $id            = 0;
+    public $year          = '';
     public $type          = 1; // 类型 （1.个人 2.团队）
     public $user_id       = 0; // 跟进人
     public $action_id     = 0;

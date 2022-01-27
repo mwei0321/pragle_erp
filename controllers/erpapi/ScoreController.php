@@ -29,8 +29,8 @@ class ScoreController extends InitController
     {
         // 默认选择当前年
         $scoreParams->year  = $scoreParams->year ?: date('Y');
-        $scoreParams->stime = strtotime($scoreParams->year . '0101');
-        $scoreParams->etime = strtotime($scoreParams->year . '1231');
+        $scoreParams->stime = $scoreParams->year . '0101';
+        $scoreParams->etime = $scoreParams->year . '1231';
 
         $result = [];
         switch ($scoreParams->type) {

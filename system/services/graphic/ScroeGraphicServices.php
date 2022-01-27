@@ -63,7 +63,7 @@ class ScroeGraphicServices
         }
 
         return $query->select($field)
-            ->groupBy("staff_id")
+            ->groupBy("obj_id")
             ->orderBy("score DESC")
             ->all();
     }
@@ -115,7 +115,7 @@ class ScroeGraphicServices
         }
 
         return $query->select($field)
-            ->groupBy("staff_id")
+            ->groupBy("obj_id")
             ->orderBy("score DESC")
             ->all();
     }
