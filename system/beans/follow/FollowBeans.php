@@ -21,4 +21,5 @@ class FollowBeans extends BaseBean
     public $department_id = 0; // 部门ID
     public $content       = ''; // 跟进内容
     public $follow_time   = 0; // 跟进时间
+    public $attachment_url    = ''; // 附件
 }
