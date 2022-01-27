@@ -568,15 +568,16 @@
 
 请求参数：
 
-| 参数名         | 类型   | 必需 | 值   | 说明                   |
-| -------------- | ------ | ---- | ---- | ---------------------- |
-| type           | int    | 是   | 1    | 类型 （1.个人 2.团队） |
-| staff_id       | int    | 是   | 1    | 跟进人                 |
-| action_id      | int    | 是   | 2    | 动作id                 |
-| enterprise_id  | int    | 是   | 1    | 企业id                 |
-| department_id  | int    | 否   | 0    | 部门 type=2时,否=0     |
-| content        | text   | 否   |      | 跟进内容               |
-| attachment_url | string | 否   |      | 附件UR地址             |
+| 参数名         | 类型   | 必需 | 值                  | 说明                   |
+| -------------- | ------ | ---- | ------------------- | ---------------------- |
+| type           | int    | 是   | 1                   | 类型 （1.个人 2.团队） |
+| staff_id       | int    | 是   | 1                   | 跟进人                 |
+| action_id      | int    | 是   | 2                   | 动作id                 |
+| enterprise_id  | int    | 是   | 1                   | 企业id                 |
+| department_id  | int    | 否   | 0                   | 部门 type=2时,否=0     |
+| content        | text   | 否   |                     | 跟进内容               |
+| attachment_url | string | 否   |                     | 附件UR地址             |
+| follow_time    | string | 是   | 2022-01-26 14:15:16 | 跟进时间               |
 
 返回参数：
 
