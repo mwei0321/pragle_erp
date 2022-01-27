@@ -14,7 +14,7 @@ use yii\db\Query;
 use system\common\{TableMap, ServiceFactory};
 use system\beans\score\ScoreBeans;
 
-class ScoreGraphicServices
+class ScroeGraphicServices
 {
 
     /**
@@ -27,7 +27,7 @@ class ScoreGraphicServices
     function getStaffScore(ScoreBeans $scoreParams)
     {
         // 字段
-        $field = "*";
+        $field = "`obj_id` AS `staff_id`,SUM(`score`) AS `cnt`";
 
         // 构建
         $query = (new Query())->from(TableMap::DepartmentAndStaffScore)
@@ -38,13 +38,32 @@ class ScoreGraphicServices
 
         // 部门
         if ($scoreParams->department_id > 0) {
-            //
+            // 提取部门下的人
+            $staffId = (new Query())->from(TableMap::GroupMember)
+                ->where([
+                    'group_id' => $scoreParams->department_id,
+                    "type"     => 2,
+                ])->all();
+            // 添加员工条件
+            if ($staffId) {
+                $staffId = array_column($staffId, 'target_id');
+                $query->andWhere(['in', "obj_id", $staffId]);
+            } else {
+                return [];
+            }
+        }
+
+        // 年
+        if ($scoreParams->year) {
             $query->andWhere([
-                "obj_id" => $scoreParams->department_id,
+                'and',
+                ['>=', 'day', $scoreParams->stime],
+                ['<=', 'day', $scoreParams->etime],
             ]);
         }
 
         return $query->select($field)
+            ->groupBy("staff_id")
             ->orderBy("score DESC")
             ->all();
     }
@@ -59,7 +78,7 @@ class ScoreGraphicServices
     function getDepartmentScore(ScoreBeans $scoreParams)
     {
         // 字段
-        $field = "*";
+        $field = "`obj_id` AS `department_id`,SUM(`score`) AS `cnt`";
 
         // 构建
         $query = (new Query())->from(TableMap::DepartmentAndStaffScore)
@@ -70,13 +89,33 @@ class ScoreGraphicServices
 
         // 部门
         if ($scoreParams->department_id > 0) {
-            //
+            // 提取部门下的人
+            $departmentIds = (new Query())->from(TableMap::Group)
+                ->select('id')
+                ->where([
+                    'parent_id' => $scoreParams->department_id,
+                    "type"     => 2,
+                ])->all();
+            // 添加员工条件
+            if ($departmentIds) {
+                $departmentIds = array_column($departmentIds, 'id');
+                $query->andWhere(['in', "obj_id", $departmentIds]);
+            } else {
+                return [];
+            }
+        }
+
+        // 年
+        if ($scoreParams->year) {
             $query->andWhere([
-                "obj_id" => $scoreParams->department_id,
+                'and',
+                ['>', 'day', $scoreParams->stime],
+                ['<', 'day', $scoreParams->etime],
             ]);
         }
 
         return $query->select($field)
+            ->groupBy("staff_id")
             ->orderBy("score DESC")
             ->all();
     }

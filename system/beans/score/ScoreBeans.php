@@ -19,4 +19,6 @@ class ScoreBeans extends BaseBean
     public $action_id     = 0;
     public $enterprise_id = 0; // 企业ID
     public $department_id = null; // 部门ID
+    public $stime         = 0; // 筛选开始时间
+    public $etime         = 0; // 筛选结束时间
 }

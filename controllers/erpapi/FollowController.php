@@ -100,6 +100,7 @@ class FollowController extends InitController
         $scoreBeans->action_id     = $followParams->action_id;
         $scoreBeans->obj_id        = $followParams->id;
         $scoreBeans->type          = $followParams->type;
+        $scoreBeans->follow_time   = $followParams->follow_time;
 
         // 添加对应积分
         $result = ServiceFactory::getInstance("FollowScoreSrv")->addActionFollowScore($scoreBeans);

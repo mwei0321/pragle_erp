@@ -27,17 +27,23 @@ class ScoreController extends InitController
      */
     function actionGetbarchat(ScoreBeans $scoreParams)
     {
+        // 默认选择当前年
+        $scoreParams->year  = $scoreParams->year ?: date('Y');
+        $scoreParams->stime = strtotime($scoreParams->year . '0101');
+        $scoreParams->etime = strtotime($scoreParams->year . '1231');
 
-        if ($scoreParams->type == 1) {
-            // 提取排行
-            $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getStaffScore($scoreParams);
-        } else {
-            // 提取排行
-            $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getDepartmentScore($scoreParams);
+        $result = [];
+        switch ($scoreParams->type) {
+            case 1:
+                $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getStaffScore($scoreParams);
+                break;
+            case 2:
+                $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getDepartmentScore($scoreParams);
+                break;
+            default:
+                break;
         }
 
-
-
-        return $this->reJson([$result]);
+        return $this->reJson($result);
     }
 }
