@@ -29,16 +29,14 @@ class ScoreController extends InitController
     {
         // 默认选择当前年
         $scoreParams->year  = $scoreParams->year ?: date('Y');
-        $scoreParams->stime = $scoreParams->year . '0101';
-        $scoreParams->etime = $scoreParams->year . '1231';
 
         $result = [];
         switch ($scoreParams->type) {
             case 1:
-                $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getStaffScore($scoreParams);
+                $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getStaffMonthScore($scoreParams);
                 break;
             case 2:
-                $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getDepartmentScore($scoreParams);
+                $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getDepartmentMonthScore($scoreParams);
                 break;
             default:
                 break;

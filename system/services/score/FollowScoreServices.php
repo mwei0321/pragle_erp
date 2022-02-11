@@ -35,13 +35,17 @@ class FollowScoreServices
         }
 
         // 跟进日期
-        $day = date("Ymd", $scoreBeans->follow_time);
+        $year  = date("Y", $scoreBeans->follow_time);
+        $month = date("m", $scoreBeans->follow_time);
+        $day   = date("d", $scoreBeans->follow_time);
 
         // 给跟进人添加积分
         $scoreId = $dbObj->getFieldValByCondition([
             "enterprise_id" => $scoreBeans->enterprise_id,
             "obj_id"        => $scoreBeans->type == 1 ? $scoreBeans->staff_id : $scoreBeans->department_id,
             "type"          => $scoreBeans->type,
+            "year"          => $year,
+            "month"         => $month,
             "day"           => $day,
         ], 'id', TableMap::DepartmentAndStaffScore);
 
@@ -53,6 +57,8 @@ class FollowScoreServices
                 "enterprise_id" => $scoreBeans->enterprise_id,
                 "obj_id"        => $scoreBeans->type == 1 ? $scoreBeans->staff_id : $scoreBeans->department_id,
                 "type"          => $scoreBeans->type,
+                "year"          => $year,
+                "month"         => $month,
                 "day"           => $day,
                 "score"         => $score,
                 "ctime"         => time(),

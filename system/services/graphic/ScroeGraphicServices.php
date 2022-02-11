@@ -11,11 +11,55 @@
 namespace system\services\graphic;
 
 use yii\db\Query;
-use system\common\{TableMap, ServiceFactory};
+use system\common\{HelperFuns, TableMap, ServiceFactory};
 use system\beans\score\ScoreBeans;
 
 class ScroeGraphicServices
 {
+
+    /**
+     * 返回指定年的12月统计
+     * @param  \system\beans\score\ScoreBeans $scoreParams
+     * date: 2022-02-11 17:27:21
+     * @author  <mawei.live>
+     * @return void
+     */
+    function getStaffMonthScore(ScoreBeans $scoreParams)
+    {
+        // 字段
+        $field = "`obj_id` AS `staff_id`,`month`,SUM(`score`) AS `cnt`";
+
+        // 提取条件构建
+        $query = $this->_staffScoreQuery($scoreParams);
+
+        // 提取结果 
+        $result = $query->select($field)
+            ->groupBy("obj_id,month")
+            ->orderBy("score DESC")
+            ->all();
+        if (!$result) {
+            return [];
+        }
+
+        // 数据处理
+        $result = HelperFuns::classifyMergeArray($result, "staff_id");
+        $month = ["01" => "0", "02" => "0", "03" => "0", "04" => "0", "05" => "0", "06" => "0", "07" => "0", "08" => "0", "09" => "0", "10" => "0", "11" => "0", "12" => "0"];
+
+        // 实例化对象
+        $userObj = ServiceFactory::getInstance("BaseDB", TableMap::User);
+
+        // 月份补全
+        $data = [];
+        foreach ($result as $k => $v) {
+            $exsit                = array_combine(array_column($v, "month"), array_column($v, "cnt"));
+            $score                = array_merge($month, $exsit);
+            $data[$k]['name']     = $userObj->getFieldValById($v[0]["staff_id"]);
+            $data[$k]['staff_id'] = $v[0]["staff_id"];
+            $data[$k]['count']    = $score ? array_values($score) : ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"];
+        }
+
+        return $data;
+    }
 
     /**
      * 员工积分排行
@@ -24,11 +68,30 @@ class ScroeGraphicServices
      * @author  <mawei.live>
      * @return void
      */
-    function getStaffScore(ScoreBeans $scoreParams)
+    function getStaffYearScore(ScoreBeans $scoreParams)
     {
         // 字段
         $field = "`obj_id` AS `staff_id`,SUM(`score`) AS `cnt`";
 
+        // 提取条件构建
+        $query = $this->_staffScoreQuery($scoreParams);
+
+        // 提取数据
+        return $query->select($field)
+            ->groupBy("obj_id")
+            ->orderBy("score DESC")
+            ->all();
+    }
+
+    /**
+     * 构建员工积分查询条件query
+     * @param  \system\beans\score\ScoreBeans $scoreParams
+     * date: 2022-02-11 17:33:21
+     * @author  <mawei.live>
+     * @return object
+     */
+    private function _staffScoreQuery(ScoreBeans $scoreParams)
+    {
         // 构建
         $query = (new Query())->from(TableMap::DepartmentAndStaffScore)
             ->where([
@@ -56,30 +119,69 @@ class ScroeGraphicServices
         // 年
         if ($scoreParams->year) {
             $query->andWhere([
-                'and',
-                ['>=', 'day', $scoreParams->stime],
-                ['<=', 'day', $scoreParams->etime],
+                "year" => $scoreParams->year
             ]);
         }
 
-        return $query->select($field)
-            ->groupBy("obj_id")
-            ->orderBy("score DESC")
-            ->all();
+        return $query;
     }
 
+
+    //------->>>>>>>------部门相关积分------<<<<<<<&&&&>>>>>>---MaWei@2022-02-11 18:09----<<<<<<----//
+
     /**
-     * 部门积分排行
+     * 构建部门积分查询条件query
      * @param  \system\beans\score\ScoreBeans $scoreParams
      * date: 2022-01-23 22:02:58
      * @author  <mawei.live>
      * @return void
      */
-    function getDepartmentScore(ScoreBeans $scoreParams)
+    function getDepartmentMonthScore(ScoreBeans $scoreParams)
     {
         // 字段
-        $field = "`obj_id` AS `department_id`,SUM(`score`) AS `cnt`";
+        $field = "`obj_id` AS `department_id`,`month`,SUM(`score`) AS `cnt`";
 
+        // 提取条件构建
+        $query = $this->_departmentScoreQuery($scoreParams);
+
+        // 提取结果 
+        $result = $query->select($field)
+            ->groupBy("obj_id,month")
+            ->orderBy("score DESC")
+            ->all();
+        if (!$result) {
+            return [];
+        }
+
+        // 数据处理
+        $result = HelperFuns::classifyMergeArray($result, "department_id");
+        $month = ["01" => "0", "02" => "0", "03" => "0", "04" => "0", "05" => "0", "06" => "0", "07" => "0", "08" => "0", "09" => "0", "10" => "0", "11" => "0", "12" => "0"];
+
+        // 实例化对象
+        $userObj = ServiceFactory::getInstance("BaseDB", TableMap::Group);
+
+        // 月份补全
+        $data = [];
+        foreach ($result as $k => $v) {
+            $exsit                     = array_combine(array_column($v, "month"), array_column($v, "cnt"));
+            $score                     = array_merge($month, $exsit);
+            $data[$k]['name']          = $userObj->getFieldValById($v[0]["department_id"]);
+            $data[$k]['department_id'] = $v[0]["department_id"];
+            $data[$k]['count']         = $score ? array_values($score) : ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Undocumented function
+     * @param  \system\beans\score\ScoreBeans $scoreParams
+     * date: 2022-02-11 18:11:52
+     * @author  <mawei.live>
+     * @return object
+     */
+    private function _departmentScoreQuery(ScoreBeans $scoreParams)
+    {
         // 构建
         $query = (new Query())->from(TableMap::DepartmentAndStaffScore)
             ->where([
@@ -114,9 +216,6 @@ class ScroeGraphicServices
             ]);
         }
 
-        return $query->select($field)
-            ->groupBy("obj_id")
-            ->orderBy("score DESC")
-            ->all();
+        return $query;
     }
 }
