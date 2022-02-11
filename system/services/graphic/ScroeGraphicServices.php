@@ -58,7 +58,7 @@ class ScroeGraphicServices
             $data[$k]['count']    = $score ? array_values($score) : ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"];
         }
 
-        return $data;
+        return array_values($data);
     }
 
     /**
@@ -156,7 +156,6 @@ class ScroeGraphicServices
         // 数据处理
         $result = HelperFuns::classifyMergeArray($result, "department_id");
         $month = ["01" => "0", "02" => "0", "03" => "0", "04" => "0", "05" => "0", "06" => "0", "07" => "0", "08" => "0", "09" => "0", "10" => "0", "11" => "0", "12" => "0"];
-
         // 实例化对象
         $userObj = ServiceFactory::getInstance("BaseDB", TableMap::Group);
 
@@ -170,7 +169,7 @@ class ScroeGraphicServices
             $data[$k]['count']         = $score ? array_values($score) : ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"];
         }
 
-        return $data;
+        return array_values($data);
     }
 
     /**
@@ -210,9 +209,7 @@ class ScroeGraphicServices
         // 年
         if ($scoreParams->year) {
             $query->andWhere([
-                'and',
-                ['>', 'day', $scoreParams->stime],
-                ['<', 'day', $scoreParams->etime],
+                "year" => $scoreParams->year
             ]);
         }
 
