@@ -9,7 +9,7 @@
 namespace system\services\graphic;
 
 use yii\db\Query;
-use system\common\{TableMap, ServiceFactory};
+use system\common\{TableMap, ServiceFactory, HelperFuns};
 use system\beans\kpi\KpiBeans;
 
 class KpiGraphicServices
@@ -25,20 +25,37 @@ class KpiGraphicServices
     function getDepartmentMarketingBarChat(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'g.name,dm.department_id,SUM(dm.target) target,SUM(dm.completed) completed';
+        $field = 'department_id,GROUP_CONCAT(`target` ORDER BY `month` ASC) `target`,GROUP_CONCAT(`completed` ORDER BY `month` ASC) `completed`';
 
         // 构建条件
         $query = (new Query())->select($field)
-            ->from(TableMap::DepartmentMarketingKpi . ' as dm')
-            ->leftJoin(TableMap::Group . ' as g', "g.id = dm.department_id")
+            ->from(TableMap::DepartmentMarketingKpi)
             ->where([
-                'year' => $kpiParams->year,
+                'enterprise_id' => $kpiParams->enterprise_id,
+                'year'          => $kpiParams->year,
             ]);
 
+        // 部门
+        if ($kpiParams->department_id > 0) {
+            $query->andWhere(["department_id" => $kpiParams->department_id]);
+        }
+
         // 提取数据
-        $list = $query->orderBy("target DESC")
-            ->groupBy("department_id")
+        $query = $query->groupBy("department_id");
+        $list = (new Query())->from(["k" => $query])
+            ->leftJoin(TableMap::Group . ' AS g', 'g.id = k.department_id')
+            ->select("g.name,k.*")
             ->all();
+
+        // 数据处理
+        if ($list) {
+            foreach ($list as $k => $v) {
+                $list[$k]["target"] = explode(",", $v["target"]);
+                $list[$k]["completed"] = explode(",", $v["completed"]);
+            }
+        } else {
+            return [];
+        }
 
         return $list;
     }
@@ -53,20 +70,37 @@ class KpiGraphicServices
     function getStaffMarketingBarChat(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'u.first_name,u.last_name,sm.staff_id,sm.month,sm.target,sm.completed';
+        $field = 'staff_id,GROUP_CONCAT(`target` ORDER BY `month` ASC) `target`,GROUP_CONCAT(`completed` ORDER BY `month` ASC) `completed`';
 
         // 构建条件
         $query = (new Query())->select($field)
-            ->from(TableMap::StaffMarketingKpi . ' AS sm')
-            ->leftJoin(TableMap::User . ' AS u', 'u.id = sm.staff_id')
+            ->from(TableMap::StaffMarketingKpi)
             ->where([
-                'year'     => $kpiParams->year,
-                'staff_id' => $kpiParams->staff_id,
+                'enterprise_id' => $kpiParams->enterprise_id,
+                'year'          => $kpiParams->year,
             ]);
 
+        // 员工
+        if ($kpiParams->staff_id > 0) {
+            $query->andWhere(["staff_id" => $kpiParams->staff_id]);
+        }
+
         // 提取数据
-        $list = $query->orderBy("target DESC")
+        $query = $query->groupBy("staff_id");
+        $list = (new Query())->from(["k" => $query])
+            ->leftJoin(TableMap::User . ' AS u', 'u.id = k.staff_id')
+            ->select("u.first_name,u.last_name,k.*")
             ->all();
+
+        // 数据处理
+        if ($list) {
+            foreach ($list as $k => $v) {
+                $list[$k]["target"] = explode(",", $v["target"]);
+                $list[$k]["completed"] = explode(",", $v["completed"]);
+            }
+        } else {
+            return [];
+        }
 
         return $list;
     }
