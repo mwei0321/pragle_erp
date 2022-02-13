@@ -308,18 +308,14 @@ class KpiController extends InitController
 
         // 提取列表
         switch ($kpiParams->type) {
-                // 部门
-            case 1:
-                $list = ServiceFactory::getInstance("KpiGraphicSrv")->getDepartmentMarketingBarChat($kpiParams);
-                break;
                 // 个人
-            case 2:
-                if ($kpiParams->staff_id < 1) {
-                    return $this->reJson([], '参数错误!', 400);
-                }
+            case 1:
                 $list = ServiceFactory::getInstance("KpiGraphicSrv")->getStaffMarketingBarChat($kpiParams);
                 break;
-
+                // 部门
+            case 2:
+                $list = ServiceFactory::getInstance("KpiGraphicSrv")->getDepartmentMarketingBarChat($kpiParams);
+                break;
             default:
                 $list = [];
                 break;

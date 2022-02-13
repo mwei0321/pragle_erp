@@ -25,7 +25,7 @@ class KpiGraphicServices
     function getDepartmentMarketingBarChat(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'department_id,GROUP_CONCAT(`target` ORDER BY `month` ASC) `target`,GROUP_CONCAT(`completed` ORDER BY `month` ASC) `completed`';
+        $field = 'group_id,GROUP_CONCAT(`target` ORDER BY `month` ASC) `target`,GROUP_CONCAT(`completed` ORDER BY `month` ASC) `completed`';
 
         // 构建条件
         $query = (new Query())->select($field)
@@ -41,9 +41,9 @@ class KpiGraphicServices
         }
 
         // 提取数据
-        $query = $query->groupBy("department_id");
+        $query = $query->groupBy("group_id");
         $list = (new Query())->from(["k" => $query])
-            ->leftJoin(TableMap::Group . ' AS g', 'g.id = k.department_id')
+            ->leftJoin(TableMap::Group . ' AS g', 'g.id = k.group_id')
             ->select("g.name,k.*")
             ->all();
 
