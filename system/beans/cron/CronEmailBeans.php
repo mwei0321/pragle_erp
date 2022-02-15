@@ -14,5 +14,8 @@ use system\common\BaseBean;
 
 class CronEmailBeans extends BaseBean
 {
-    public $cycle = 1;
+    public $cycle   = 1; // 周期
+    public $user_id = 0; // 用户id
+    public $stime   = 0; // 开始时间
+    public $etime   = 0; // 结束时间
 }

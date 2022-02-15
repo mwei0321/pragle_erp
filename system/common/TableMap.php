@@ -12,6 +12,7 @@ namespace system\common;
 
 class TableMap
 {
+	// erp 库
 	const Config                  = 'config';
 	const Enterprise              = 'enterprise';
 	const EnterpriseMarketingKpi  = 'enterprise_marketing_kpi';
@@ -28,4 +29,8 @@ class TableMap
 	const GroupMember             = 'group_member';
 	const Follow                  = "follow_info";
 	const User                    = "user";
+
+	// dbDate 库
+	const TaskQueue               = "task_queue";
+	const TaskDistribute          = "task_distribute";
 }
