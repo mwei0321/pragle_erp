@@ -72,9 +72,6 @@ class FollowController extends InitController
         $data = $followParams->toArray();
         unset($data['id']);
 
-        // 开启事务
-        $connection = \Yii::$app->db->beginTransaction();
-
         // 入库
         if ($followParams->id > 0) {
             $data['utime'] = time();
@@ -87,31 +84,8 @@ class FollowController extends InitController
         }
         // 提取列表
         if ($result === false) {
-            // 失败回滚
-            $connection->rollback();
             return $this->reJson([$result], "write fail", 400);
         }
-
-        // 积分入库
-        $scoreBeans                = new FollowScoreBeans();
-        $scoreBeans->enterprise_id = $this->enterpriseId;
-        $scoreBeans->staff_id      = $this->userId;
-        $scoreBeans->department_id = $followParams->department_id;
-        $scoreBeans->action_id     = $followParams->action_id;
-        $scoreBeans->obj_id        = $followParams->id;
-        $scoreBeans->type          = $followParams->type;
-        $scoreBeans->follow_time   = $followParams->follow_time;
-
-        // 添加对应积分
-        $result = ServiceFactory::getInstance("FollowScoreSrv")->addActionFollowScore($scoreBeans);
-        if ($result < 1) {
-            // 失败回滚
-            $connection->rollback();
-            return $this->reJson([$result], "write fail", 400);
-        }
-
-        // 提交事务
-        $connection->commit();
 
         return $this->reJson();
     }

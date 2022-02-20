@@ -13,16 +13,21 @@ namespace system\common;
 class SrvMap
 {
     // 数据基础
-    public $BaseDB = 'system\common\BaseDB';
+    public $BaseDB          = 'system\common\BaseDB';
 
     // service
     public $MaketingKpiSrv  = 'system\services\kpi\MaketingKpiServices';
     public $ActionKpiSrv    = 'system\services\kpi\ActionKpiServices';
     public $KpiRecordSrv    = 'system\services\kpi\KpiRecordServices';
+    public $ActionLogSrv    = 'system\services\kpi\ActionLogServices';
     public $KpiGraphicSrv   = 'system\services\graphic\KpiGraphicServices';
     public $ScoreGraphiSrv  = 'system\services\graphic\ScroeGraphicServices';
     public $ActionFollowSrv = 'system\services\follow\ActionFollowServices';
-    public $FollowScoreSrv  = 'system\services\score\FollowScoreServices';
+    public $ActionScoreSrv  = 'system\services\score\ActionScoreServices';
+
+    // 定时任务
+    public $EmailCronSrv    = 'system\services\cron\EmailCronServices';
+    public $ActionCronSrv   = 'system\services\cron\ActionCronServices';
 
 
     // 引用旧的代码

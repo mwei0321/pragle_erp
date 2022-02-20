@@ -1,7 +1,7 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+$dbarr = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
@@ -47,14 +47,8 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
-        'db_data' => [
-            'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=pargle_dbdata',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
-        ],
+        'db' => $dbarr['erp'],
+        'dbdata' => $dbarr['dbdata'],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -62,7 +56,7 @@ $config = [
                 'v2/erpapi/<controller:\w+>/<action:\w+>/' => 'erpapi/<controller>/<action>',
             ],
         ],
-        
+
     ],
     'params' => $params,
 ];

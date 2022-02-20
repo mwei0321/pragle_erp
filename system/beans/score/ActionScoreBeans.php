@@ -12,7 +12,7 @@ namespace system\beans\score;
 
 use system\common\BaseBean;
 
-class FollowScoreBeans extends BaseBean
+class ActionScoreBeans extends BaseBean
 {
     public $id            = 0;
     public $enterprise_id = 0; // 企业ID
@@ -23,4 +23,7 @@ class FollowScoreBeans extends BaseBean
     public $type          = 1; // 类型 （1.action_follow  2.follow_info)
     public $obj_id        = ''; // 跟进对象表ID
     public $follow_time   = 0; // 跟进时间
+    public $year          = 0; // 年
+    public $month         = 0; // 月
+    public $day           = 0; // 日
 }
