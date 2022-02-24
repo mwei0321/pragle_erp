@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-02-24 23:00:31 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-02-24 23:14:02
+ * @Last Modified time: 2022-02-24 23:21:57
  */
 
 
@@ -29,9 +29,9 @@ class YestodayController extends InitController
     function actionIndex()
     {
         // 昨天邮件统计 
-        // ServiceFactory::getInstance("EmailCronSrv")->getYesterdayEmailStatistics();
+        ServiceFactory::getInstance("EmailCronSrv")->getYesterdayEmailStatistics();
         // 昨天新跟进动作统计
-        // ServiceFactory::getInstance("FollowCronSrv")->getYesterdayActionFollow();
+        ServiceFactory::getInstance("FollowCronSrv")->getYesterdayActionFollow();
         // 昨天旧跟进动作统计
         ServiceFactory::getInstance("FollowCronSrv")->getYesterdayOldFollow();
         // 昨天客户统计

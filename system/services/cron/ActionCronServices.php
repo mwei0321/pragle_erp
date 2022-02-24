@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-02-19 19:45:56 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-02-19 21:06:22
+ * @Last Modified time: 2022-02-24 23:30:09
  */
 
 namespace system\services\cron;
@@ -13,7 +13,7 @@ namespace system\services\cron;
 use yii\db\Query;
 use system\common\{HelperFuns, TableMap, ServiceFactory};
 use system\beans\kpi\ActionBeans;
-use system\beans\cron\CronActionBeans;
+use system\beans\cron\{CronActionBeans, CronActionLogBeans};
 
 class ActionCronServices
 {
@@ -74,23 +74,23 @@ class ActionCronServices
             $actionBeans->action_id     = $v['action_id'];
 
             // 写入执行记录
-            $cronActionBeans         = new CronActionBeans();
-            $cronActionBeans->setVals($actionBeans->toArray());
-            $cronActionBeans->target = $v['target'];
-            $cronActionBeans->finish = $actionLogSrv->getAssginActionFinishNum($actionBeans);
-            $cronActionBeans->status = ($cronActionBeans->finish >= $cronActionBeans->target) ? 1 : 0;
-            $cronActionBeans->obj_id = $v['id'];
-            $cronActionBeans->score  = $actionScore[$v["action_id"]] ?? 0;
-            $actionLogId = $this->addActionCronLog($cronActionBeans);
+            $CronActionLogBeans         = new CronActionLogBeans();
+            $CronActionLogBeans->setVals($actionBeans->toArray());
+            $CronActionLogBeans->target = $v['target'];
+            $CronActionLogBeans->finish = $actionLogSrv->getAssginActionFinishNum($actionBeans);
+            $CronActionLogBeans->status = ($CronActionLogBeans->finish >= $CronActionLogBeans->target) ? 1 : 0;
+            $CronActionLogBeans->obj_id = $v['id'];
+            $CronActionLogBeans->score  = $actionScore[$v["action_id"]] ?? 0;
+            $actionLogId = $this->addActionCronLog($CronActionLogBeans);
             if ($actionLogId < 1) {
                 return -1;
             }
 
             // 判断是否完成,完成加积分
-            if ($cronActionBeans->status == 1) {
+            if ($CronActionLogBeans->status == 1) {
                 // 添加积分
                 $actionScoreBeans         = new \system\beans\score\ActionScoreBeans();
-                $actionScoreBeans->setVals($cronActionBeans->toArray());
+                $actionScoreBeans->setVals($CronActionLogBeans->toArray());
                 $actionScoreBeans->year   = $actionBeans->year;
                 $actionScoreBeans->month  = $actionBeans->month ?: date("m");
                 $actionScoreBeans->day    = $actionBeans->day ?: date("d");
@@ -109,15 +109,15 @@ class ActionCronServices
 
     /**
      * 动作日志入库
-     * @param  \system\beans\cron\CronActionBeans $cronActionBeans
+     * @param  \system\beans\cron\CronActionLogBeans $CronActionLogBeans
      * date: 2022-02-19 21:05:26
      * @author  <mawei.live>
      * @return int
      */
-    function addActionCronLog(CronActionBeans $cronActionBeans)
+    function addActionCronLog(CronActionLogBeans $CronActionLogBeans)
     {
         // 入库数据
-        $data = $cronActionBeans->toArray();
+        $data = $CronActionLogBeans->toArray();
         $data['ctime'] = time();
 
         // 实例化对象并调用
