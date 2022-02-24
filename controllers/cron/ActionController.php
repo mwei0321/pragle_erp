@@ -27,4 +27,9 @@ class ActionController extends InitController
 
         return $this->reJson($result);
     }
+
+
+    function actionEveryday()
+    {
+    }
 }

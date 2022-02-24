@@ -1,11 +1,11 @@
 <?php
 
 /*
- * 邮件相关定时任务
+ * 动作执行
  * @Author: MaWei 
- * @Date: 2022-02-13 20:20:18 
+ * @Date: 2022-02-19 19:45:56 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-02-19 20:23:29
+ * @Last Modified time: 2022-02-19 21:06:22
  */
 
 namespace system\services\cron;
@@ -14,16 +14,15 @@ use yii\db\Query;
 use system\common\{HelperFuns, TableMap, ServiceFactory};
 use system\beans\cron\CronActionBeans;
 
-class EmailCronServices
+class CustomerCronServices
 {
-
     /**
-     * 获取昨天邮件发送统计
+     * 获取昨天新增客户统计
      * date: 2022-02-19 12:04:59
      * @author  <mawei.live>
      * @return void
      */
-    function getYesterdayEmailStatistics()
+    function getYesterdayCustomerStatistics()
     {
         $cronActionBeans = new CronActionBeans();
         $time = date("Y-m-d", strtotime("-1 day"));
@@ -32,7 +31,7 @@ class EmailCronServices
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
 
         // 提取统计数据
-        $list = $this->getEmailStatistics($cronActionBeans);
+        $list = $this->getCustomerStatistics($cronActionBeans);
 
         // 提取分组
         $uesrIds = array_column($list, 'user_id');
@@ -70,41 +69,39 @@ class EmailCronServices
         return 1;
     }
 
+
     /**
-     * 返回邮件的统计
+     * 返回新增客户的统计
      * @param  \system\beans\cron\CronActionBeans $cronActionBeans
      * @date: 2022-02-15 18:33:20.
      * @author  <mawei.live>
      * @return array
      */
-    function getEmailStatistics(CronActionBeans $cronActionBeans)
+    function getCustomerStatistics(CronActionBeans $cronActionBeans)
     {
         // 时间过滤
-        if (!($cronActionBeans->stime && $cronActionBeans->etime)) {
+        if (!($cronActionBeans->stime)) {
             return [];
         }
 
         // 字段
-        $field = "tq.enterprise_id,tq.user_id,COUNT(*) cnt";
+        $field = "id enterprise_id,user_id,COUNT(*) cnt";
 
         // 构建查询
-        $query = (new Query())->from(TableMap::TaskQueue . " AS tq")
-            ->leftJoin(TableMap::TaskDistribute . " AS td", "td.task_id = tq.id")
+        $query = (new Query())->from(TableMap::Enterprise)
             ->where([
                 "and",
-                ["tq.type" => 1],
-                ["in", "td.state", [1, 2, 3]],
-                [">=", "tq.created_at", $cronActionBeans->stime],
-                ["<=", "tq.created_at", $cronActionBeans->etime],
+                ['>=', 'created_at', $cronActionBeans->stime],
+                ['<=', 'created_at', $cronActionBeans->etime],
             ]);
 
         // 用户
         if ($cronActionBeans->staff_id) {
-            $query->andWhere(["tq.user_id" => $cronActionBeans->staff_id]);
+            $query->andWhere(["user_id" => $cronActionBeans->staff_id]);
         }
 
         return $query->select($field)
-            ->groupBy("tq.user_id")
+            ->groupBy("user_id")
             ->all(\Yii::$app->dbdata);
     }
 }
