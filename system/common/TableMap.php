@@ -30,7 +30,7 @@ class TableMap
 	const Group                   = 'group';
 	const Department              = 'group';
 	const GroupMember             = 'group_member';
-	const Follow                  = "follow_info";
+	const FollowInfo              = "follow_info";
 	const User                    = "user";
 
 	// dbDate 库

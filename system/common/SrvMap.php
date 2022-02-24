@@ -28,6 +28,7 @@ class SrvMap
     // 定时任务
     public $EmailCronSrv    = 'system\services\cron\EmailCronServices';
     public $ActionCronSrv   = 'system\services\cron\ActionCronServices';
+    public $FollowCronSrv   = 'system\services\cron\FollowCronServices';
 
 
     // 引用旧的代码

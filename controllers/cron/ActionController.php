@@ -25,6 +25,8 @@ class ActionController extends InitController
         // 员工每天完成统计
         $result = ServiceFactory::getInstance("ActionCronSrv")->staffActionFinishCheck($actionBeans);
 
+
+
         return $this->reJson($result);
     }
 }
