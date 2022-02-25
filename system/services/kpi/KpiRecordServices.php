@@ -29,7 +29,7 @@ class KpiRecordServices
         $field = "*";
 
         $query = (new Query())->select($field)
-            ->from(TableMap::Follow);
+            ->from(TableMap::FollowInfo);
 
         // 动作搜索 
         if ($kpiParams->action) {

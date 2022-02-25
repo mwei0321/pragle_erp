@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-02-13 20:20:18 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-02-19 20:23:29
+ * @Last Modified time: 2022-02-24 23:13:54
  */
 
 namespace system\services\cron;
@@ -27,7 +27,7 @@ class EmailCronServices
     {
         $cronActionBeans = new CronActionBeans();
         $time = date("Y-m-d", strtotime("-1 day"));
-        $time = date("Y-m-d", '1645204141');
+        // $time = date("Y-m-d", '1645204141');
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
 
@@ -44,13 +44,8 @@ class EmailCronServices
                 ["in", "user_id", $uesrIds],
             ])->indexBy("user_id")->all();
 
-
-        // 统计数据对象
-        $cronActionBeans = new \system\beans\cron\CronActionBeans();
-
         // 实例化对象
         $srvObj = ServiceFactory::getInstance("BaseDB", TableMap::ActionDayStatisticsLog);
-
         // 数据处理
         foreach ($list as $v) {
             $data["enterprise_id"] = $v['enterprise_id'];
