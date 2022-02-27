@@ -102,6 +102,9 @@ class ActionCronServices
                 if ($result < 1) {
                     return -2;
                 }
+
+                // 给员工加积分
+                ServiceFactory::getInstance("BaseDB", TableMap::User)->increment("score", "`id` = " . $actionBeans->staff_id, TableMap::User, $CronActionLogBeans->score);
             }
         }
 
