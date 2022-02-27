@@ -8,18 +8,17 @@
  * @Last Modified time: 2022-02-24 23:25:17
  */
 
-namespace app\controllers\cron;
+namespace app\commands;
 
-use app\controllers\InitController;
-use system\common\{ServiceFactory, TableMap};
-use system\traits\BindBeanParamsTrait;
+use yii\console\Controller;
 use system\beans\kpi\ActionBeans;
+use system\common\{ServiceFactory, TableMap, HelperFuns};
 
-class ActionController extends InitController
+class ActionController extends Controller
 {
-    use BindBeanParamsTrait;
 
     /**
+     * 5 2 * * * /domedea/pragle_erp/yii action/everyday
      * 每天执行
      * date: 2022-02-27 20:12:58
      * @author  <mawei.live>
@@ -35,6 +34,7 @@ class ActionController extends InitController
     }
 
     /**
+     * 10 2 1-12 * * /domedea/pragle_erp/yii action/everymonth
      * 每月执行
      * date: 2022-02-27 20:13:13
      * @author  <mawei.live>
@@ -49,6 +49,7 @@ class ActionController extends InitController
     }
 
     /**
+     * 10 2 ? ? 1 /domedea/pragle_erp/yii action/everyweek
      * 每周执行
      * date: 2022-02-27 20:13:13
      * @author  <mawei.live>

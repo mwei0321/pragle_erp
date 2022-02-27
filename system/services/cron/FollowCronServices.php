@@ -36,6 +36,8 @@ class FollowCronServices
         // 员工跟进统计数据
         $cronActionBeans->type = 1;
         $staffList = $this->getActionFollowStatisticsForType($cronActionBeans);
+        HelperFuns::writeLog("Staff YesterdayActionFollow count " . count($staffList), '/yestoday', 'YesterdayActionFollow');
+
 
         // 提取分组
         $uesrIds = array_column($staffList, 'staff_id');
@@ -66,8 +68,10 @@ class FollowCronServices
         // 团队跟进统计数据
         $cronActionBeans->type = 2;
         $departmentList = $this->getActionFollowStatisticsForType($cronActionBeans);
+        HelperFuns::writeLog("Department YesterdayActionFollow count " . count($staffList), '/yestoday', 'YesterdayActionFollow');
+
         // 数据处理
-        foreach ($staffList as $v) {
+        foreach ($departmentList as $v) {
             $data["enterprise_id"] = $v['enterprise_id'];
             $data["department_id"] = $v["department_id"];
             $data["staff_id"]      = 0;
@@ -143,6 +147,7 @@ class FollowCronServices
         // 员工跟进统计数据
         $cronActionBeans->type = 1;
         $staffList = $this->getFollowInfoStatistics($cronActionBeans);
+        HelperFuns::writeLog("Staff YesterdayOldFollow count " . count($staffList), '/yestoday', 'YesterdayOldFollow');
 
         // 提取分组
         $uesrIds = array_column($staffList, 'user_id');

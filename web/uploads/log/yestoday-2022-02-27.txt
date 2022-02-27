@@ -1,0 +1,35 @@
+<---------++Date:  2022-02-27 12:16:51------------>
+File:E:\Web\pragle_erp\system\services\cron\EmailCronServices.php
+Line:36
+Function:getYesterdayEmailStatistics
+Args:["emailstatistics count 0","\/yestoday","email"]
+Log Description:email
+LogMsg:emailstatistics count 0
+<---------++Date:  2022-02-27 12:16:51------------>
+File:E:\Web\pragle_erp\system\services\cron\FollowCronServices.php
+Line:39
+Function:getYesterdayActionFollow
+Args:["Staff YesterdayActionFollow count 0","\/yestoday","YesterdayActionFollow"]
+Log Description:YesterdayActionFollow
+LogMsg:Staff YesterdayActionFollow count 0
+<---------++Date:  2022-02-27 12:16:51------------>
+File:E:\Web\pragle_erp\system\services\cron\FollowCronServices.php
+Line:71
+Function:getYesterdayActionFollow
+Args:["Department YesterdayActionFollow count 0","\/yestoday","YesterdayActionFollow"]
+Log Description:YesterdayActionFollow
+LogMsg:Department YesterdayActionFollow count 0
+<---------++Date:  2022-02-27 12:16:51------------>
+File:E:\Web\pragle_erp\system\services\cron\FollowCronServices.php
+Line:150
+Function:getYesterdayOldFollow
+Args:["Staff YesterdayOldFollow count 0","\/yestoday","YesterdayOldFollow"]
+Log Description:YesterdayOldFollow
+LogMsg:Staff YesterdayOldFollow count 0
+<---------++Date:  2022-02-27 12:16:51------------>
+File:E:\Web\pragle_erp\system\services\cron\CustomerCronServices.php
+Line:35
+Function:getYesterdayCustomerStatistics
+Args:["Customer YesterdayCustomerStatistics count 0","\/yestoday","YesterdayCustomerStatistics"]
+Log Description:YesterdayCustomerStatistics
+LogMsg:Customer YesterdayCustomerStatistics count 0

@@ -26,12 +26,13 @@ class CustomerCronServices
     {
         $cronActionBeans = new CronActionBeans();
         $time = date("Y-m-d", strtotime("-1 day"));
-        $time = date("Y-m-d", '1645204141');
+        // $time = date("Y-m-d", '1507623030');
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
 
         // 提取统计数据
         $list = $this->getCustomerStatistics($cronActionBeans);
+        HelperFuns::writeLog("Customer YesterdayCustomerStatistics count " . count($list), '/yestoday', 'YesterdayCustomerStatistics');
 
         // 提取分组
         $uesrIds = array_column($list, 'user_id');
@@ -42,10 +43,6 @@ class CustomerCronServices
                 ["type" => 2],
                 ["in", "user_id", $uesrIds],
             ])->indexBy("user_id")->all();
-
-
-        // 统计数据对象
-        $cronActionBeans = new \system\beans\cron\CronActionBeans();
 
         // 实例化对象
         $srvObj = ServiceFactory::getInstance("BaseDB", TableMap::ActionDayStatisticsLog);
@@ -60,7 +57,7 @@ class CustomerCronServices
             $data["day"]           = date("d", $cronActionBeans->stime + 3600);
             $data["week"]          = date("W", $cronActionBeans->stime + 3600);
             $data["value"]         = $v['cnt'];
-            $data["action_id"]     = 225;
+            $data["action_id"]     = 222;
             $data["ctime"]         = time();
             // 写入
             $result = $srvObj->insert($data);
@@ -85,7 +82,7 @@ class CustomerCronServices
         }
 
         // 字段
-        $field = "id enterprise_id,user_id,COUNT(*) cnt";
+        $field = "`id` `enterprise_id`,`belong_to` `user_id`,COUNT(*) `cnt`";
 
         // 构建查询
         $query = (new Query())->from(TableMap::Enterprise)
@@ -101,7 +98,7 @@ class CustomerCronServices
         }
 
         return $query->select($field)
-            ->groupBy("user_id")
-            ->all(\Yii::$app->dbdata);
+            ->groupBy("belong_to")
+            ->all();
     }
 }

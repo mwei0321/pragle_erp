@@ -65,6 +65,7 @@ class ActionCronServices
 
         // 提取员工动作完成对象
         $actionLogSrv = ServiceFactory::getInstance("ActionLogSrv");
+        $finishActionObj = ServiceFactory::getInstance("ActionScoreSrv");
 
         // 处理是否完成动作目标
         foreach ($list as $v) {
@@ -97,7 +98,7 @@ class ActionCronServices
                 $actionScoreBeans->obj_id = $actionLogId;
                 $actionScoreBeans->type   = 1;
                 // 添加积分入库
-                $result = ServiceFactory::getInstance("ActionScoreSrv")->addActionFinishScore($actionScoreBeans);
+                $result = $finishActionObj->addActionFinishScore($actionScoreBeans);
                 if ($result < 1) {
                     return -2;
                 }

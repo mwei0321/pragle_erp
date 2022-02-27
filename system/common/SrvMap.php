@@ -5,7 +5,7 @@
  * @Author: MaWei
  * @Date:   2021-10-27
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-01-06 10:40:38 10:40:38
+ * @Last Modified time: 2022-01-06 10:40:38
  */
 
 namespace system\common;
@@ -29,6 +29,7 @@ class SrvMap
     public $EmailCronSrv    = 'system\services\cron\EmailCronServices';
     public $ActionCronSrv   = 'system\services\cron\ActionCronServices';
     public $FollowCronSrv   = 'system\services\cron\FollowCronServices';
+    public $CustomerCronSrv = 'system\services\cron\CustomerCronServices';
 
 
     // 引用旧的代码

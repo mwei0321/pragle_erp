@@ -25,7 +25,20 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=pargle_erp',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ],
+        'dbdata' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=pargle_dbdata',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ],
     ],
     'params' => $params,
     /*
@@ -36,6 +49,9 @@ $config = [
     ],
     */
 ];
+
+// 自定义别名
+\Yii::setAlias('@system', dirname(__DIR__) . '/system');
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment

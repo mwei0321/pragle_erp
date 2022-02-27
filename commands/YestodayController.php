@@ -9,19 +9,18 @@
  */
 
 
-namespace app\controllers\cron;
+namespace app\commands;
 
-use app\controllers\InitController;
-use system\common\{ServiceFactory, TableMap};
-use system\traits\BindBeanParamsTrait;
-use system\beans\kpi\ActionBeans;
+use yii\console\Controller;
+use yii\console\ExitCode;
+use system\common\{ServiceFactory, TableMap, HelperFuns};
 
-class YestodayController extends InitController
+class YestodayController extends Controller
 {
 
 
     /**
-     * 0 2 * * * /domedea/pragle_erp/yii yestoday/index
+     * 20 1 * * * /domedea/pragle_erp/yii yestoday/index
      * 执行昨天数据统计
      * date: 2022-02-24 22:55:00
      * @author  <mawei.live>
@@ -31,11 +30,13 @@ class YestodayController extends InitController
     {
         // 昨天邮件统计 
         ServiceFactory::getInstance("EmailCronSrv")->getYesterdayEmailStatistics();
-        // 昨天新跟进动作统计
+        // // 昨天新跟进动作统计
         ServiceFactory::getInstance("FollowCronSrv")->getYesterdayActionFollow();
-        // 昨天旧跟进动作统计
+        // // 昨天旧跟进动作统计
         ServiceFactory::getInstance("FollowCronSrv")->getYesterdayOldFollow();
         // 昨天客户统计
         ServiceFactory::getInstance("CustomerCronSrv")->getYesterdayCustomerStatistics();
+
+        return ExitCode::OK;
     }
 }

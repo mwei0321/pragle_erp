@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,6 +10,7 @@ namespace app\commands;
 
 use yii\console\Controller;
 use yii\console\ExitCode;
+use system\common\{ServiceFactory, TableMap};
 
 /**
  * This command echoes the first argument that you have entered.
@@ -27,7 +29,10 @@ class HelloController extends Controller
      */
     public function actionIndex($message = 'hello world')
     {
-        echo $message . "\n";
+        // 实例化对象
+        $info = ServiceFactory::getInstance("BaseDB", TableMap::Config)->getInfoById(200);
+
+        echo json_encode($info);
 
         return ExitCode::OK;
     }

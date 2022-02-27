@@ -33,6 +33,7 @@ class EmailCronServices
 
         // 提取统计数据
         $list = $this->getEmailStatistics($cronActionBeans);
+        HelperFuns::writeLog("emailstatistics count " . count($list), '/yestoday', 'email');
 
         // 提取分组
         $uesrIds = array_column($list, 'user_id');

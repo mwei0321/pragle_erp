@@ -16,6 +16,8 @@ require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
 
 $config = require __DIR__ . '/config/console.php';
 
+define("ROOT_PATH", __DIR__);
+
 $application = new yii\console\Application($config);
 $exitCode = $application->run();
 exit($exitCode);
