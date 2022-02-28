@@ -19,7 +19,7 @@ class TableMap
 	const DepartmentActionKpi     = 'department_action_kpi';
 	const Staff                   = 'user';
 	const ActionFollow            = "action_follow";
-	const ActionFollowLog         = "action_follow_log";
+	const FollowScoreLog         = "action_follow_score_log";
 	const ActionDayStatisticsLog  = "action_day_statistics_log";
 	const ActionCronLog           = "action_cron_log";
 	const StaffDepartment         = 'user_department';

@@ -521,18 +521,33 @@
 
 请求参数：
 
-| 参数名        | 类型   | 必需 | 值   | 说明                 |
-| ------------- | ------ | ---- | ---- | -------------------- |
-| enterprise_id | int    | 是   | 1    | 企业id               |
-| type          | int    | 是   | 1    | 类型 (1.个人 2.团队) |
-| year          | string | 是   | 2022 | 年份                 |
-| department_id | int    | 否   | 1    | 部门                 |
+| 参数名        | 类型   | 必需 | 值   | 说明                            |
+| ------------- | ------ | ---- | ---- | ------------------------------- |
+| enterprise_id | int    | 是   | 1    | 企业id                          |
+| type          | int    | 是   | 1    | 类型 (1.个人 2.团队)            |
+| year          | string | 是   | 2022 | 年份                            |
+| department_id | int    | 否   | 1    | 部门                            |
+| is_year_all   | int    | 是   | 1    | 是否是统计一年的总和(1.是 0.否) |
 
 返回参数：
 
 团队
 
 ```json
+# is_year_all = 1
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": [
+        {
+            "name": "All Dept.", // 部门名称
+            "department_id": "40232", // 部门ID
+            "target": 10  // 1年目标
+            "completed": 10  // 1年的完成
+        },
+    ],
+}
+# is_year_all = 0
 {
     "code": 200,
     "msg": "return success!",

@@ -87,19 +87,19 @@ class FollowController extends InitController
             return $this->reJson([$result], "write fail", 400);
         }
 
-        // 给跟进的加积分
-        if ($followParams->type == 1) {
-            $scoreBeans                = new \system\beans\score\ActionScoreBeans();
-            $scoreBeans->enterprise_id = $followParams->enterprise_id;
-            $scoreBeans->staff_id      = $followParams->user_id;
-            $scoreBeans->staff_id      = $followParams->department_id;
-            $scoreBeans->type          = $followParams->type;
-            $scoreBeans->year          = date("Y", $followParams->follow_time);
-            $scoreBeans->month         = date("m", $followParams->follow_time);
-            $scoreBeans->day           = date("d", $followParams->follow_time);
-            // 实例化对象并调用
-            $result = ServiceFactory::getInstance("ActionScoreSrv")->followActionScore($scoreBeans);
-        }
+        // // 给跟进的加积分
+        // if ($followParams->type == 1) {
+        //     $scoreBeans                = new \system\beans\score\ActionScoreBeans();
+        //     $scoreBeans->enterprise_id = $followParams->enterprise_id;
+        //     $scoreBeans->staff_id      = $followParams->user_id;
+        //     $scoreBeans->staff_id      = $followParams->department_id;
+        //     $scoreBeans->type          = $followParams->type;
+        //     $scoreBeans->year          = date("Y", $followParams->follow_time);
+        //     $scoreBeans->month         = date("m", $followParams->follow_time);
+        //     $scoreBeans->day           = date("d", $followParams->follow_time);
+        //     // 实例化对象并调用
+        //     $result = ServiceFactory::getInstance("ActionScoreSrv")->followActionScore($scoreBeans);
+        // }
 
         return $this->reJson();
     }

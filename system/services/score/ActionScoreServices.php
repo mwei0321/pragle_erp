@@ -27,7 +27,7 @@ class ActionScoreServices
     {
 
         // 初始化
-        $dbObj = ServiceFactory::getInstance("BaseDB", TableMap::ActionFollowLog);
+        $dbObj = ServiceFactory::getInstance("BaseDB", TableMap::FollowScoreLog);
 
         // 提取动作对应积分
         if ($scoreBeans->score > 0) {
@@ -95,7 +95,7 @@ class ActionScoreServices
     function addActionFinishScore(ActionScoreBeans $scoreBeans)
     {
         // 初始化
-        $dbObj = ServiceFactory::getInstance("BaseDB", TableMap::ActionFollowLog);
+        $dbObj = ServiceFactory::getInstance("BaseDB", TableMap::FollowScoreLog);
 
         // 提取动作对应积分
         if ($scoreBeans->score > 0) {

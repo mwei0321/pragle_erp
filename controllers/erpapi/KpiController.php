@@ -304,7 +304,6 @@ class KpiController extends InitController
     {
         // 年初始化
         $kpiParams->year          = $kpiParams->year ?: date('Y');
-        $kpiParams->enterprise_id = $this->enterpriseId;
 
         // 提取列表
         switch ($kpiParams->type) {
@@ -314,7 +313,7 @@ class KpiController extends InitController
                 break;
                 // 部门
             case 2:
-                $list = ServiceFactory::getInstance("KpiGraphicSrv")->getDepartmentMarketingBarChat($kpiParams);
+                $list = ServiceFactory::getInstance("KpiGraphicSrv")->getDepartmentMarketingBarChatForYear($kpiParams);
                 break;
             default:
                 $list = [];
