@@ -96,7 +96,7 @@ class ActionCronServices
                 $actionScoreBeans->month  = $actionBeans->month ?: date("m");
                 $actionScoreBeans->day    = $actionBeans->day ?: date("d");
                 $actionScoreBeans->obj_id = $actionLogId;
-                $actionScoreBeans->type   = 1;
+                $actionScoreBeans->type   = 3;
                 // 添加积分入库
                 $result = $finishActionObj->addActionFinishScore($actionScoreBeans);
                 if ($result < 1) {
