@@ -76,10 +76,6 @@ class MaketingKpiServices
 
         // 员工
         $staff = $this->getGroupInStaffMarketingKpi($kpiParams);
-        foreach ($staff as $k => $v) {
-            $staff[$k]['target'] = explode(',', $v['target']);
-            $staff[$k]['completed'] = explode(',', $v['completed']);
-        }
 
         return [
             'group_kpi' => $group,
@@ -98,7 +94,7 @@ class MaketingKpiServices
     function getGroupInStaffMarketingKpi(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'sk.staff_id,sk.year,u.username,u.first_name,u.last_name,GROUP_CONCAT(`sk`.`target` ORDER BY `month` ASC ) as `target`,GROUP_CONCAT(`sk`.`completed` ORDER BY `month` ASC) as `completed`';
+        $field = 'sk.staff_id,sk.year,u.username,u.first_name,u.last_name,u.department,GROUP_CONCAT(`sk`.`target` ORDER BY `month` ASC ) as `target`,GROUP_CONCAT(`sk`.`completed` ORDER BY `month` ASC) as `completed`';
 
         // 提取数据
         $list = (new Query())->select($field)
@@ -107,12 +103,16 @@ class MaketingKpiServices
             ->leftJoin(TableMap::GroupMember . ' as gm', 'gm.target_id = u.id')
             ->where([
                 'sk.year'          => $kpiParams->year,
-                'sk.enterprise_id' => $kpiParams->enterprise_id,
             ])
             ->andWhere(['in', 'gm.group_id', $kpiParams->department_id])
             ->groupBy('sk.staff_id')
             ->orderBy('sk.month ASC')
             ->all();
+
+        foreach ($list as $k => $v) {
+            $list[$k]['target'] = explode(',', $v['target']);
+            $list[$k]['completed'] = explode(',', $v['completed']);
+        }
 
         return $list;
     }

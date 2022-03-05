@@ -37,20 +37,16 @@ class EmailCronServices
 
         // 提取分组
         $uesrIds = array_column($list, 'user_id');
-        $department = (new Query())->select("id,user_id")
-            ->from(TableMap::Group)
-            ->where([
-                "and",
-                ["type" => 2],
-                ["in", "user_id", $uesrIds],
-            ])->indexBy("user_id")->all();
+        $department = (new Query())->select("id,department ")
+            ->from(TableMap::User)
+            ->where(["in", "id", $uesrIds])->indexBy("id")->all();
 
         // 实例化对象
         $srvObj = ServiceFactory::getInstance("BaseDB", TableMap::ActionDayStatisticsLog);
         // 数据处理
         foreach ($list as $v) {
             $data["enterprise_id"] = $v['enterprise_id'];
-            $data["department_id"] = $department[$v["user_id"]]["id"] ?? 0;
+            $data["department_id"] = $department[$v["user_id"]]["department"] ?? 0;
             $data["staff_id"]      = $v['user_id'];
             $data["year"]          = date("Y", $cronActionBeans->stime + 3600);
             $data["month"]         = date("m", $cronActionBeans->stime + 3600);

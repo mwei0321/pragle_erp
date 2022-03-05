@@ -14,10 +14,28 @@ use app\controllers\InitController;
 use system\common\{ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
 use system\beans\kpi\KpiBeans;
+use system\beans\kpi\ActionBeans;
 
 class KpiController extends InitController
 {
     use BindBeanParamsTrait;
+
+
+    function actionIndex() {
+        // // 昨天邮件统计 
+        // ServiceFactory::getInstance("EmailCronSrv")->getYesterdayEmailStatistics();
+        // // 昨天新跟进动作统计
+        ServiceFactory::getInstance("FollowCronSrv")->getYesterdayActionFollow();
+        // // 昨天旧跟进动作统计
+        ServiceFactory::getInstance("FollowCronSrv")->getYesterdayOldFollow();
+        // // 昨天客户统计
+        // ServiceFactory::getInstance("CustomerCronSrv")->getYesterdayCustomerStatistics();
+
+        $actionBeans = new ActionBeans();
+        $actionBeans->cycle = 1;
+        // 员工每天完成统计
+        ServiceFactory::getInstance("ActionCronSrv")->staffActionFinishCheck($actionBeans);
+    }
 
     /**
      * 部门员工kpi列表
@@ -39,7 +57,7 @@ class KpiController extends InitController
         }
 
         // 提取列表
-        $list = ServiceFactory::getInstance("MaketingKpiSrv")->getDepartmentAndStaffMarketingKpi($kpiParams);
+        $list = ServiceFactory::getInstance("MaketingKpiSrv")->getGroupInStaffMarketingKpi($kpiParams);
 
         return $this->reJson($list);
     }
@@ -53,9 +71,25 @@ class KpiController extends InitController
      */
     function actionYear(KpiBeans $kpiParams)
     {
-        $year = ServiceFactory::getInstance("MaketingKpiSrv")->getKpiYears($kpiParams);
+        $year = ServiceFactory::getInstance("BaseDB",TableMap::ActionYear)->getListByCondition(["id"=>0]);
 
         return $this->reJson($year);
+    }
+
+    function actionAddyear(KpiBeans $kpiParams) {
+        if(ServiceFactory::getInstance("BaseDB",TableMap::ActionYear)->insert(['year' => $kpiParams->year]) < 1) {
+            return $this->reJson([],"fail",400);
+        }
+
+        return $this->reJson();
+    }
+
+    function actionDelyear(KpiBeans $kpiParams) {
+        if(ServiceFactory::getInstance("BaseDB")->delById(['id' => $kpiParams->id],[],TableMap::ActionYear,true) < 1) {
+            return $this->reJson([],"fail",400);
+        }
+
+        return $this->reJson();
     }
 
     /**
@@ -176,7 +210,7 @@ class KpiController extends InitController
     function actionDepartmentaction(KpiBeans $kpiParams)
     {
         // 年初始化
-        $kpiParams->year          = $kpiParams->year ?: date('Y');
+        $kpiParams->year = $kpiParams->year ?: date('Y');
 
         // 提取数据
         $list = ServiceFactory::getInstance("ActionKpiSrv")->getDepartmentActionKpi($kpiParams);
@@ -303,7 +337,7 @@ class KpiController extends InitController
         switch ($kpiParams->type) {
                 // 个人
             case 1:
-                $list = ServiceFactory::getInstance("KpiGraphicSrv")->getStaffMarketingBarChat($kpiParams);
+                $list = ServiceFactory::getInstance("KpiGraphicSrv")->getStaffMarketingBarChatForMonth($kpiParams);
                 break;
                 // 部门
             case 2:

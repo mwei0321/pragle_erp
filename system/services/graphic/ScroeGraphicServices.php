@@ -27,14 +27,17 @@ class ScroeGraphicServices
     function getStaffMonthScore(ScoreBeans $scoreParams)
     {
         // 字段
-        $field = "`obj_id` AS `staff_id`,`month`,SUM(`score`) AS `cnt`";
+        $field = "`staff_id`,`month`,SUM(`score`) AS `cnt`";
 
         // 提取条件构建
         $query = $this->_staffScoreQuery($scoreParams);
+        if(!$query) {
+            return [];
+        }
 
         // 提取结果 
         $result = $query->select($field)
-            ->groupBy("obj_id,month")
+            ->groupBy("staff_id,month")
             ->orderBy("score DESC")
             ->all();
         if (!$result) {
@@ -71,14 +74,14 @@ class ScroeGraphicServices
     function getStaffYearScore(ScoreBeans $scoreParams)
     {
         // 字段
-        $field = "`obj_id` AS `staff_id`,SUM(`score`) AS `cnt`";
+        $field = "`staff_id`,SUM(`score`) AS `cnt`";
 
         // 提取条件构建
         $query = $this->_staffScoreQuery($scoreParams);
 
         // 提取数据
         return $query->select($field)
-            ->groupBy("obj_id")
+            ->groupBy("staff_id")
             ->orderBy("score DESC")
             ->all();
     }
@@ -112,7 +115,7 @@ class ScroeGraphicServices
                 $staffId = array_column($staffId, 'target_id');
                 $query->andWhere(['in', "obj_id", $staffId]);
             } else {
-                return [];
+                return null;
             }
         }
 
@@ -139,14 +142,17 @@ class ScroeGraphicServices
     function getDepartmentMonthScore(ScoreBeans $scoreParams)
     {
         // 字段
-        $field = "`obj_id` AS `department_id`,`month`,SUM(`score`) AS `cnt`";
+        $field = "`department_id`,`month`,SUM(`score`) AS `cnt`";
 
         // 提取条件构建
         $query = $this->_departmentScoreQuery($scoreParams);
+        if(!$query) {
+            return [];
+        }
 
         // 提取结果 
         $result = $query->select($field)
-            ->groupBy("obj_id,month")
+            ->groupBy("department_id,month")
             ->orderBy("score DESC")
             ->all();
         if (!$result) {
@@ -202,7 +208,7 @@ class ScroeGraphicServices
                 $departmentIds = array_column($departmentIds, 'id');
                 $query->andWhere(['in', "obj_id", $departmentIds]);
             } else {
-                return [];
+                return null;
             }
         }
 

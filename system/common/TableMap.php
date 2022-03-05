@@ -32,6 +32,10 @@ class TableMap
 	const GroupMember             = 'group_member';
 	const FollowInfo              = "follow_info";
 	const User                    = "user";
+	const Order = "order";
+	const OrderDetail = "order_detail";
+	const Product = "product";
+	const ActionYear = "action_year";
 
 	// dbDate 库
 	const TaskQueue               = "task_queue";

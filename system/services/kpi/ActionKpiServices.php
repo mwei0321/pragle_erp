@@ -78,6 +78,7 @@ class ActionKpiServices
         $query = (new Query())->select($field)
             ->from(TableMap::StaffActionKpi . ' as sa')
             ->where([
+                "enterprise_id" => $kpiParams->enterprise_id,
                 "del_time" => 0,
             ]);
 
@@ -151,6 +152,7 @@ class ActionKpiServices
         $query = (new Query())->select($field)
             ->from(TableMap::DepartmentActionKpi . ' as sa')
             ->where([
+                "enterprise_id" => $kpiParams->enterprise_id,
                 "del_time" => 0
             ]);
 

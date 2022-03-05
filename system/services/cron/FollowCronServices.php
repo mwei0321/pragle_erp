@@ -40,20 +40,16 @@ class FollowCronServices
         HelperFuns::writeLog("Staff YesterdayActionFollow count " . count($staffList), 'yestoday', 'YesterdayActionFollow');
 
 
-        // 提取分组
+        // 提取员工部门
         $uesrIds = array_column($staffList, 'staff_id');
-        $department = (new Query())->select("id,user_id")
-            ->from(TableMap::Group)
-            ->where([
-                "and",
-                ["type" => 2],
-                ["in", "user_id", $uesrIds],
-            ])->indexBy("user_id")->all();
+        $department = (new Query())->select("id,department ")
+            ->from(TableMap::User)
+            ->where(["in", "id", $uesrIds])->indexBy("id")->all();
 
         // 数据处理
         foreach ($staffList as $v) {
             $data["enterprise_id"] = $v['enterprise_id'];
-            $data["department_id"] = $department[$v["staff_id"]]["id"] ?? 0;
+            $data["department_id"] = $department[$v["staff_id"]]["department"] ?? 0;
             $data["staff_id"]      = $v['staff_id'];
             $data["year"]          = date("Y", $cronActionBeans->stime);
             $data["month"]         = date("m", $cronActionBeans->stime);
@@ -152,18 +148,14 @@ class FollowCronServices
 
         // 提取分组
         $uesrIds = array_column($staffList, 'user_id');
-        $department = (new Query())->select("id,user_id")
-            ->from(TableMap::Group)
-            ->where([
-                "and",
-                ["type" => 2],
-                ["in", "user_id", $uesrIds],
-            ])->indexBy("user_id")->all();
+        $department = (new Query())->select("id,department ")
+            ->from(TableMap::User)
+            ->where(["in", "id", $uesrIds])->indexBy("id")->all();
 
         // 数据处理
         foreach ($staffList as $v) {
             $data["enterprise_id"] = $v['enterprise_id'];
-            $data["department_id"] = $department[$v["user_id"]]["id"] ?? 0;
+            $data["department_id"] = $department[$v["user_id"]]["department"] ?? 0;
             $data["staff_id"]      = $v['user_id'];
             $data["year"]          = date("Y", $cronActionBeans->stime);
             $data["month"]         = date("m", $cronActionBeans->stime);

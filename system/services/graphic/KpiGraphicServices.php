@@ -16,6 +16,49 @@ class KpiGraphicServices
 {
 
 
+    /**
+     * 个人销售条形图排行
+     * @param  \system\beans\kpi\KpiBeans $kpiParams
+     * date: 2022-01-23 20:08:21
+     * @author  <mawei.live>
+     * @return void
+     */
+    function getStaffMarketingBarChatForMonth(KpiBeans $kpiParams)
+    {
+        // 字段
+        $field = 'staff_id,GROUP_CONCAT(`target` ORDER BY `month` ASC) `target`,GROUP_CONCAT(`completed` ORDER BY `month` ASC) completed';
+
+        // 构建条件
+        $query = (new Query())->select($field)
+            ->from(TableMap::StaffMarketingKpi)
+            ->where([
+                'enterprise_id' => $kpiParams->enterprise_id,
+                'year'          => $kpiParams->year,
+            ]);
+
+        // 员工
+        if ($kpiParams->staff_id > 0) {
+            $query->andWhere(["staff_id" => $kpiParams->staff_id]);
+        }
+
+        // 提取数据
+        $query = $query->groupBy("staff_id");
+        $list = (new Query())->from(["k" => $query])
+            ->leftJoin(TableMap::User . ' AS u', 'u.id = k.staff_id')
+            ->select("u.first_name,u.last_name,k.*")
+            ->all();
+
+        // 数据处理
+        if ($list) {
+            foreach ($list as $k => $v) {
+                $list[$k]["target"] = explode(",", $v["target"]);
+                $list[$k]["completed"] = explode(",", $v["completed"]);
+            }
+        }
+
+        return $list;
+    }
+
 
     /**
      * 个人销售条形图排行
@@ -49,7 +92,7 @@ class KpiGraphicServices
         $query = $query->groupBy("staff_id");
         $list = (new Query())->from(["k" => $query])
             ->leftJoin(TableMap::User . ' AS u', 'u.id = k.staff_id')
-            ->select("u.first_name,u.last_name,k.*")
+            ->select("u.first_name,u.last_names,k.*")
             ->all();
 
         // 数据处理
