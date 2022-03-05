@@ -32,7 +32,6 @@ class KpiController extends InitController
     {
         // 年初始化
         $kpiParams->year          = $kpiParams->year ?: date('Y');
-        $kpiParams->enterprise_id = $this->enterpriseId;
 
         // 参数过滤
         if ($kpiParams->department_id < 1) {
@@ -73,9 +72,6 @@ class KpiController extends InitController
             return $this->reJson([], '参数错误!', 400);
         }
         $kpiParams->year = $kpiParams->year ?: date('Y');
-
-        // 企业ID
-        $kpiParams->enterprise_id = $this->enterpriseId;
 
         // 更新入库
         if (!ServiceFactory::getInstance("MaketingKpiSrv")->updateDepartmentAndStaffMarketingKpi($kpiParams)) {
@@ -181,7 +177,6 @@ class KpiController extends InitController
     {
         // 年初始化
         $kpiParams->year          = $kpiParams->year ?: date('Y');
-        $kpiParams->enterprise_id = $this->enterpriseId;
 
         // 提取数据
         $list = ServiceFactory::getInstance("ActionKpiSrv")->getDepartmentActionKpi($kpiParams);
@@ -206,7 +201,6 @@ class KpiController extends InitController
         if (!$kpiParams->staff || !$kpiParams->action) {
             return $this->reJson([], '参数错误!', 400);
         }
-        $kpiParams->enterprise_id = $this->enterpriseId;
 
         // 更新入库
         if (!ServiceFactory::getInstance("ActionKpiSrv")->updateStaffActionKpi($kpiParams)) {
@@ -230,7 +224,7 @@ class KpiController extends InitController
         if (!$kpiParams->action || !$kpiParams->department) {
             return $this->reJson([$kpiParams], '参数错误!', 400);
         }
-        $kpiParams->enterprise_id = $this->enterpriseId;
+
         // 更新入库
         if (!ServiceFactory::getInstance("ActionKpiSrv")->updateDepartmentActionKpi($kpiParams)) {
             return $this->reJson([$kpiParams->errCode], $kpiParams->errMsg, 400);
@@ -313,7 +307,7 @@ class KpiController extends InitController
                 break;
                 // 部门
             case 2:
-                $list = ServiceFactory::getInstance("KpiGraphicSrv")->getDepartmentMarketingBarChatForYear($kpiParams);
+                $list = ServiceFactory::getInstance("KpiGraphicSrv")->getDepartmentMarketingBarChatForMonth($kpiParams);
                 break;
             default:
                 $list = [];

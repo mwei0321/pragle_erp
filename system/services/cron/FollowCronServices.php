@@ -27,6 +27,7 @@ class FollowCronServices
     {
         $cronActionBeans = new CronActionBeans();
         $time = date("Y-m-d", strtotime("-1 day"));
+        // $time = "2022-03-03";
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
 
@@ -36,7 +37,7 @@ class FollowCronServices
         // 员工跟进统计数据
         $cronActionBeans->type = 1;
         $staffList = $this->getActionFollowStatisticsForType($cronActionBeans);
-        HelperFuns::writeLog("Staff YesterdayActionFollow count " . count($staffList), '/yestoday', 'YesterdayActionFollow');
+        HelperFuns::writeLog("Staff YesterdayActionFollow count " . count($staffList), 'yestoday', 'YesterdayActionFollow');
 
 
         // 提取分组
@@ -147,7 +148,7 @@ class FollowCronServices
         // 员工跟进统计数据
         $cronActionBeans->type = 1;
         $staffList = $this->getFollowInfoStatistics($cronActionBeans);
-        HelperFuns::writeLog("Staff YesterdayOldFollow count " . count($staffList), '/yestoday', 'YesterdayOldFollow');
+        HelperFuns::writeLog("Staff YesterdayOldFollow count " . count($staffList), 'yestoday', 'YesterdayOldFollow');
 
         // 提取分组
         $uesrIds = array_column($staffList, 'user_id');

@@ -67,12 +67,21 @@ class ActionCronServices
         $actionLogSrv = ServiceFactory::getInstance("ActionLogSrv");
         $finishActionObj = ServiceFactory::getInstance("ActionScoreSrv");
 
+        // 日期
+        $timem = strtotime("-1 day");
+        $year = date('Y',$timem);
+        $month = date('m',$timem);
+        $day = date('d',$timem);
+
         // 处理是否完成动作目标
         foreach ($list as $v) {
             // 提取指定员工的动作完成值参数
             $actionBeans->enterprise_id = $v['enterprise_id'];
             $actionBeans->staff_id      = $v['staff_id'];
             $actionBeans->action_id     = $v['action_id'];
+            $actionBeans->year = $year;
+            $actionBeans->month = $month;
+            $actionBeans->day = $day;
 
             // 写入执行记录
             $CronActionLogBeans         = new CronActionLogBeans();
@@ -96,7 +105,7 @@ class ActionCronServices
                 $actionScoreBeans->month  = $actionBeans->month ?: date("m");
                 $actionScoreBeans->day    = $actionBeans->day ?: date("d");
                 $actionScoreBeans->obj_id = $actionLogId;
-                $actionScoreBeans->type   = 3;
+                $actionScoreBeans->type   = 1;
                 // 添加积分入库
                 $result = $finishActionObj->addActionFinishScore($actionScoreBeans);
                 if ($result < 1) {
@@ -104,7 +113,7 @@ class ActionCronServices
                 }
 
                 // 给员工加积分
-                ServiceFactory::getInstance("BaseDB", TableMap::User)->increment("score", "`id` = " . $actionBeans->staff_id, TableMap::User, $CronActionLogBeans->score);
+                // ServiceFactory::getInstance("BaseDB", TableMap::User)->increment("score", "`id` = " . $actionBeans->staff_id, TableMap::User, $CronActionLogBeans->score);
             }
         }
 

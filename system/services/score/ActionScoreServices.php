@@ -119,7 +119,8 @@ class ActionScoreServices
         // 给跟进人添加积分
         $scoreId = $dbObj->getFieldValByCondition([
             "enterprise_id" => $scoreBeans->enterprise_id,
-            "obj_id"        => $scoreBeans->type == 1 ? $scoreBeans->staff_id : $scoreBeans->department_id,
+            "department_id"        => $scoreBeans->department_id,
+            "staff_id"        => $scoreBeans->staff_id,
             "type"          => $scoreBeans->type,
             "year"          => $scoreBeans->year,
             "month"         => $scoreBeans->month,
@@ -132,7 +133,8 @@ class ActionScoreServices
         } else {
             $data = [
                 "enterprise_id" => $scoreBeans->enterprise_id,
-                "obj_id"        => $scoreBeans->type == 1 ? $scoreBeans->staff_id : $scoreBeans->department_id,
+                "department_id"        => $scoreBeans->department_id,
+                "staff_id"        => $scoreBeans->staff_id,
                 "type"          => $scoreBeans->type,
                 "year"          => $scoreBeans->year,
                 "month"         => $scoreBeans->month,

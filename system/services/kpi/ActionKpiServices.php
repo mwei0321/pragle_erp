@@ -72,7 +72,7 @@ class ActionKpiServices
     function getStaffActionKpi(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'sa.id,sa.name,sa.cycle,sa.action_id,sa.action_value,sa.action_type,sa.staff_id,sa.year,sa.ctime,sa.utime';
+        $field = 'sa.id,sa.name,sa.cycle,sa.action_id,sa.action_type,sa.action_value,sa.action_value,sa.action_type,sa.staff_id,sa.year,sa.ctime,sa.utime';
 
         // 构建条件
         $query = (new Query())->select($field)
@@ -145,7 +145,7 @@ class ActionKpiServices
     function getDepartmentActionKpi(KpiBeans $kpiParams)
     {
         // 字段
-        $field = 'sa.id,sa.action_id,sa.name,sa.cycle,sa.department_id,sa.year,sa.utime,sa.ctime';
+        $field = 'sa.id,sa.action_id,sa.action_type,sa.action_value,sa.name,sa.cycle,sa.department_id,sa.year,sa.utime,sa.ctime';
 
         // 构建条件
         $query = (new Query())->select($field)
@@ -237,6 +237,7 @@ class ActionKpiServices
             $data['name']          = $kpiParams->name;
             $data['cycle']         = $kpiParams->cycle;
             $data['staff_id']      = $val;
+            $data["del_time"] = 0;
             foreach ($kpiParams->action as $v) {
                 $data['action_id']    = $v['id'];
                 $data["action_value"] = $v["value"];
@@ -292,6 +293,7 @@ class ActionKpiServices
             $data['name']          = $kpiParams->name;
             $data['cycle']         = $kpiParams->cycle;
             $data['department_id']      = $val;
+            $data["del_time"] = 0;
             foreach ($kpiParams->action as $v) {
                 $data['action_id']    = $v;
                 // 查询是否有记录

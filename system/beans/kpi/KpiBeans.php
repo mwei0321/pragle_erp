@@ -29,6 +29,6 @@ class KpiBeans extends BaseBean
     public $staff         = [];
     public $department    = [];
     public $action        = null;
-    public $timeFormat    = "Y-m-d H: i";
+    public $timeFormat    = "Y-m-d H:i";
     public $is_year_all   = 1; // 是否是一年总和统计
 }

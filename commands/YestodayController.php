@@ -20,7 +20,6 @@ class YestodayController extends Controller
 
 
     /**
-     * 20 1 * * * /domedea/pragle_erp/yii yestoday/index
      * 执行昨天数据统计
      * date: 2022-02-24 22:55:00
      * @author  <mawei.live>
