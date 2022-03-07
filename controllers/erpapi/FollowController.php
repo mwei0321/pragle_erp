@@ -29,6 +29,11 @@ class FollowController extends InitController
      */
     function actionGetlist(FollowBeans $followParams)
     {
+        // 企业id
+        if ($followParams->enterprise_id < 1) {
+            return $this->reJson([], '企业id不能为空', 400);
+        }
+
         // 提取数据
         $list = ServiceFactory::getInstance("ActionFollowSrv")->getActionFollowList($followParams);
 

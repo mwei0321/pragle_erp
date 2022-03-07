@@ -38,6 +38,21 @@ class ActionFollowServices
             $query->andWhere(['in', 'action_id', $followParams->action_id]);
         }
 
+        // 企业ID
+        if ($followParams->enterprise_id > 0) {
+            $query->andWhere(["enterprise_id" => $followParams->enterprise_id]);
+        }
+
+        // 个人
+        if ($followParams->staff_id > 0) {
+            $query->andWhere(["staff_id" => $followParams->staff_id]);
+        }
+
+        // 部门
+        if ($followParams->department_id > 0) {
+            $query->andWhere(["department_id" => $followParams->department_id]);
+        }
+
         // 总条数
         $count = $query->count();
         if ($count < 1) {

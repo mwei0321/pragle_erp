@@ -34,7 +34,7 @@ class YestodayController extends InitController
         // 昨天新跟进动作统计
         ServiceFactory::getInstance("FollowCronSrv")->getYesterdayActionFollow();
         // 昨天旧跟进动作统计
-        ServiceFactory::getInstance("FollowCronSrv")->getYesterdayOldFollow();
+        // ServiceFactory::getInstance("FollowCronSrv")->getYesterdayOldFollow();
         // 昨天客户统计
         ServiceFactory::getInstance("CustomerCronSrv")->getYesterdayCustomerStatistics();
     }

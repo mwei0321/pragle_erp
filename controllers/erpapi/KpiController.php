@@ -21,7 +21,8 @@ class KpiController extends InitController
     use BindBeanParamsTrait;
 
 
-    function actionIndex() {
+    function actionIndex()
+    {
         // // 昨天邮件统计 
         // ServiceFactory::getInstance("EmailCronSrv")->getYesterdayEmailStatistics();
         // // 昨天新跟进动作统计
@@ -71,22 +72,24 @@ class KpiController extends InitController
      */
     function actionYear(KpiBeans $kpiParams)
     {
-        $year = ServiceFactory::getInstance("BaseDB",TableMap::ActionYear)->getListByCondition(["id"=>0]);
+        $year = ServiceFactory::getInstance("BaseDB", TableMap::ActionYear)->getListByCondition([">", "id", 0]);
 
         return $this->reJson($year);
     }
 
-    function actionAddyear(KpiBeans $kpiParams) {
-        if(ServiceFactory::getInstance("BaseDB",TableMap::ActionYear)->insert(['year' => $kpiParams->year]) < 1) {
-            return $this->reJson([],"fail",400);
+    function actionAddyear(KpiBeans $kpiParams)
+    {
+        if (ServiceFactory::getInstance("BaseDB", TableMap::ActionYear)->insert(['year' => $kpiParams->year]) < 1) {
+            return $this->reJson([], "fail", 400);
         }
 
         return $this->reJson();
     }
 
-    function actionDelyear(KpiBeans $kpiParams) {
-        if(ServiceFactory::getInstance("BaseDB")->delById(['id' => $kpiParams->id],[],TableMap::ActionYear,true) < 1) {
-            return $this->reJson([],"fail",400);
+    function actionDelyear(KpiBeans $kpiParams)
+    {
+        if (ServiceFactory::getInstance("BaseDB")->delById(['id' => $kpiParams->id], [], TableMap::ActionYear, true) < 1) {
+            return $this->reJson([], "fail", 400);
         }
 
         return $this->reJson();

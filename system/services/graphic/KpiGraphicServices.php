@@ -92,6 +92,7 @@ class KpiGraphicServices
         $query = $query->groupBy("staff_id");
         $list = (new Query())->from(["k" => $query])
             ->leftJoin(TableMap::User . ' AS u', 'u.id = k.staff_id')
+            ->andWhere(['u.state' => 1])
             ->select("u.first_name,u.last_names,k.*")
             ->all();
 
