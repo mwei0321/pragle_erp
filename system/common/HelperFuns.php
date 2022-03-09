@@ -329,6 +329,7 @@ class HelperFuns
      */
     static function getOrderSN()
     {
+        defined("ORDER_PREFIX") ?: define("ORDER_PREFIX", "MW");
         list($usec, $sec) = explode(" ", microtime());
         $sn = ORDER_PREFIX . date('YmdHis') . intval($usec * 1000000);
         return self::getStrByTime(ORDER_PREFIX);

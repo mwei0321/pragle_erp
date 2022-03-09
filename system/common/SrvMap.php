@@ -24,8 +24,8 @@ class SrvMap
     public $ScoreGraphiSrv  = 'system\services\graphic\ScroeGraphicServices';
     public $ActionFollowSrv = 'system\services\follow\ActionFollowServices';
     public $ActionScoreSrv  = 'system\services\score\ActionScoreServices';
-    public $ProductSrv  = 'system\services\product\ProductServices';
-    public $OrderSrv  = 'system\services\order\OrderServices';
+    public $ProductSrv      = 'system\services\product\ProductServices';
+    public $OrderSrv        = 'system\services\order\OrderServices';
 
     // 定时任务
     public $EmailCronSrv    = 'system\services\cron\EmailCronServices';
