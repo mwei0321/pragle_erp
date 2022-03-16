@@ -38,6 +38,8 @@ class OrderServices
             "total_amount"  => $orderBeans->total_amount,
             "order_type"    => 2,
             "status"        => 2,
+            "description"   => $orderBeans->description,
+            "money_type"    => $orderBeans->description,
             "created_at"    => time(),
         ];
         $result = $srvObj->insert($data);

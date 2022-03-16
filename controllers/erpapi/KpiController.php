@@ -11,7 +11,7 @@
 namespace app\controllers\erpapi;
 
 use app\controllers\InitController;
-use system\common\{ServiceFactory, TableMap};
+use system\common\{HelperFuns, ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
 use system\beans\kpi\KpiBeans;
 use system\beans\kpi\ActionBeans;
@@ -20,6 +20,34 @@ class KpiController extends InitController
 {
     use BindBeanParamsTrait;
 
+    function actionA()
+    {
+        $file = [
+            "asset/asset.go",
+            "db/broadcast.go",
+            "db/class.go",
+            "db/student.go",
+            "db/teacher.go",
+            "handler/broadcast.go",
+            "job/job.go",
+            "main.go",
+            "model/broadcast_open.go",
+            "model/teachers.go",
+            "proto/broadcast/broadcast.pb.go",
+            "proto/broadcast/broadcast.pb.micro.go",
+            "proto/broadcast/broadcast.proto",
+            "res/sql/mysql/get.classbroadcastlist.stpl",
+            "res/sql/mysql/get.teacherbroadcastlist.stpl",
+            "service/broadcast.go",
+            "service/pedometer.go",
+            "tool/arr.go",
+        ];
+
+        exec("cd E:/Go/ancda/user-api&&git diff --name-only e3a9191e5a686^ 7a429fd6d3f8", $a);
+        var_dump($a);
+
+        var_dump(HelperFuns::copyFile("E:/Go/ancda/user-api/", $a));
+    }
 
     function actionIndex()
     {
@@ -58,7 +86,7 @@ class KpiController extends InitController
         }
 
         // 提取列表
-        $list = ServiceFactory::getInstance("MaketingKpiSrv")->getGroupInStaffMarketingKpi($kpiParams);
+        $list = ServiceFactory::getInstance("MaketingKpiSrv")->getDepartmentAndStaffMarketingKpi($kpiParams);
 
         return $this->reJson($list);
     }

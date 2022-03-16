@@ -378,6 +378,28 @@ class HelperFuns
         return $text;
     }
 
+    /**
+     * 复制一个文件列表到另一个文件里面
+     * @param  [type] $_path
+     * @param  [type] $_fileList
+     * @param  string $_prefix
+     * date: 2022-03-16 16:59:48
+     * @author  <mawei.live>
+     * @return void
+     */
+    static function copyFile($_path, $_fileList, $_prefix = "copy")
+    {
+        $cnt = 0;
+        $path = dirname($_path) . '/' . $_prefix . '/';
+        foreach ($_fileList as $k => $v) {
+            $tmpPath = $path . $v;
+            $tmpSource = $_path . $v;
+            static::createDir(dirname($tmpPath));
+            copy($tmpSource, $tmpPath);
+            $cnt++;
+        }
+        return $cnt;
+    }
 
     /**
      * 过滤表情

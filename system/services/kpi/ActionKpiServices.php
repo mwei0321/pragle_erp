@@ -43,12 +43,13 @@ class ActionKpiServices
             $query->orWhere([
                 'and',
                 ['group_id' => 13],
-                ['in', 'state', [1]]
+                ['in', 'state', [1, 3]]
             ]);
         } elseif ($kpiParams->type == 2) { // 团队
             $query->orWhere([
                 'and',
                 ['group_id' => 13],
+                ['in', 'state', [2, 3]]
             ]);
         } else {
             return [];

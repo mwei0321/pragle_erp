@@ -233,6 +233,7 @@
 | target        | float   | 是   | 1    | 目标金额                   |
 | group_id      | integer | 是   | 1    | 部门分组ID                 |
 | id            | integer | 否   | 0    | 如果有值为更新，否则为写入 |
+| enterprise_id | int     | 是   | 1    | 企业id                     |
 
 请求参数示例：
 
@@ -276,13 +277,14 @@
 
 请求参数：
 
-| 参数名     | 类型   | 必需 | 值   | 说明                              |
-| ---------- | ------ | ---- | ---- | --------------------------------- |
-| year       | string | 是   | 2022 | 年                                |
-| department | array  | 是   | 1    | 部门                              |
-| cycle      | int    | 是   | 2    | 周期(1.每天 2.每月 3.每周 4.每年) |
-| name       | string | 是   | 1    | 名称                              |
-| action     | array  | 是   | []   | 动作列表                          |
+| 参数名        | 类型   | 必需 | 值   | 说明                              |
+| ------------- | ------ | ---- | ---- | --------------------------------- |
+| year          | string | 是   | 2022 | 年                                |
+| department    | array  | 是   | 1    | 部门                              |
+| cycle         | int    | 是   | 2    | 周期(1.每天 2.每月 3.每周 4.每年) |
+| name          | string | 是   | 1    | 名称                              |
+| action        | array  | 是   | []   | 动作列表                          |
+| enterprise_id | int    | 是   | 1    | 企业id                            |
 
 ```json
 {
@@ -313,15 +315,16 @@
 
 请求参数：
 
-| 参数名 | 类型   | 必需 | 值    | 说明                              |
-| :----- | ------ | ---- | ----- | --------------------------------- |
-| year   | string | 是   | 2022  | 年                                |
-| staff  | array  | 是   | [1,2] | 员工ID数组                        |
-| cycle  | int    | 是   | 2     | 周期(1.每天 2.每月 3.每周 4.每年) |
-| action | int    | 是   | []    | 动作列表                          |
-| id     | int    | 是   | 1     | 动作id                            |
-| value  | int    | 是   | 1     | 动作值                            |
-| name   | string | 是   | name  | 名称                              |
+| 参数名        | 类型   | 必需 | 值    | 说明                              |
+| :------------ | ------ | ---- | ----- | --------------------------------- |
+| year          | string | 是   | 2022  | 年                                |
+| staff         | array  | 是   | [1,2] | 员工ID数组                        |
+| cycle         | int    | 是   | 2     | 周期(1.每天 2.每月 3.每周 4.每年) |
+| action        | int    | 是   | []    | 动作列表                          |
+| id            | int    | 是   | 1     | 动作id                            |
+| value         | int    | 是   | 1     | 动作值                            |
+| name          | string | 是   | name  | 名称                              |
+| enterprise_id | int    | 是   | 1     | 企业id                            |
 
 ```json
 {
@@ -603,6 +606,7 @@
 | type          | int  | 是   | 1    | 类型 （1.个人 2.团队） |
 | department_id | int  | 否   | 1    | 部门                   |
 | action_id     | int  | 否   | 1    | 动作列表               |
+| staff_id      | int  | 否   | 1    | 员工                   |
 
 返回参数：
 
@@ -752,6 +756,8 @@
 | product_number    | int    | 是   | 1     | 商品数量     |
 | product_price     | int    | 是   | 1     | 商品价格     |
 | order_num         | string | 是   | 23123 | 订单号       |
+| money_type        | string | 是   | RMB   | 货币         |
+| description       | string | 否   |       | 描述         |
 
 返回参数：
 

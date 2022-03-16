@@ -47,8 +47,20 @@ $config = [
                 ],
             ],
         ],
-        'db' => $dbarr['erp'],
-        'dbdata' => $dbarr['dbdata'],
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=pargle_erp',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ],
+        'dbdata' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=pargle_dbdata',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,

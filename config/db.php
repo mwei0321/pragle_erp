@@ -1,20 +1,11 @@
 <?php
 
 return [
-    'erp' => [
-        'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=localhost;dbname=pargle_erp',
-        'username' => 'root',
-        'password' => '',
-        'charset' => 'utf8',
-    ],
-    'dbdata' => [
-        'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=localhost;dbname=pargle_dbdata',
-        'username' => 'root',
-        'password' => '',
-        'charset' => 'utf8',
-    ],
+    'class' => 'yii\db\Connection',
+    'dsn' => 'mysql:host=localhost;dbname=pargle_erp',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8',
     // Schema cache options (for production environment)
     //'enableSchemaCache' => true,
     //'schemaCacheDuration' => 60,

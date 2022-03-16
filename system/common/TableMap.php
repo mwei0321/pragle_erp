@@ -19,7 +19,7 @@ class TableMap
 	const DepartmentActionKpi     = 'department_action_kpi';
 	const Staff                   = 'user';
 	const ActionFollow            = "action_follow";
-	const FollowScoreLog         = "action_follow_score_log";
+	const FollowScoreLog          = "action_follow_score_log";
 	const ActionDayStatisticsLog  = "action_day_statistics_log";
 	const ActionCronLog           = "action_cron_log";
 	const StaffDepartment         = 'user_department';
@@ -32,10 +32,10 @@ class TableMap
 	const GroupMember             = 'group_member';
 	const FollowInfo              = "follow_info";
 	const User                    = "user";
-	const Order = "order";
-	const OrderDetail = "order_detail";
-	const Product = "product";
-	const ActionYear = "action_year";
+	const Order                   = "order";
+	const OrderDetail             = "order_detail";
+	const Product                 = "product";
+	const ActionYear              = "action_year";
 
 	// dbDate 库
 	const TaskQueue               = "task_queue";

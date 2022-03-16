@@ -43,10 +43,18 @@ class KpiGraphicServices
 
         // 提取数据
         $query = $query->groupBy("staff_id");
-        $list = (new Query())->from(["k" => $query])
+
+        // 连表构建
+        $query = (new Query())->from(["k" => $query])
             ->leftJoin(TableMap::User . ' AS u', 'u.id = k.staff_id')
-            ->select("u.first_name,u.last_name,k.*")
-            ->all();
+            ->andWhere(["in", "state", [1, 3]])
+            ->select("u.first_name,u.last_name,k.*");
+        // 部门
+        if ($kpiParams->department_id > 0) {
+            $query->andWhere(["u.department" => $kpiParams->department_id]);
+        }
+
+        $list = $query->all();
 
         // 数据处理
         if ($list) {
