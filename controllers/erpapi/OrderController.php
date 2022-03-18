@@ -40,4 +40,25 @@ class OrderController extends InitController
 
 		return $this->reJson();
 	}
+
+	/**
+	 * 删除订单
+	 * @param  OrderBeans $orderBeans
+	 * date: 2022-03-18 10:40:47
+	 * @author  <mawei.live>
+	 * @return void
+	 */
+	function actionDelete(OrderBeans $orderBeans)
+	{
+		if ($orderBeans->id < 1) {
+			return $this->reJson([], 'param error', 400);
+		}
+
+		// 实例化对象并调用
+		if (ServiceFactory::getInstance("BaseDB", TableMap::Order)->delById($orderBeans->id, ["is_delete" => 1, "updated_at" => time()]) === false) {
+			return $this->reJson([], 'delete fail', 400);
+		}
+
+		return $this->reJson();
+	}
 }

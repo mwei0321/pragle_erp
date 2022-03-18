@@ -178,15 +178,16 @@
 
 请求参数：
 
-| 参数名     | 类型    | 必需 | 值    | 说明                  |
-| ---------- | ------- | ---- | ----- | --------------------- |
-| year       | string  | 是   | 2021  | 年                    |
-| keyword    | string  | 否   | name  | 名称搜索              |
-| department | array   | 否   | [1,2] | 部门ID                |
-| action     | string  | 否   | 1,2   | 动作,多个动作逗号隔开 |
-| cycle      | integer | 否   | 1     | 周期                  |
-| page       | integer | 是   | 1     | 页数                  |
-| page_size  | integer | 否   | 10    | 每页条数              |
+| 参数名        | 类型    | 必需 | 值    | 说明                  |
+| ------------- | ------- | ---- | ----- | --------------------- |
+| enterprise_id | int     | 是   | 1     | 企业ID                |
+| year          | string  | 是   | 2021  | 年                    |
+| keyword       | string  | 否   | name  | 名称搜索              |
+| department    | array   | 否   | [1,2] | 部门ID                |
+| action        | string  | 否   | 1,2   | 动作,多个动作逗号隔开 |
+| cycle         | integer | 否   | 1     | 周期                  |
+| page          | integer | 是   | 1     | 页数                  |
+| page_size     | integer | 否   | 10    | 每页条数              |
 
 返回参数：
 
@@ -757,6 +758,7 @@
 | product_price     | int    | 是   | 1     | 商品价格     |
 | order_num         | string | 是   | 23123 | 订单号       |
 | money_type        | string | 是   | RMB   | 货币         |
+| created_at        | int    | 是   |       | 时间戳(秒)   |
 | description       | string | 否   |       | 描述         |
 
 返回参数：
@@ -769,7 +771,29 @@
 }
 ```
 
-####
+#### 2. 删除订单
+
+请求地址：`/erpapi/order/delete`
+
+请求方式：`get`
+
+请求参数：
+
+| 参数名 | 类型 | 必需 | 值   | 说明 |
+| ------ | ---- | ---- | ---- | ---- |
+| id     | int  | 是   | 1    | id   |
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data":[],
+}
+```
+
+###
 
 
 

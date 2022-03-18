@@ -75,9 +75,9 @@ class ActionCronServices
 
         // 日期
         $timem = strtotime("-1 day");
-        $year = date('Y',$timem);
-        $month = date('m',$timem);
-        $day = date('d',$timem);
+        $year  = date('Y', $timem);
+        $month = date('m', $timem);
+        $day   = date('d', $timem);
 
         // 处理是否完成动作目标
         foreach ($list as $v) {
@@ -86,28 +86,30 @@ class ActionCronServices
             $actionBeans->department_id = $department[$v["staff_id"]]["department"] ?? 0;
             $actionBeans->staff_id      = $v['staff_id'];
             $actionBeans->action_id     = $v['action_id'];
-            $actionBeans->year = $year;
-            $actionBeans->month = $month;
-            $actionBeans->day = $day;
+            $actionBeans->year          = $year;
+            $actionBeans->month         = $month;
+            $actionBeans->day           = $day;
 
             // 写入执行记录
-            $CronActionLogBeans         = new CronActionLogBeans();
+            $CronActionLogBeans               = new CronActionLogBeans();
             $CronActionLogBeans->setVals($actionBeans->toArray());
-            $CronActionLogBeans->target = $v['target'];
-            $CronActionLogBeans->finish = $actionLogSrv->getAssginActionFinishNum($actionBeans);
-            $CronActionLogBeans->status = ($CronActionLogBeans->finish >= $CronActionLogBeans->target) ? 1 : 0;
-            $CronActionLogBeans->obj_id = $v['id'];
-            $CronActionLogBeans->score  = $actionScore[$v["action_id"]] ?? 0;
+            $CronActionLogBeans->target       = $v['target'];
+            $CronActionLogBeans->finish       = $actionLogSrv->getAssginActionFinishNum($actionBeans);
+            $CronActionLogBeans->status       = ($CronActionLogBeans->finish >= $CronActionLogBeans->target) ? 1 : 0;
+            $CronActionLogBeans->obj_id       = $v['id'];
+            $CronActionLogBeans->action_score = $actionScore[$v["action_id"]] ?? 0;
+            $CronActionLogBeans->finish_score = ($CronActionLogBeans->status > 0 ? (($CronActionLogBeans->target + 1) * $CronActionLogBeans->action_score) : $CronActionLogBeans->finish  * $CronActionLogBeans->action_score);
             $actionLogId = $this->addActionCronLog($CronActionLogBeans);
             if ($actionLogId < 1) {
                 return -1;
             }
 
-            // 判断是否完成,完成加积分
-            if ($CronActionLogBeans->status == 1) {
+            // 判断有分完成,完成加积分
+            if ($CronActionLogBeans->finish_score > 0) {
                 // 添加积分
                 $actionScoreBeans         = new \system\beans\score\ActionScoreBeans();
                 $actionScoreBeans->setVals($CronActionLogBeans->toArray());
+                $actionScoreBeans->score  = $CronActionLogBeans->finish_score;
                 $actionScoreBeans->year   = $actionBeans->year;
                 $actionScoreBeans->month  = $actionBeans->month ?: date("m");
                 $actionScoreBeans->day    = $actionBeans->day ?: date("d");
@@ -118,10 +120,11 @@ class ActionCronServices
                 if ($result < 1) {
                     return -2;
                 }
-
-                // 给员工加积分
-                // ServiceFactory::getInstance("BaseDB", TableMap::User)->increment("score", "`id` = " . $actionBeans->staff_id, TableMap::User, $CronActionLogBeans->score);
             }
+
+            // 给员工加积分
+            // ServiceFactory::getInstance("BaseDB", TableMap::User)->increment("score", "`id` = " . $actionBeans->staff_id, TableMap::User, $CronActionLogBeans->score);
+            // }
         }
 
         return 1;
@@ -184,9 +187,9 @@ class ActionCronServices
 
         // 日期
         $timem = strtotime("-1 day");
-        $year = date('Y',$timem);
-        $month = date('m',$timem);
-        $day = date('d',$timem);
+        $year = date('Y', $timem);
+        $month = date('m', $timem);
+        $day = date('d', $timem);
 
         // 处理是否完成动作目标
         foreach ($list as $v) {

@@ -21,7 +21,8 @@ class CronActionLogBeans extends BaseBean
     public $cycle         = 1; // 周期
     public $target        = 0; // 需要完成的目标数
     public $finish        = 0; // 已完成的目标数
-    public $score         = 0; // 完成后添加积分数
+    public $action_score  = 0; // 动作单位积分数
+    public $finish_score  = 0; // 完成所得积分数
     public $status        = 0; // 状态 (1.完成 0.未完成)
     public $obj_id        = 0; // 跟进id
 }

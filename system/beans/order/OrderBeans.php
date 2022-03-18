@@ -14,6 +14,7 @@ use system\common\BaseBean;
 
 class OrderBeans extends BaseBean
 {
+    public $id                = 0; // 订单id
     public $enterprise_id     = 0; // 企业
     public $user_id           = 0; // 购买用户
     public $staff_id          = 0; // 员工
@@ -27,5 +28,6 @@ class OrderBeans extends BaseBean
     public $product_price     = 0; // 产品价格
     public $order_num         = ""; // 订单号
     public $money_type        = "RMB";
+    public $created_at        = 0; // 创建时间
     public $description       = ""; // 订单说明
 }

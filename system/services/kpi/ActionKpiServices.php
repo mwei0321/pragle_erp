@@ -34,26 +34,26 @@ class ActionKpiServices
             ->from(TableMap::Config)
             ->where([
                 'and',
-                ['in', 'group_id', [6, 15]],
+                ['in', 'group_id', [6, 13, 15]],
                 ['>', 'parent_id', '0']
             ]);
 
         // 个人
-        if ($kpiParams->type == 1) {
-            $query->orWhere([
-                'and',
-                ['group_id' => 13],
-                ['in', 'state', [1, 3]]
-            ]);
-        } elseif ($kpiParams->type == 2) { // 团队
-            $query->orWhere([
-                'and',
-                ['group_id' => 13],
-                ['in', 'state', [2, 3]]
-            ]);
-        } else {
-            return [];
-        }
+        // if ($kpiParams->type == 1) {
+        //     $query->orWhere([
+        //         'and',
+        //         ['group_id' => 13],
+        //         ['in', 'state', [1, 3]]
+        //     ]);
+        // } elseif ($kpiParams->type == 2) { // 团队
+        //     $query->orWhere([
+        //         'and',
+        //         ['group_id' => 13],
+        //         ['in', 'state', [2, 3]]
+        //     ]);
+        // } else {
+        //     return [];
+        // }
 
         $list = $query->orderBy('group_id ASC,index ASC')
             ->all();
@@ -118,10 +118,10 @@ class ActionKpiServices
         $kpiParams->page($count);
 
         // 排序提取
-        $list = $query->orderBy("utime DESC")
-            ->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
+        $list = $query->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
             ->limit($kpiParams->limit)
             ->offset($kpiParams->offset)
+            ->orderBy("sa.staff_id DESC")
             ->all();
 
         // 是否格式化时间
@@ -192,10 +192,10 @@ class ActionKpiServices
         $kpiParams->page($count);
 
         // 排序提取
-        $list = $query->orderBy("utime DESC")
-            ->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
+        $list = $query->leftJoin(TableMap::Config . ' as c', 'c.id = sa.action_id')
             ->limit($kpiParams->limit)
             ->offset($kpiParams->offset)
+            ->orderBy("sa.department_id DESC")
             ->all();
 
         // 是否格式化时间

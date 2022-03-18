@@ -98,12 +98,12 @@ class ActionScoreServices
         $dbObj = ServiceFactory::getInstance("BaseDB", TableMap::FollowScoreLog);
 
         // 提取动作对应积分
-        if ($scoreBeans->score > 0) {
-            $score = $dbObj->getFieldValById($scoreBeans->action_id, "interior_rank", TableMap::Config);
-            if ($score == null) {
-                return -1;
-            }
-        }
+        // if ($scoreBeans->score > 0) {
+        //     $score = $dbObj->getFieldValById($scoreBeans->action_id, "interior_rank", TableMap::Config);
+        //     if ($score == null) {
+        //         return -1;
+        //     }
+        // }
 
         // 写入跟进添加积分记录
         $data["enterprise_id"] = $scoreBeans->enterprise_id;
@@ -114,13 +114,13 @@ class ActionScoreServices
         $data["type"]          = $scoreBeans->type;
         $data["score"]         = $scoreBeans->score;
         $data["ctime"]         = time();
-        $result = $dbObj->insert($data);
+        $result                = $dbObj->insert($data);
 
         // 给跟进人添加积分
         $scoreId = $dbObj->getFieldValByCondition([
             "enterprise_id" => $scoreBeans->enterprise_id,
-            "department_id"        => $scoreBeans->department_id,
-            "staff_id"        => $scoreBeans->staff_id,
+            "department_id" => $scoreBeans->department_id,
+            "staff_id"      => $scoreBeans->staff_id,
             "type"          => $scoreBeans->type,
             "year"          => $scoreBeans->year,
             "month"         => $scoreBeans->month,
@@ -129,17 +129,17 @@ class ActionScoreServices
 
         // 判断是写入还是更新
         if (intval($scoreId) > 0) {
-            $result = $dbObj->increment("score", "`id` = {$scoreId}", TableMap::DepartmentAndStaffScore, $score, "`utime` = " . time());
+            $result = $dbObj->increment("score", "`id` = {$scoreId}", TableMap::DepartmentAndStaffScore, $scoreBeans->score, "`utime` = " . time());
         } else {
             $data = [
                 "enterprise_id" => $scoreBeans->enterprise_id,
-                "department_id"        => $scoreBeans->department_id,
-                "staff_id"        => $scoreBeans->staff_id,
+                "department_id" => $scoreBeans->department_id,
+                "staff_id"      => $scoreBeans->staff_id,
                 "type"          => $scoreBeans->type,
                 "year"          => $scoreBeans->year,
                 "month"         => $scoreBeans->month,
                 "day"           => $scoreBeans->day,
-                "score"         => $score,
+                "score"         => $scoreBeans->score,
                 "ctime"         => time(),
             ];
             $result = $dbObj->insert($data, TableMap::DepartmentAndStaffScore);
