@@ -19,6 +19,12 @@ class OrderController extends InitController
 
 	use BindBeanParamsTrait;
 
+
+	function actionIndex()
+	{
+		var_dump(ServiceFactory::getInstance("OrderCronSrv")->getYesterdayMarket());
+	}
+
 	/**
 	 * 手动添加订单
 	 * @param  OrderBeans $orderBeans
@@ -31,6 +37,8 @@ class OrderController extends InitController
 		if ($orderBeans->product_id < 1 || $orderBeans->user_id < 1 || $orderBeans->staff_id < 1) {
 			return $this->reJson($orderBeans->toArray(), "param error", 400);
 		}
+
+		$orderBeans->money_type = strtoupper($orderBeans->money_type);
 
 		// 写入订单
 		$result = ServiceFactory::getInstance("OrderSrv")->ManualEntry($orderBeans);

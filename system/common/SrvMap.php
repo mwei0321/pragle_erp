@@ -32,6 +32,7 @@ class SrvMap
     public $ActionCronSrv   = 'system\services\cron\ActionCronServices';
     public $FollowCronSrv   = 'system\services\cron\FollowCronServices';
     public $CustomerCronSrv = 'system\services\cron\CustomerCronServices';
+    public $OrderCronSrv    = 'system\services\cron\OrderCronServices';
 
 
     // 引用旧的代码

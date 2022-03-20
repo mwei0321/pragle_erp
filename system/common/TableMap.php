@@ -21,6 +21,7 @@ class TableMap
 	const ActionFollow            = "action_follow";
 	const FollowScoreLog          = "action_follow_score_log";
 	const ActionDayStatisticsLog  = "action_day_statistics_log";
+	const MarketDayStatisticsLog  = "market_day_statistics_log";
 	const ActionCronLog           = "action_cron_log";
 	const StaffDepartment         = 'user_department';
 	const StaffActionKpi          = 'staff_action_kpi';
