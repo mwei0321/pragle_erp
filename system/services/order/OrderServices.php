@@ -33,6 +33,7 @@ class OrderServices
         // 入库数据
         $data = [
             "enterprise_id" => $orderBeans->enterprise_id,
+            "target_id"     => $orderBeans->target_id,
             "user_id"       => $orderBeans->user_id,
             "order_num"     => $orderBeans->order_num ?: HelperFuns::getOrderSN(),
             "total_amount"  => $orderBeans->total_amount,

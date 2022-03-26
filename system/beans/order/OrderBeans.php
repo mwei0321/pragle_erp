@@ -17,6 +17,7 @@ class OrderBeans extends BaseBean
     public $id                = 0; // 订单id
     public $enterprise_id     = 0; // 企业
     public $user_id           = 0; // 购买用户
+    public $target_id         = 0;
     public $staff_id          = 0; // 员工
     public $total_amount      = 0; // 总金额
     public $order_type        = 2; // 订单类型

@@ -748,8 +748,9 @@
 
 | 参数名            | 类型   | 必需 | 值    | 说明         |
 | ----------------- | ------ | ---- | ----- | ------------ |
-| enterprise_id     | int    | 是   | 1     | 购买的企业ID |
+| enterprise_id     | int    | 是   | 1     | 当前登录用户的企业ID |
 | user_id           | int    | 是   | 1     | 购买的用户ID |
+| target_id         | int    | 是   | 1     | 购买的用户的企业ID |
 | staff_id          | int    | 是   | 1     | 操作用户ID   |
 | total_amount      | int    | 是   | 111   | 订单金额     |
 | product_id        | int    | 是   | 1     | 商品ID       |
