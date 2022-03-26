@@ -742,7 +742,7 @@
 
 #### 1. 手动录入
 
-接口：`/erp/order/manual`
+接口：`/erpapi/order/manual`
 
 请求参数：
 
