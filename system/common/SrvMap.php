@@ -5,7 +5,7 @@
  * @Author: MaWei
  * @Date:   2021-10-27
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-01-06 10:40:38
+ * @Last Modified time: 2022-03-29 10:02:32
  */
 
 namespace system\common;
@@ -30,6 +30,7 @@ class SrvMap
     // 定时任务
     public $EmailCronSrv    = 'system\services\cron\EmailCronServices';
     public $ActionCronSrv   = 'system\services\cron\ActionCronServices';
+    public $MarketCronSrv   = 'system\services\cron\MarketCronServices';
     public $FollowCronSrv   = 'system\services\cron\FollowCronServices';
     public $CustomerCronSrv = 'system\services\cron\CustomerCronServices';
     public $OrderCronSrv    = 'system\services\cron\OrderCronServices';

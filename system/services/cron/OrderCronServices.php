@@ -47,19 +47,23 @@ class OrderCronServices
             ->indexBy("id")
             ->all();
 
+        // 日期处理
+        list($year, $month, $day, $week) = [date("Y", $cronActionBeans->stime), date("m", $cronActionBeans->stime), date("d", $cronActionBeans->stime), date("W", $cronActionBeans->stime)];
+
         // 数据处理
         foreach ($staffList as $v) {
             if (intval($v["user_id"]) < 1) {
                 continue;
             }
+            $data                  = [];
             $data["enterprise_id"] = $department[$v["user_id"]]["enterprise_id"] ?? 0;
             $data["department_id"] = $department[$v["user_id"]]["department"] ?? 0;
             $data["staff_id"]      = $v['user_id'];
-            $data["year"]          = date("Y", $cronActionBeans->stime);
-            $data["month"]         = date("m", $cronActionBeans->stime);
-            $data["day"]           = date("d", $cronActionBeans->stime);
-            $data["week"]          = date("W", $cronActionBeans->stime);
-            $data["value"]         = $v['cnt'];
+            $data["year"]          = $year;
+            $data["month"]         = $month;
+            $data["day"]           = $day;
+            $data["week"]          = $week;
+            $data["value"]         = $v['total_amount'];
             $data["ctime"]         = time();
             // 写入
             $result = $srvObj->insert($data);
@@ -74,6 +78,16 @@ class OrderCronServices
             if (intval($id) > 1) {
                 $srvObj->increment("completed", ["id" => $id], TableMap::StaffMarketingKpi, $data["value"], "utime => " . time());
             }
+
+            // 写入订单个数动作统计 action_id=228
+            $data["action_id"] = 228;
+            $data["value"]     = $v["cnt"];
+            $srvObj->insert($data, TableMap::ActionDayStatisticsLog);
+
+            // 写入订单金额动作统计 action_id=227
+            $data["action_id"] = 227;
+            $data["value"]     = $v["total_amount"];
+            $srvObj->insert($data, TableMap::ActionDayStatisticsLog);
         }
 
         return 1;
@@ -94,7 +108,7 @@ class OrderCronServices
         }
 
         // 字段
-        $field = "`od`.`user_id`,SUM(`o`.`total_amount`) cnt";
+        $field = "`od`.`user_id`,SUM(`o`.`total_amount`) `total_amount`,COUNT(*) `cnt`";
 
         // 构建查询
         $query = (new Query())->from(TableMap::Order . ' AS `o`')
