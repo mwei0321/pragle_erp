@@ -173,7 +173,8 @@ class ActionKpiServices
         }
 
         // 部门
-        if ($kpiParams->department) {
+        if ($kpiParams->department || $kpiParams->department_id > 0) {
+            $kpiParams->department_id > 0 && $kpiParams->department[] = $kpiParams->department_id;
             $query->andWhere(['in', 'department_id', $kpiParams->department]);
         }
 

@@ -12,9 +12,32 @@ namespace system\services\order;
 use yii\db\Query;
 use system\common\{TableMap, ServiceFactory, HelperFuns};
 use system\beans\order\OrderBeans;
+use yii\db\Expression;
 
 class OrderServices
 {
+
+   
+    function getOrderMarketByStaffIds($_staffIds,$_years) {
+        $stime = strtotime($_years);
+        $etime = strtotime($_years."-12-30 24:00:00");
+
+        // 字段
+        $feild = "CONCAT_WS('-',od.user_id , FROM_UNIXTIME(`created_at`,'%d')) AS user,SUM(`total_amount`) cnt";
+
+        // 构造查询
+        return (new Query())->from(TableMap::Order.' AS o')
+                    ->select(new Expression($feild))
+                    ->leftJoin(TableMap::OrderDetail.' AS od','od.order_num = o.order_num')
+                    ->where([
+                        'and',
+                        ['>','o.created_at', $stime],
+                        ['<','o.created_at', $etime],
+                        ["in",'od.user_id',$_staffIds]
+                    ])
+                    ->groupBy("od.user_id,month")
+                    ->all();
+    }
 
     /**
      * 手动录入订单

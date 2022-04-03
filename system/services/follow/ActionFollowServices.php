@@ -53,6 +53,11 @@ class ActionFollowServices
             $query->andWhere(["department_id" => $followParams->department_id]);
         }
 
+        // 类型
+        if ($followParams->type > 0) {
+            $query->andWhere(["type" => $followParams->type]);
+        }
+
         // 总条数
         $count = $query->count();
         if ($count < 1) {

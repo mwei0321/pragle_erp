@@ -14,7 +14,7 @@ use system\common\BaseBean;
 class FollowBeans extends BaseBean
 {
     public $id            = 0;
-    public $type          = 1; // 类型 （1.个人 2.团队）
+    public $type          = 0; // 类型 （1.个人 2.团队）
     public $staff_id      = 0; // 跟进员工ID
     public $action_id     = 0;
     public $enterprise_id = 0; // 企业ID

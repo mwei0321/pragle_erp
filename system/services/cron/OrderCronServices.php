@@ -27,7 +27,6 @@ class OrderCronServices
     {
         $cronActionBeans = new CronActionBeans();
         $time = date("Y-m-d", strtotime("-1 day"));
-        $time = "2021-05-02";
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
 
