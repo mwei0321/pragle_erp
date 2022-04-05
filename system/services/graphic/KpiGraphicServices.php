@@ -59,18 +59,18 @@ class KpiGraphicServices
         // 数据处理
         if ($list) {
             // 提取员工的完成销售额
-            $staffIds = array_column($list,'staff_id');
-            $staffMarket = ServiceFactory::getInstance("OrderSrv")->getOrderMarketByStaffIds($staffIds,$kpiParams->year);
-            $staffMarket = HelperFuns::fieldtokey($staffMarket,'user');
-            $month = ["01","02","03","04","05","06","07","08","09","10","11","12"];
+            $staffIds = array_column($list, 'staff_id');
+            $staffMarket = ServiceFactory::getInstance("OrderSrv")->getOrderMarketByStaffIds($staffIds, $kpiParams->year);
+            $staffMarket = HelperFuns::fieldtokey($staffMarket, 'user');
+            $month = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
             foreach ($list as $k => $v) {
                 $list[$k]["target"] = explode(",", $v["target"]);
                 // 完成销售额处理
-                $tmp = [0,0,0,0,0,0,0,0,0,0,0,0];
-                if($staffMarket) {
-                    foreach($tmp as $key => $val) {
-                        $staffmonth = $v['staff_id']."-".$month[$key];
-                        if(isset($staffMarket[$staffmonth])) {
+                $tmp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                if ($staffMarket) {
+                    foreach ($tmp as $key => $val) {
+                        $staffmonth = $v['staff_id'] . "-" . $month[$key];
+                        if (isset($staffMarket[$staffmonth])) {
                             $tmp[$key] = $staffMarket[$staffmonth]["cnt"];
                         }
                     }
@@ -200,9 +200,33 @@ class KpiGraphicServices
             ->leftJoin(TableMap::Group . ' AS g', 'g.id = k.group_id')
             ->select("g.name,k.*")
             ->all();
-
+        var_dump($list);
         // 数据处理
         if ($list) {
+            // 提取员工的完成销售额
+            $departmentIds = array_column($list, 'group_id');
+            $staffMarket = ServiceFactory::getInstance("OrderSrv")->getOrderMarketByDepartment($departmentIds, $kpiParams->year);
+            var_dump($staffMarket);
+            $staffMarket = HelperFuns::fieldtokey($staffMarket, 'department');
+            var_dump($staffMarket);
+            exit();
+            $month = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+            foreach ($list as $k => $v) {
+                $list[$k]["target"] = explode(",", $v["target"]);
+                // 完成销售额处理
+                $tmp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                if ($staffMarket) {
+                    foreach ($tmp as $key => $val) {
+                        $staffmonth = $v['staff_id'] . "-" . $month[$key];
+                        if (isset($staffMarket[$staffmonth])) {
+                            $tmp[$key] = $staffMarket[$staffmonth]["cnt"];
+                        }
+                    }
+                }
+                $list[$k]["completed"] = $tmp;
+            }
+
+
             foreach ($list as $k => $v) {
                 $list[$k]["target"] = explode(",", $v["target"]);
                 $list[$k]["completed"] = explode(",", $v["completed"]);

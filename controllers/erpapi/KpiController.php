@@ -333,7 +333,7 @@ class KpiController extends InitController
     function actionMarketingbarchat(KpiBeans $kpiParams)
     {
         // 年初始化
-        $kpiParams->year          = $kpiParams->year ?: date('Y');
+        $kpiParams->year = $kpiParams->year ?: date('Y');
 
         // 提取列表
         switch ($kpiParams->type) {
