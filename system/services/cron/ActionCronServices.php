@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-02-19 19:45:56 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-03-29 09:57:54
+ * @Last Modified time: 2022-04-06 14:37:24
  */
 
 namespace system\services\cron;
@@ -78,7 +78,6 @@ class ActionCronServices
         $year  = date('Y', $timem);
         $month = date('m', $timem);
         $day   = date('d', $timem);
-
         // 处理是否完成动作目标
         foreach ($list as $v) {
             // 提取指定员工的动作完成值参数
@@ -98,7 +97,14 @@ class ActionCronServices
             $CronActionLogBeans->status       = ($CronActionLogBeans->finish >= $CronActionLogBeans->target) ? 1 : 0;
             $CronActionLogBeans->obj_id       = $v['id'];
             $CronActionLogBeans->action_score = $actionScore[$v["action_id"]] ?? 0;
-            $CronActionLogBeans->finish_score = ($CronActionLogBeans->status > 0 ? (($CronActionLogBeans->target + 1) * $CronActionLogBeans->action_score) : $CronActionLogBeans->finish  * $CronActionLogBeans->action_score);
+
+            // 处理异形处理,比如完成多少得多少分
+            if (in_array($v["action_id"], ['228'])) {
+                $CronActionLogBeans->status = 1;
+                $CronActionLogBeans->finish_score = round($CronActionLogBeans->finish  * $CronActionLogBeans->action_score);
+            } else {
+                $CronActionLogBeans->finish_score = ($CronActionLogBeans->status > 0 ? (($CronActionLogBeans->target + 1) * $CronActionLogBeans->action_score) : $CronActionLogBeans->finish  * $CronActionLogBeans->action_score);
+            }
             $actionLogId = $this->addActionCronLog($CronActionLogBeans);
             if ($actionLogId < 1) {
                 return -1;

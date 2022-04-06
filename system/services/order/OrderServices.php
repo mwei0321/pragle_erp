@@ -4,7 +4,7 @@
  * @Author: MaWei 
  * @Date: 2022-01-06 10:35:44 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-01-17 23:06:01
+ * @Last Modified time: 2022-04-06 11:54:39
  */
 
 namespace system\services\order;
@@ -55,7 +55,7 @@ class OrderServices
      * @author  <mawei.live>
      * @return array
      */
-    function getOrderMarketByDepartment($_departmentIds, $_year)
+    function getOrderMarketByDepartment($_departmentIds, $_year, $_groupBy = "u.department,month")
     {
         $stime = strtotime($_year);
         $etime = strtotime($_year . "-12-30 24:00:00");
@@ -74,7 +74,7 @@ class OrderServices
                 ['<', 'o.created_at', $etime],
                 ["in", 'u.department', $_departmentIds]
             ])
-            ->groupBy("u.department,month")
+            ->groupBy($_groupBy)
             ->all();
     }
 
