@@ -5,7 +5,7 @@
  * @Author: MaWei
  * @Date:   2021-10-27
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-03-29 10:02:32
+ * @Last Modified time: 2022-04-06 10:02:25
  */
 
 namespace system\common;
@@ -26,6 +26,7 @@ class SrvMap
     public $ActionScoreSrv  = 'system\services\score\ActionScoreServices';
     public $ProductSrv      = 'system\services\product\ProductServices';
     public $OrderSrv        = 'system\services\order\OrderServices';
+    public $DepartmentSrv   = 'system\services\user\DepartmentServices';
 
     // 定时任务
     public $EmailCronSrv    = 'system\services\cron\EmailCronServices';

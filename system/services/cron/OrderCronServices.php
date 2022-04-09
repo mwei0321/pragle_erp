@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-03-18 20:24:15
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-03-18 20:24:15
+ * @Last Modified time: 2022-04-06 14:31:00
  */
 
 namespace system\services\cron;
@@ -48,7 +48,6 @@ class OrderCronServices
 
         // 日期处理
         list($year, $month, $day, $week) = [date("Y", $cronActionBeans->stime), date("m", $cronActionBeans->stime), date("d", $cronActionBeans->stime), date("W", $cronActionBeans->stime)];
-
         // 数据处理
         foreach ($staffList as $v) {
             if (intval($v["user_id"]) < 1) {
@@ -75,16 +74,16 @@ class OrderCronServices
                 "month"         => $data["month"],
             ], "id", TableMap::StaffMarketingKpi);
             if (intval($id) > 1) {
-                $srvObj->increment("completed", ["id" => $id], TableMap::StaffMarketingKpi, $data["value"], "utime => " . time());
+                $srvObj->increment("completed", "id = {$id}", TableMap::StaffMarketingKpi, $data["value"], "utime = " . time());
             }
 
-            // 写入订单个数动作统计 action_id=228
-            $data["action_id"] = 228;
+            // 写入订单个数动作统计 action_id=227
+            $data["action_id"] = 227;
             $data["value"]     = $v["cnt"];
             $srvObj->insert($data, TableMap::ActionDayStatisticsLog);
 
-            // 写入订单金额动作统计 action_id=227
-            $data["action_id"] = 227;
+            // 写入订单金额动作统计 action_id=228
+            $data["action_id"] = 228;
             $data["value"]     = $v["total_amount"];
             $srvObj->insert($data, TableMap::ActionDayStatisticsLog);
         }

@@ -4,8 +4,8 @@
  * 常用公共方法
  * @Author: mawei
  * @Date:   2021-12-22
- * @Last Modified by:   mawei
- * @Last Modified time: 2021-12-23
+ * @Last Modified by: MaWei
+ * @Last Modified time: 2022-04-06 11:38:06
  */
 
 namespace system\common;
