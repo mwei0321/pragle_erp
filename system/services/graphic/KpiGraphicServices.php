@@ -3,7 +3,7 @@
  * @Author: MaWei 
  * @Date: 2022-01-06 10:35:44 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-01-23 21:42:25
+ * @Last Modified time: 2022-04-06 11:56:01
  */
 
 namespace system\services\graphic;
@@ -56,11 +56,17 @@ class KpiGraphicServices
 
         $list = $query->all();
 
+        // $staffIds = array_column($list, 'staff_id');
+        // $staffMarket = ServiceFactory::getInstance("OrderSrv")->getOrderMarketByStaffIds($staffIds, $kpiParams->year);
+        // var_dump($list, $staffMarket);
+        // exit();
         // 数据处理
         if ($list) {
             // 提取员工的完成销售额
             $staffIds = array_column($list, 'staff_id');
             $staffMarket = ServiceFactory::getInstance("OrderSrv")->getOrderMarketByStaffIds($staffIds, $kpiParams->year);
+            // var_dump($staffMarket);
+            // exit();
             $staffMarket = HelperFuns::fieldtokey($staffMarket, 'user');
             $month = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
             foreach ($list as $k => $v) {
@@ -200,36 +206,34 @@ class KpiGraphicServices
             ->leftJoin(TableMap::Group . ' AS g', 'g.id = k.group_id')
             ->select("g.name,k.*")
             ->all();
-        var_dump($list);
+        // var_dump($list);
         // 数据处理
         if ($list) {
             // 提取员工的完成销售额
-            $departmentIds = array_column($list, 'group_id');
-            $staffMarket = ServiceFactory::getInstance("OrderSrv")->getOrderMarketByDepartment($departmentIds, $kpiParams->year);
-            var_dump($staffMarket);
-            $staffMarket = HelperFuns::fieldtokey($staffMarket, 'department');
-            var_dump($staffMarket);
-            exit();
+            $orderObj = ServiceFactory::getInstance("OrderSrv");
+            $departObj = ServiceFactory::getInstance("DepartmentSrv");
             $month = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
             foreach ($list as $k => $v) {
                 $list[$k]["target"] = explode(",", $v["target"]);
+                // 提取部门
+                $dpTmp = $departObj->getChildDepartmentById($v['group_id']);
+                $dpIds = array_column($dpTmp, 'id');
+                $dpIds[] = $v["group_id"];
+                $mktmp = [];
+                if ($dpIds) {
+                    $mktmp = $orderObj->getOrderMarketByDepartment($dpIds, $kpiParams->year, $v['group_id']) ?: [];
+                }
                 // 完成销售额处理
                 $tmp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                if ($staffMarket) {
+                if ($mktmp) {
                     foreach ($tmp as $key => $val) {
-                        $staffmonth = $v['staff_id'] . "-" . $month[$key];
+                        $staffmonth = $v['group_id'] . "-" . $month[$key];
                         if (isset($staffMarket[$staffmonth])) {
                             $tmp[$key] = $staffMarket[$staffmonth]["cnt"];
                         }
                     }
                 }
                 $list[$k]["completed"] = $tmp;
-            }
-
-
-            foreach ($list as $k => $v) {
-                $list[$k]["target"] = explode(",", $v["target"]);
-                $list[$k]["completed"] = explode(",", $v["completed"]);
             }
         } else {
             return [];

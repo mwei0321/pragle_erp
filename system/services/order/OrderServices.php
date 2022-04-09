@@ -27,7 +27,7 @@ class OrderServices
      */
     function getOrderMarketByStaffIds($_staffIds, $_year)
     {
-        $stime = strtotime($_year);
+        $stime = strtotime($_year . "-01-01 00:00:00");
         $etime = strtotime($_year . "-12-30 24:00:00");
 
         // 字段
@@ -55,13 +55,13 @@ class OrderServices
      * @author  <mawei.live>
      * @return array
      */
-    function getOrderMarketByDepartment($_departmentIds, $_year)
+    function getOrderMarketByDepartment($_departmentIds, $_year, $_departmentId)
     {
-        $stime = strtotime($_year);
+        $stime = strtotime($_year . "-01-01 00:00:00");
         $etime = strtotime($_year . "-12-30 24:00:00");
 
         // 字段
-        $feild = "CONCAT_WS('-',u.department , FROM_UNIXTIME(o.`created_at`,'%d')) AS department,SUM(`total_amount`) cnt";
+        $feild = "CONCAT_WS('-',{$_departmentId} , FROM_UNIXTIME(o.`created_at`,'%d')) AS department,SUM(`total_amount`) cnt";
 
         // 构造查询
         return (new Query())->from(TableMap::Order . ' AS o')
@@ -74,7 +74,7 @@ class OrderServices
                 ['<', 'o.created_at', $etime],
                 ["in", 'u.department', $_departmentIds]
             ])
-            ->groupBy("u.department,month")
+            ->groupBy("month")
             ->all();
     }
 
@@ -94,9 +94,8 @@ class OrderServices
         $connection = \Yii::$app->db->beginTransaction();
         // 入库数据
         $data = [
-            "enterprise_id" => $orderBeans->enterprise_id,
-            "target_id"     => $orderBeans->target_id,
-            "user_id"       => $orderBeans->user_id,
+            "enterprise_id" => $orderBeans->buyer_enterpriise_id,
+            "user_id"       => $orderBeans->buyer_user_id,
             "order_num"     => $orderBeans->order_num ?: HelperFuns::getOrderSN(),
             "total_amount"  => $orderBeans->total_amount,
             "order_type"    => 2,
@@ -116,8 +115,8 @@ class OrderServices
 
         // 写入商品信息
         $product = [
-            "enterprise_id" => 91796,
-            "user_id"       => $orderBeans->staff_id,
+            "enterprise_id" => $orderBeans->seller_enterpriise_id,
+            "user_id"       => $orderBeans->seller_user_id,
             "order_num"     => $data["order_num"],
             "commodity_id"  => $orderBeans->product_id,
             "detail_id"     => $orderBeans->product_detail_id,
