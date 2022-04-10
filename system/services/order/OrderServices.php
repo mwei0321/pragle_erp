@@ -74,11 +74,7 @@ class OrderServices
                 ['<', 'o.created_at', $etime],
                 ["in", 'u.department', $_departmentIds]
             ])
-<<<<<<< HEAD
             ->groupBy("month")
-=======
-            ->groupBy($_groupBy)
->>>>>>> 7623f1732de33415973b0c7ec004c54a517df311
             ->all();
     }
 

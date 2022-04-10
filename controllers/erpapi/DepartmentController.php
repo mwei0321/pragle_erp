@@ -4,19 +4,15 @@
  * 部门
  * @Author: mawei
  * @Date:   2021-12-22
- * @Last Modified by:   mawei
- * @Last Modified time: 2021-12-23
+ * @Last Modified by: MaWei
+ * @Last Modified time: 2022-04-09 20:58:31
  */
 
 namespace app\controllers\erpapi;
 
-use Yii;
-use Closure;
 use app\controllers\InitController;
 use system\common\{ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
-use system\beans\KpiBeans;
-
 
 class DepartmentController extends InitController
 {

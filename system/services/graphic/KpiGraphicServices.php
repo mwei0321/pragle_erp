@@ -3,7 +3,7 @@
  * @Author: MaWei 
  * @Date: 2022-01-06 10:35:44 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-04-06 11:56:01
+ * @Last Modified time: 2022-04-09 21:05:32
  */
 
 namespace system\services\graphic;
@@ -222,14 +222,15 @@ class KpiGraphicServices
                 $mktmp = [];
                 if ($dpIds) {
                     $mktmp = $orderObj->getOrderMarketByDepartment($dpIds, $kpiParams->year, $v['group_id']) ?: [];
+                    $mktmp && $mktmp = HelperFuns::fieldtokey($mktmp, "department");
                 }
                 // 完成销售额处理
                 $tmp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 if ($mktmp) {
                     foreach ($tmp as $key => $val) {
                         $staffmonth = $v['group_id'] . "-" . $month[$key];
-                        if (isset($staffMarket[$staffmonth])) {
-                            $tmp[$key] = $staffMarket[$staffmonth]["cnt"];
+                        if (isset($mktmp[$staffmonth])) {
+                            $tmp[$key] = $mktmp[$staffmonth]["cnt"];
                         }
                     }
                 }

@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-03-18 20:24:15
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-04-06 14:31:00
+ * @Last Modified time: 2022-04-09 20:48:36
  */
 
 namespace system\services\cron;
@@ -23,10 +23,10 @@ class OrderCronServices
      * @author  <mawei.live>
      * @return void
      */
-    function getYesterdayMarket()
+    function getYesterdayMarket($_date = "")
     {
         $cronActionBeans = new CronActionBeans();
-        $time = date("Y-m-d", strtotime("-1 day"));
+        $time = $_date ? strtotime($_date) : date("Y-m-d", strtotime("-1 day"));
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
 

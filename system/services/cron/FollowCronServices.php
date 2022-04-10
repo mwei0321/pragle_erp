@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-02-13 20:20:18 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-02-24 23:22:05
+ * @Last Modified time: 2022-04-09 20:48:25
  */
 
 namespace system\services\cron;
@@ -23,10 +23,10 @@ class FollowCronServices
      * @author  <mawei.live>
      * @return void
      */
-    function getYesterdayActionFollow()
+    function getYesterdayActionFollow($_date = "")
     {
         $cronActionBeans = new CronActionBeans();
-        $time = date("Y-m-d", strtotime("-1 day"));
+        $time = $_date ? strtotime($_date) : date("Y-m-d", strtotime("-1 day"));
         // $time = "2022-03-03";
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");

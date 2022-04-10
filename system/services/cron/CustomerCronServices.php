@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-02-19 19:45:56 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-02-19 21:06:22
+ * @Last Modified time: 2022-04-09 20:48:48
  */
 
 namespace system\services\cron;
@@ -22,10 +22,10 @@ class CustomerCronServices
      * @author  <mawei.live>
      * @return void
      */
-    function getYesterdayCustomerStatistics()
+    function getYesterdayCustomerStatistics($_date)
     {
         $cronActionBeans = new CronActionBeans();
-        $time = date("Y-m-d", strtotime("-1 day"));
+        $time = $_date ? strtotime($_date) : date("Y-m-d", strtotime("-1 day"));
         // $time = date("Y-m-d", '1507623030');
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");

@@ -5,7 +5,7 @@
  * @Author: MaWei
  * @Date:   2021-12-22
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-01-25 22:58:42
+ * @Last Modified time: 2022-04-09 20:59:09
  */
 
 namespace app\controllers\erpapi;
@@ -14,7 +14,6 @@ use app\controllers\InitController;
 use system\common\{ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
 use system\beans\follow\FollowBeans;
-use system\beans\score\FollowScoreBeans;
 
 class FollowController extends InitController
 {

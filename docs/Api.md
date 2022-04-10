@@ -800,7 +800,7 @@
 
 ### 客户&营销页面接口说明
 
-#### 1.客户数量（按阶段）
+#### 1. 客户数量（按阶段）
 
 接口：`/erp/enterprise/statisticschart`
 
@@ -835,7 +835,7 @@
 }
 ```
 
-#### 2.**客户数量(按员工)**
+#### 2. 客户数量(按员工)
 
 接口：`/erp/enterprise/statisticscount`
 
@@ -865,7 +865,7 @@
 }
 ```
 
-#### 3. **邮件数量(按状态)**
+#### 3. 邮件数量(按状态)
 
 请求：`/erp/enterprise/statisticsemailchart`
 
@@ -932,7 +932,40 @@
 
 
 
+### 统计
 
+#### 1. 动作时间段统计
+
+请求：`/erpapi/actionstat/timebucket`
+
+请求参数：
+
+| 参数名        | 类型   | 必需 | 值         | 说明     |
+| ------------- | ------ | ---- | ---------- | -------- |
+| enterprise_id | string | 是   | 91796      | 企业ID   |
+| stime         | string | 是   | 2021-04-01 | 开始时间 |
+| etime         | int    | 是   | 2021-04-10 | 结束时间 |
+| action_id     | int    | 否   | 1          | 动作id   |
+| department_id | int    | 否   | 1          | 部门id   |
+| staff_id      | int    | 否   | 1          | 员工id   |
+
+请求参数：
+
+```json
+{
+    "code": 200,
+    "msg": "response success",
+    "data": [
+        {
+            "department_id": "37532",
+            "staff_id": "144273",
+            "action_id": "94",
+            "value": "1"
+        },
+    ],
+    "page": []
+}
+```
 
 
 

@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-02-13 20:20:18 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-02-24 23:13:54
+ * @Last Modified time: 2022-04-09 20:47:58
  */
 
 namespace system\services\cron;
@@ -23,10 +23,10 @@ class EmailCronServices
      * @author  <mawei.live>
      * @return void
      */
-    function getYesterdayEmailStatistics()
+    function getYesterdayEmailStatistics($_date)
     {
         $cronActionBeans = new CronActionBeans();
-        $time = date("Y-m-d", strtotime("-1 day"));
+        $time = $_date ? strtotime($_date) : date("Y-m-d", strtotime("-1 day"));
         // $time = date("Y-m-d", '1645204141');
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
