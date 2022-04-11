@@ -30,7 +30,6 @@ class ActionStatServices
 
         // 构建查询
         $query = (new Query())->from(TableMap::ActionDayStatisticsLog)
-            ->select($field)
             ->where([
                 "enterprise_id" => $statBeans->enterprise_id,
             ]);
@@ -53,8 +52,27 @@ class ActionStatServices
                 ->groupBy("staff_id,action_id");
         }
 
+        // 动作id
+        if ($statBeans->action_id > 0) {
+            $query->andWhere(["action_id" => $statBeans->action_id]);
+        }
+
+        // 总条数
+        $count = $query->select("id")->count();
+        if ($count < 1) {
+            return [];
+        }
+        $statBeans->page($count);
+
         // 提示列表
-        $list = $query->orderBy("staff_id DESC")
+        $query = $query->select($field)
+            ->orderBy("staff_id DESC")
+            ->limit($statBeans->limit)
+            ->offset($statBeans->offset);
+        $list = (new Query())->from(["a" => $query])
+            ->select("a.*,g.name AS department,u.first_name,u.last_name")
+            ->leftJoin(TableMap::Group . " as g", "g.id = a.department_id")
+            ->leftJoin(TableMap::User . " as u", "u.id = a.staff_id")
             ->all();
 
         return $list;

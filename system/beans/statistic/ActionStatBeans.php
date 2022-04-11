@@ -17,10 +17,8 @@ class ActionStatBeans extends BaseBean
     public $enterprise_id = 0; // 企业ID
     public $department_id = null; // 部门ID
     public $staff_id      = 0; // 员工ID
+    public $action_id     = 0; // 动作id
     public $year          = ''; // 年
-    public $staff_kpi     = [];
-    public $department    = [];
-    public $action        = null;
     public $stime         = "";
     public $etime         = "";
 }
