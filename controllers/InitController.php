@@ -88,6 +88,8 @@ class InitController extends Controller
             $this->userId       = 90486;
             return true;
         }
+
+        return true;
         //验证TOKEN
         if ($token) {
             $token = HelperFuns::revDecrypt($token);

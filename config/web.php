@@ -1,7 +1,10 @@
 <?php
-
 $params = require __DIR__ . '/params.php';
-$dbarr = require __DIR__ . '/db.php';
+
+$MYSQL_USERNAME = getenv("MYSQL_USERNAME");
+$MYSQL_PASSWORD = getenv("MYSQL_PASSWORD");
+$MYSQL_DB_DSN = getenv("MYSQL_DB_DSN");
+$MYSQL_DB_DATA_DSN = getenv("MYSQL_DB_DATA_DSN");
 
 $config = [
     'id' => 'basic',
@@ -49,23 +52,23 @@ $config = [
         ],
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=pargle_erp',
-            'username' => 'root',
-            'password' => '',
+            'dsn' => $MYSQL_DB_DSN,
+            'username' => $MYSQL_USERNAME,
+            'password' => $MYSQL_PASSWORD,
             'charset' => 'utf8',
         ],
         'dbdata' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=pargle_dbdata',
-            'username' => 'root',
-            'password' => '',
+            'dsn' => $MYSQL_DB_DATA_DSN,
+            'username' => $MYSQL_USERNAME,
+            'password' => $MYSQL_PASSWORD,
             'charset' => 'utf8',
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'v2/erpapi/<controller:\w+>/<action:\w+>/' => 'erpapi/<controller>/<action>',
+                '<controller:\w+>/<action:\w+>/' => 'erpapi/<controller>/<action>',
             ],
         ],
 

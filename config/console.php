@@ -1,7 +1,5 @@
 <?php
-
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic-console',
@@ -25,29 +23,8 @@ $config = [
                 ],
             ],
         ],
-        'db' => [
-            'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=pargle_erp',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
-        ],
-        'dbdata' => [
-            'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=pargle_dbdata',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
-        ],
     ],
     'params' => $params,
-    /*
-    'controllerMap' => [
-        'fixture' => [ // Fixture generation command line.
-            'class' => 'yii\faker\FixtureController',
-        ],
-    ],
-    */
 ];
 
 // 自定义别名

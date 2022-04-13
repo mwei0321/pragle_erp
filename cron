@@ -1,0 +1,4 @@
+15 8 * * * php /var/www/html/yii yestoday/index
+25 8 * * * php /var/www/html/yii action/everyday
+30 8 1-12 * * php /var/www/html/yii action/everymonth
+40 8 * * 1 php /var/www/html/yii action/everyweek
