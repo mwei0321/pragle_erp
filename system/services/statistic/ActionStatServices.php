@@ -32,7 +32,8 @@ class ActionStatServices
         $query = (new Query())->from(TableMap::ActionDayStatisticsLog)
             ->where([
                 "enterprise_id" => $statBeans->enterprise_id,
-            ]);
+            ])
+            ->groupBy("action_id");
 
         // 时间段
         if ($statBeans->stime && $statBeans->etime) {
@@ -73,6 +74,7 @@ class ActionStatServices
             ->select("a.*,g.name AS department,u.first_name,u.last_name")
             ->leftJoin(TableMap::Group . " as g", "g.id = a.department_id")
             ->leftJoin(TableMap::User . " as u", "u.id = a.staff_id")
+            ->orderBy("a.value DESC")
             ->all();
 
         return $list;
