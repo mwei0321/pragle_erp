@@ -29,11 +29,15 @@ class ActionStatServices
         $field = "department_id,staff_id,action_id,SUM(`value`) value";
 
         // 构建查询
-        $query = (new Query())->from(TableMap::ActionDayStatisticsLog)
+        $query = (new Query())->from(TableMap::Config . ' AS c')
+            ->leftJoin(TableMap::ActionDayStatisticsLog . ' AS al')
             ->where([
+                'and',
                 "enterprise_id" => $statBeans->enterprise_id,
+                ['in', 'c.group_id', ['6,13,15']],
+                [">", "c.parent_id", 0]
             ])
-            ->groupBy("action_id");
+            ->groupBy("staff_id,action_id");
 
         // 时间段
         if ($statBeans->stime && $statBeans->etime) {
@@ -43,14 +47,14 @@ class ActionStatServices
 
         // 部门搜索
         if ($statBeans->department_id > 0) {
-            $query->andWhere(["department_id" => $statBeans->department_id])
-                ->groupBy("department_id,action_id");
+            $query->andWhere(["department_id" => $statBeans->department_id]);
+            // ->groupBy("department_id,action_id");
         }
 
         // 员工搜索
         if ($statBeans->staff_id > 0) {
-            $query->andWhere(["staff_id" => $statBeans->staff_id])
-                ->groupBy("staff_id,action_id");
+            $query->andWhere(["staff_id" => $statBeans->staff_id]);
+            // ->groupBy("staff_id,action_id");
         }
 
         // 动作id
