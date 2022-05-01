@@ -7,4 +7,6 @@ RUN chmod -R 777 ./ && composer install && crontab cron
 
 EXPOSE 8080
 
-CMD service cron start && apache2-foreground
+CMD printenv | grep -v "no_proxy" >> /etc/environment \
+    && service cron start \
+    && apache2-foreground
