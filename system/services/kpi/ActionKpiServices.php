@@ -10,7 +10,7 @@
 namespace system\services\kpi;
 
 use yii\db\Query;
-use system\common\{TableMap, ServiceFactory};
+use system\common\{HelperFuns, TableMap, ServiceFactory, SrvConfig};
 use system\beans\kpi\KpiBeans;
 
 class ActionKpiServices
@@ -34,7 +34,7 @@ class ActionKpiServices
             ->from(TableMap::Config)
             ->where([
                 'and',
-                ['in', 'group_id', [6, 13, 15]],
+                ['in', 'group_id', SrvConfig::$ActionGroup],
                 ['>', 'parent_id', '0']
             ]);
 
@@ -57,6 +57,25 @@ class ActionKpiServices
 
         $list = $query->orderBy('group_id ASC,index ASC')
             ->all();
+
+        return $list;
+    }
+
+    function getKpiActionOptionTree(KpiBeans $kpiParams) {
+        // 字段
+        $field = 'id,project_name title,index,group_id,parent_id pid,state,rank,interior_rank';
+
+        // 提取记录
+        $query = (new Query())->select($field)
+            ->from(TableMap::Config)
+            ->where([
+                'and',
+                ['in', 'group_id', SrvConfig::$ActionGroup],
+            ]);
+
+        $list = $query->orderBy('group_id ASC,index ASC')
+            ->all();
+        $list = HelperFuns::getTree(HelperFuns::level($list));
 
         return $list;
     }

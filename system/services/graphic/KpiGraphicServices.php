@@ -51,7 +51,7 @@ class KpiGraphicServices
             ->select("u.first_name,u.last_name,k.*");
         // 部门
         if ($kpiParams->department_id > 0) {
-            $query->andWhere(["u.department" => $kpiParams->department_id]);
+            $query->andWhere(["u.department" => $kpiParams->department_id]);    
         }
 
         $list = $query->all();

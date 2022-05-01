@@ -178,6 +178,12 @@ class KpiController extends InitController
         return $this->reJson($list);
     }
 
+    function actionGetkpiactiontree(KpiBeans $kpiBeans) {
+        $list = ServiceFactory::getInstance("ActionKpiSrv")->getKpiActionOptionTree($kpiBeans);
+
+        return $this->reJson($list);
+    }
+
     /**
      * 员工动作kpi列表
      * @param  KpiBeans $kpiParams [description]

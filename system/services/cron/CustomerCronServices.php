@@ -22,7 +22,7 @@ class CustomerCronServices
      * @author  <mawei.live>
      * @return void
      */
-    function getYesterdayCustomerStatistics($_date)
+    function getYesterdayCustomerStatistics($_date = null)
     {
         $cronActionBeans = new CronActionBeans();
         $time = $_date ? strtotime($_date) : date("Y-m-d", strtotime("-1 day"));

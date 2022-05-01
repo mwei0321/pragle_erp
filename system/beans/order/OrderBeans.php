@@ -31,6 +31,9 @@ class OrderBeans extends BaseBean
     public $product_price         = 0; // 产品价格
     public $order_num             = ""; // 订单号
     public $money_type            = "RMB";
+    public $exchange_rate = 0; // 汇率
+    public $total_rmb = 0; // 人民币
     public $created_at            = 0; // 创建时间
     public $description           = ""; // 订单说明
+
 }

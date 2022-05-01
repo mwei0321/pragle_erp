@@ -131,10 +131,12 @@ class FollowCronServices
      * @author  <mawei.live>
      * @return void
      */
-    function getYesterdayOldFollow()
+    function getYesterdayOldFollow($_date = null)
     {
         $cronActionBeans = new CronActionBeans();
-        $time = date("Y-m-d", strtotime("-1 day"));
+
+        $time = $_date ? strtotime($_date) : date("Y-m-d", strtotime("-1 day"));
+        // $time = date("Y-m-d", strtotime("-1 day"));
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
 

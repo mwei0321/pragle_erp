@@ -11,7 +11,7 @@
 namespace system\services\statistic;
 
 use yii\db\Query;
-use system\common\{TableMap, ServiceFactory};
+use system\common\{TableMap, ServiceFactory,SrvConfig};
 use system\beans\statistic\ActionStatBeans;
 
 class ActionStatServices
@@ -30,14 +30,15 @@ class ActionStatServices
 
         // 构建查询
         $query = (new Query())->from(TableMap::Config . ' AS c')
-            ->leftJoin(TableMap::ActionDayStatisticsLog . ' AS al')
+            ->leftJoin(TableMap::ActionDayStatisticsLog . ' AS al',"al.action_id = c.id")
             ->where([
                 'and',
-                "enterprise_id" => $statBeans->enterprise_id,
-                ['in', 'c.group_id', [6,13,15]],
+                ["enterprise_id" => $statBeans->enterprise_id],
+                ['in', 'c.group_id', SrvConfig::$ActionGroup],
                 [">", "c.parent_id", 0]
             ])
-            ->groupBy("staff_id,action_id");
+            // ->groupBy("staff_id,action_id");
+            ->groupBy("action_id");
 
         // 时间段
         if ($statBeans->stime && $statBeans->etime) {
@@ -63,7 +64,7 @@ class ActionStatServices
         }
 
         // 总条数
-        $count = $query->select("id")->count();
+        $count = $query->select("al.id")->count();
         if ($count < 1) {
             return [];
         }

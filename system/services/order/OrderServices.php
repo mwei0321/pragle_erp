@@ -101,7 +101,9 @@ class OrderServices
             "order_type"    => 2,
             "status"        => 2,
             "description"   => $orderBeans->description,
-            "money_type"    => $orderBeans->description,
+            "money_type"    => $orderBeans->money_type,
+            "exchange_rate" => $orderBeans->exchange_rate,
+            "total_rmb"     => $orderBeans->total_rmb,
             "created_at"    => time(),
         ];
         $result = $srvObj->insert($data);
