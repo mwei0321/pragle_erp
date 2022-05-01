@@ -34,7 +34,7 @@ class ActionStatServices
             ->where([
                 'and',
                 "enterprise_id" => $statBeans->enterprise_id,
-                ['in', 'c.group_id', ['6,13,15']],
+                ['in', 'c.group_id', [6,13,15]],
                 [">", "c.parent_id", 0]
             ])
             ->groupBy("staff_id,action_id");
