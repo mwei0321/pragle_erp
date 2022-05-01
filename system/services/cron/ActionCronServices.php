@@ -27,19 +27,19 @@ class ActionCronServices
     function staffActionFinishCheck(ActionBeans $actionBeans)
     {
         // 提取每天员工动作KPI
-        $actionBeans->year  = date('Y');
+        $actionBeans->year  = $actionBeans->year ?: date('Y');
 
         // 按周期处理
         switch ($actionBeans->cycle) {
             case 1: // 每天
-                $actionBeans->month = date('m');
-                $actionBeans->day   = date('d');
+                $actionBeans->month = $actionBeans->month ?: date('m');
+                $actionBeans->day   = $actionBeans->day ?: date('d');
                 break;
             case 2: // 每月
-                $actionBeans->month = date('m');
+                $actionBeans->month = $actionBeans->month ?: date('m');
                 break;
             case 3: // 每周
-                $actionBeans->week  = date('W');
+                $actionBeans->week  = $actionBeans->week ?: date('W');
                 break;
             default:
                 break;
@@ -73,11 +73,6 @@ class ActionCronServices
             ->from(TableMap::User)
             ->where(["in", "id", $uesrIds])->indexBy("id")->all();
 
-        // 日期
-        $timem = strtotime("-1 day");
-        $year  = date('Y', $timem);
-        $month = date('m', $timem);
-        $day   = date('d', $timem);
         // 处理是否完成动作目标
         foreach ($list as $v) {
             // 提取指定员工的动作完成值参数
@@ -85,9 +80,6 @@ class ActionCronServices
             $actionBeans->department_id = $department[$v["staff_id"]]["department"] ?? 0;
             $actionBeans->staff_id      = $v['staff_id'];
             $actionBeans->action_id     = $v['action_id'];
-            $actionBeans->year          = $year;
-            $actionBeans->month         = $month;
-            $actionBeans->day           = $day;
 
             // 写入执行记录
             $CronActionLogBeans               = new CronActionLogBeans();

@@ -94,8 +94,9 @@ class OrderServices
         $connection = \Yii::$app->db->beginTransaction();
         // 入库数据
         $data = [
-            "enterprise_id" => $orderBeans->buyer_enterpriise_id,
+            "enterprise_id" => $orderBeans->buyer_enterprise_id,
             "user_id"       => $orderBeans->buyer_user_id,
+            "target_id" => $orderBeans->buyer_user_id,
             "order_num"     => $orderBeans->order_num ?: HelperFuns::getOrderSN(),
             "total_amount"  => $orderBeans->total_amount,
             "order_type"    => 2,
@@ -117,7 +118,7 @@ class OrderServices
 
         // 写入商品信息
         $product = [
-            "enterprise_id" => $orderBeans->seller_enterpriise_id,
+            "enterprise_id" => $orderBeans->seller_enterprise_id,
             "user_id"       => $orderBeans->seller_user_id,
             "order_num"     => $data["order_num"],
             "commodity_id"  => $orderBeans->product_id,

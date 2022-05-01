@@ -40,6 +40,10 @@ class CustomerCronServices
             ->from(TableMap::User)
             ->where(["in", "id", $uesrIds])->indexBy("id")->all();
 
+        // 日期处理
+        $time = $cronActionBeans->stime+3600;
+        list($year, $month, $day, $week) = [date("Y", $time), date("m", $time), date("d", $time), date("W", $time)];
+            
         // 实例化对象
         $srvObj = ServiceFactory::getInstance("BaseDB", TableMap::ActionDayStatisticsLog);
 
@@ -48,13 +52,13 @@ class CustomerCronServices
             $data["enterprise_id"] = $v['enterprise_id'];
             $data["department_id"] = $department[$v["user_id"]]["department"] ?? 0;
             $data["staff_id"]      = $v['user_id'];
-            $data["year"]          = date("Y", $cronActionBeans->stime + 3600);
-            $data["month"]         = date("m", $cronActionBeans->stime + 3600);
-            $data["day"]           = date("d", $cronActionBeans->stime + 3600);
-            $data["week"]          = date("W", $cronActionBeans->stime + 3600);
+            $data["year"]          = $year;
+            $data["month"]         = $month;
+            $data["day"]           = $day;
+            $data["week"]          = $week;
             $data["value"]         = $v['cnt'];
             $data["action_id"]     = 222;
-            $data["ctime"]         = time();
+            $data["ctime"]         = $time;
             // 写入
             $result = $srvObj->insert($data);
         }

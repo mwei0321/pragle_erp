@@ -26,7 +26,7 @@ class OrderCronServices
     function getYesterdayMarket($_date = "")
     {
         $cronActionBeans = new CronActionBeans();
-        $time = $_date ? strtotime($_date) : date("Y-m-d", strtotime("-1 day"));
+        $time = $_date ? $_date : date("Y-m-d", strtotime("-1 day"));
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
 
@@ -47,8 +47,10 @@ class OrderCronServices
             ->all();
 
         // 日期处理
-        list($year, $month, $day, $week) = [date("Y", $cronActionBeans->stime), date("m", $cronActionBeans->stime), date("d", $cronActionBeans->stime), date("W", $cronActionBeans->stime)];
-        // 数据处理
+        $time = $cronActionBeans->stime+3600;
+        list($year, $month, $day, $week) = [date("Y", $time), date("m", $time), date("d", $time), date("W", $time)];
+        
+        // 数据处理  
         foreach ($staffList as $v) {
             if (intval($v["user_id"]) < 1) {
                 continue;
@@ -62,20 +64,20 @@ class OrderCronServices
             $data["day"]           = $day;
             $data["week"]          = $week;
             $data["value"]         = $v['total_amount'];
-            $data["ctime"]         = time();
+            $data["ctime"]         = $time;
             // 写入
             $result = $srvObj->insert($data);
 
             // 更新到销售计划
-            $id = $srvObj->getFieldValByCondition([
-                "enterprise_id" => $data["enterprise_id"],
-                "staff_id"      => $data["staff_id"],
-                "year"          => $data["year"],
-                "month"         => $data["month"],
-            ], "id", TableMap::StaffMarketingKpi);
-            if (intval($id) > 1) {
-                $srvObj->increment("completed", "id = {$id}", TableMap::StaffMarketingKpi, $data["value"], "utime = " . time());
-            }
+            // $id = $srvObj->getFieldValByCondition([
+            //     "enterprise_id" => $data["enterprise_id"],
+            //     "staff_id"      => $data["staff_id"],
+            //     "year"          => $data["year"],
+            //     "month"         => $data["month"],
+            // ], "id", TableMap::StaffMarketingKpi);
+            // if (intval($id) > 1) {
+            //     $srvObj->increment("completed", "id = {$id}", TableMap::StaffMarketingKpi, $data["value"], "utime = " . time());
+            // }
 
             // 写入订单个数动作统计 action_id=227
             $data["action_id"] = 227;

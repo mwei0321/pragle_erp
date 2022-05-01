@@ -34,7 +34,7 @@ class OrderController extends InitController
 	 */
 	function actionManual(OrderBeans $orderBeans)
 	{
-		if ($orderBeans->product_id < 1 || $orderBeans->user_id < 1 || $orderBeans->staff_id < 1) {
+		if ($orderBeans->product_id < 1 || $orderBeans->staff_id < 1) {
 			return $this->reJson($orderBeans->toArray(), "param error", 400);
 		}
 

@@ -26,7 +26,7 @@ class FollowCronServices
     function getYesterdayActionFollow($_date = "")
     {
         $cronActionBeans = new CronActionBeans();
-        $time = $_date ? strtotime($_date) : date("Y-m-d", strtotime("-1 day"));
+        $time = $_date ? $_date : date("Y-m-d", strtotime("-1 day"));
         // $time = "2022-03-03";
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
@@ -46,18 +46,22 @@ class FollowCronServices
             ->from(TableMap::User)
             ->where(["in", "id", $uesrIds])->indexBy("id")->all();
 
+        // 日期处理
+        $time = $cronActionBeans->stime+3600;
+        list($year, $month, $day, $week) = [date("Y", $time), date("m", $time), date("d", $time), date("W", $time)];
+
         // 数据处理
         foreach ($staffList as $v) {
             $data["enterprise_id"] = $v['enterprise_id'];
             $data["department_id"] = $department[$v["staff_id"]]["department"] ?? 0;
             $data["staff_id"]      = $v['staff_id'];
-            $data["year"]          = date("Y", $cronActionBeans->stime);
-            $data["month"]         = date("m", $cronActionBeans->stime);
-            $data["day"]           = date("d", $cronActionBeans->stime);
-            $data["week"]          = date("W", $cronActionBeans->stime);
+            $data["year"]          = $year;
+            $data["month"]         = $month;
+            $data["day"]           = $day;
+            $data["week"]          = $week;
             $data["value"]         = $v['cnt'];
             $data["action_id"]     = $v['action_id'];
-            $data["ctime"]         = time();
+            $data["ctime"]         = $time;
             // 写入
             $result = $srvObj->insert($data);
         }
@@ -68,17 +72,18 @@ class FollowCronServices
         HelperFuns::writeLog("Department YesterdayActionFollow count " . count($staffList), '/yestoday', 'YesterdayActionFollow');
 
         // 数据处理
+        $time = $cronActionBeans->stime + 3600;
         foreach ($departmentList as $v) {
             $data["enterprise_id"] = $v['enterprise_id'];
             $data["department_id"] = $v["department_id"];
             $data["staff_id"]      = 0;
-            $data["year"]          = date("Y", $cronActionBeans->stime);
-            $data["month"]         = date("m", $cronActionBeans->stime);
-            $data["day"]           = date("d", $cronActionBeans->stime);
-            $data["week"]          = date("W", $cronActionBeans->stime);
+            $data["year"]          = $year;
+            $data["month"]         = $month;
+            $data["day"]           = $day;
+            $data["week"]          = $week;
             $data["value"]         = $v['cnt'];
             $data["action_id"]     = $v['action_id'];
-            $data["ctime"]         = time();
+            $data["ctime"]         = $time;
             // 写入
             $result = $srvObj->insert($data);
         }
@@ -135,7 +140,7 @@ class FollowCronServices
     {
         $cronActionBeans = new CronActionBeans();
 
-        $time = $_date ? strtotime($_date) : date("Y-m-d", strtotime("-1 day"));
+        $time = $_date ? $_date : date("Y-m-d", strtotime("-1 day"));
         // $time = date("Y-m-d", strtotime("-1 day"));
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
@@ -154,18 +159,21 @@ class FollowCronServices
             ->from(TableMap::User)
             ->where(["in", "id", $uesrIds])->indexBy("id")->all();
 
+        // 日期处理
+        $time = $cronActionBeans->stime+3600;
+        list($year, $month, $day, $week) = [date("Y", $time), date("m", $time), date("d", $time), date("W", $time)];
         // 数据处理
         foreach ($staffList as $v) {
             $data["enterprise_id"] = $v['enterprise_id'];
             $data["department_id"] = $department[$v["user_id"]]["department"] ?? 0;
             $data["staff_id"]      = $v['user_id'];
-            $data["year"]          = date("Y", $cronActionBeans->stime);
-            $data["month"]         = date("m", $cronActionBeans->stime);
-            $data["day"]           = date("d", $cronActionBeans->stime);
-            $data["week"]          = date("W", $cronActionBeans->stime);
+            $data["year"]          = $year;
+            $data["month"]         = $month;
+            $data["day"]           = $day;
+            $data["week"]          = $week;
             $data["value"]         = $v['cnt'];
             $data["action_id"]     = $v['action_id'];
-            $data["ctime"]         = time();
+            $data["ctime"]         = $time;
             // 写入
             $result = $srvObj->insert($data);
         }

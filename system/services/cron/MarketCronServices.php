@@ -28,19 +28,19 @@ class MarketCronServices
     function actionMarketStatistics(CronMarketBeans $cronMarketBeans)
     {
         // 提取每天员工动作KPI
-        $cronMarketBeans->year  = date('Y');
+        $cronMarketBeans->year  = $cronMarketBeans->year ?: date('Y');
 
         // 按周期处理
         switch ($cronMarketBeans->cycle) {
             case 1: // 每天
-                $cronMarketBeans->month = date('m');
-                $cronMarketBeans->day   = date('d');
+                $cronMarketBeans->month = $cronMarketBeans->month ?: date('m');
+                $cronMarketBeans->day   = $cronMarketBeans->day ?: date('d');
                 break;
             case 2: // 每月
-                $cronMarketBeans->month = date('m');
+                $cronMarketBeans->month = $cronMarketBeans->month ?: date('m');
                 break;
             case 3: // 每周
-                $cronMarketBeans->week  = date('W');
+                $cronMarketBeans->week  = $cronMarketBeans->week ?: date('W');
                 break;
             default:
                 break;

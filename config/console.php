@@ -1,6 +1,11 @@
 <?php
 $params = require __DIR__ . '/params.php';
 
+$MYSQL_USERNAME = getenv("MYSQL_USERNAME");
+$MYSQL_PASSWORD = getenv("MYSQL_PASSWORD");
+$MYSQL_DB_DSN = getenv("MYSQL_DB_DSN");
+$MYSQL_DB_DATA_DSN = getenv("MYSQL_DB_DATA_DSN");
+
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
@@ -22,6 +27,20 @@ $config = [
                     'levels' => ['error', 'warning'],
                 ],
             ],
+        ],
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => $MYSQL_DB_DSN,
+            'username' => $MYSQL_USERNAME,
+            'password' => $MYSQL_PASSWORD,
+            'charset' => 'utf8',
+        ],
+        'dbdata' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => $MYSQL_DB_DATA_DSN,
+            'username' => $MYSQL_USERNAME,
+            'password' => $MYSQL_PASSWORD,
+            'charset' => 'utf8',
         ],
     ],
     'params' => $params,
