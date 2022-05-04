@@ -39,8 +39,15 @@ class YestodayController extends Controller
         return ExitCode::OK;
     }
 
-    function actionModifyday() {
-        for ($i = 60;$i > 0;$i--) {
+    /**
+     * 任务修复
+     * date: 2022-05-04 15:34:34
+     * @author  <mawei.live>
+     * @return void
+     */
+    function actionModifyday()
+    {
+        for ($i = 60; $i > 0; $i--) {
             $day = date("Y-m-d", strtotime("-{$i} day"));
             var_dump($day);
 
@@ -55,17 +62,25 @@ class YestodayController extends Controller
         }
     }
 
-    function actionModifysocre() {
+
+    /**
+     * 任务修复
+     * date: 2022-05-04 15:34:47
+     * @author  <mawei.live>
+     * @return void
+     */
+    function actionModifyscore()
+    {
         $actionBeans = new \system\beans\kpi\ActionBeans();
         $actionBeans->cycle = 1;
 
-        for ($i = 60;$i > 0;$i--) {
-            $day = strtotime("Y-m-d", strtotime("-{$i} day"));
+        for ($i = 60; $i > 0; $i--) {
+            $day = date("Y-m-d", strtotime("-{$i} day"));
             var_dump($day);
-            
-            $actionBeans->month = date("m",strtotime($day));
-            $actionBeans->day = date("d",strtotime($day));
-            $actionBeans->week = date("W",strtotime($day));
+
+            $actionBeans->month = date("m", strtotime($day));
+            $actionBeans->day = date("d", strtotime($day));
+            $actionBeans->week = date("W", strtotime($day));
 
             // 员工每天完成统计
             ServiceFactory::getInstance("ActionCronSrv")->staffActionFinishCheck($actionBeans);

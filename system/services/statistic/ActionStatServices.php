@@ -11,7 +11,7 @@
 namespace system\services\statistic;
 
 use yii\db\Query;
-use system\common\{TableMap, ServiceFactory,SrvConfig};
+use system\common\{TableMap, ServiceFactory, SrvConfig};
 use system\beans\statistic\ActionStatBeans;
 
 class ActionStatServices
@@ -26,42 +26,15 @@ class ActionStatServices
     function getActionStatisticListForDate(ActionStatBeans $statBeans)
     {
         // 字段
-        $field = "department_id,staff_id,action_id,SUM(`value`) value";
+        $field = "c.id AS action_id,project_name name,group_id,state,ad.value";
 
         // 构建查询
         $query = (new Query())->from(TableMap::Config . ' AS c')
-            ->leftJoin(TableMap::ActionDayStatisticsLog . ' AS al',"al.action_id = c.id")
             ->where([
                 'and',
-                ["enterprise_id" => $statBeans->enterprise_id],
                 ['in', 'c.group_id', SrvConfig::$ActionGroup],
                 [">", "c.parent_id", 0]
-            ])
-            // ->groupBy("staff_id,action_id");
-            ->groupBy("action_id");
-
-        // 时间段
-        if ($statBeans->stime && $statBeans->etime) {
-            $query->andWhere([">=", "ctime", strtotime($statBeans->stime)])
-                ->andWhere(["<=", "ctime", strtotime($statBeans->etime)]);
-        }
-
-        // 部门搜索
-        if ($statBeans->department_id > 0) {
-            $query->andWhere(["department_id" => $statBeans->department_id]);
-            // ->groupBy("department_id,action_id");
-        }
-
-        // 员工搜索
-        if ($statBeans->staff_id > 0) {
-            $query->andWhere(["staff_id" => $statBeans->staff_id]);
-            // ->groupBy("staff_id,action_id");
-        }
-
-        // 动作id
-        if ($statBeans->action_id > 0) {
-            $query->andWhere(["action_id" => $statBeans->action_id]);
-        }
+            ]);
 
         // 总条数
         $count = $query->select("al.id")->count();
@@ -70,17 +43,48 @@ class ActionStatServices
         }
         $statBeans->page($count);
 
+        // 条件搜索
+        $adQuery = (new Query())->from(TableMap::ActionDayStatisticsLog)
+            ->where([
+                "enterprise_id" => $statBeans->enterprise_id,
+            ])
+            ->select("action_id,SUM(`value`) value")
+            ->groupBy("action_id");
+
+
+        // 时间段
+        if ($statBeans->stime && $statBeans->etime) {
+            $adQuery->andWhere([">=", "ctime", strtotime($statBeans->stime)])
+                ->andWhere(["<=", "ctime", strtotime($statBeans->etime)]);
+        }
+
+        // 部门搜索
+        if ($statBeans->department_id > 0) {
+            $adQuery->andWhere(["department_id" => $statBeans->department_id]);
+            // ->groupBy("department_id,action_id");
+        }
+
+        // 员工搜索
+        if ($statBeans->staff_id > 0) {
+            $adQuery->andWhere(["staff_id" => $statBeans->staff_id]);
+            // ->groupBy("staff_id,action_id");
+        }
+
+        // 动作id
+        if ($statBeans->action_id > 0) {
+            $adQuery->andWhere(["action_id" => $statBeans->action_id]);
+        }
+
         // 提示列表
-        $query = $query->select($field)
-            ->orderBy("staff_id DESC")
+        $list = $query->select($field)
+            ->leftJoin(["ad" => $adQuery], "ad.action_id = c.id")
+            ->orderBy("action_id DESC")
             ->limit($statBeans->limit)
-            ->offset($statBeans->offset);
-        $list = (new Query())->from(["a" => $query])
-            ->select("a.*,g.name AS department,u.first_name,u.last_name")
-            ->leftJoin(TableMap::Group . " as g", "g.id = a.department_id")
-            ->leftJoin(TableMap::User . " as u", "u.id = a.staff_id")
-            ->orderBy("a.value DESC")
+            ->offset($statBeans->offset)
             ->all();
+        foreach ($list as $k => $v) {
+            $list[$k]['value'] = intval($v['value']);
+        }
 
         return $list;
     }

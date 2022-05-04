@@ -25,8 +25,7 @@ class CustomerCronServices
     function getYesterdayCustomerStatistics($_date = null)
     {
         $cronActionBeans = new CronActionBeans();
-        $time = $_date ? strtotime($_date) : date("Y-m-d", strtotime("-1 day"));
-        // $time = date("Y-m-d", '1507623030');
+        $time = $_date ? $_date : date("Y-m-d", strtotime("-1 day"));
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
 
@@ -41,9 +40,9 @@ class CustomerCronServices
             ->where(["in", "id", $uesrIds])->indexBy("id")->all();
 
         // 日期处理
-        $time = $cronActionBeans->stime+3600;
+        $time = $cronActionBeans->stime + 3600;
         list($year, $month, $day, $week) = [date("Y", $time), date("m", $time), date("d", $time), date("W", $time)];
-            
+
         // 实例化对象
         $srvObj = ServiceFactory::getInstance("BaseDB", TableMap::ActionDayStatisticsLog);
 

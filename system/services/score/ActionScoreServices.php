@@ -113,7 +113,7 @@ class ActionScoreServices
         $data["obj_id"]        = $scoreBeans->obj_id;
         $data["type"]          = $scoreBeans->type;
         $data["score"]         = $scoreBeans->score;
-        $data["ctime"]         = time();
+        $data["ctime"]         = $scoreBeans->ctime ?: time();
         $result                = $dbObj->insert($data);
 
         // 给跟进人添加积分
@@ -140,7 +140,7 @@ class ActionScoreServices
                 "month"         => $scoreBeans->month,
                 "day"           => $scoreBeans->day,
                 "score"         => $scoreBeans->score,
-                "ctime"         => time(),
+                "ctime"         => $scoreBeans->ctime ?: time(),
             ];
             $result = $dbObj->insert($data, TableMap::DepartmentAndStaffScore);
         }

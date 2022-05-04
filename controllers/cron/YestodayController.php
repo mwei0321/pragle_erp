@@ -41,4 +41,40 @@ class YestodayController extends InitController
         // 订单销售统计
         ServiceFactory::getInstance("OrderCronSrv")->getYesterdayMarket();
     }
+
+
+    function actionModifyday()
+    {
+        for ($i = 110; $i > -1; $i--) {
+            $day = date("Y-m-d", strtotime("-{$i} day"));
+            var_dump($day);
+
+            // 昨天邮件统计 
+            ServiceFactory::getInstance("EmailCronSrv")->getYesterdayEmailStatistics($day);
+            // // 昨天新跟进动作统计
+            ServiceFactory::getInstance("FollowCronSrv")->getYesterdayActionFollow($day);
+            // // 昨天旧跟进动作统计
+            ServiceFactory::getInstance("FollowCronSrv")->getYesterdayOldFollow($day);
+            // 昨天客户统计
+            ServiceFactory::getInstance("CustomerCronSrv")->getYesterdayCustomerStatistics($day);
+        }
+    }
+
+    function actionModifyscore()
+    {
+        $actionBeans = new \system\beans\kpi\ActionBeans();
+        $actionBeans->cycle = 1;
+
+        for ($i = 60; $i > 0; $i--) {
+            $day = date("Y-m-d", strtotime("-{$i} day"));
+            var_dump($day);
+
+            $actionBeans->month = date("m", strtotime($day));
+            $actionBeans->day = date("d", strtotime($day));
+            $actionBeans->week = date("W", strtotime($day));
+
+            // 员工每天完成统计
+            ServiceFactory::getInstance("ActionCronSrv")->staffActionFinishCheck($actionBeans);
+        }
+    }
 }

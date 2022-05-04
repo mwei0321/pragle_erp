@@ -1,6 +1,14 @@
 <?php
 $params = require __DIR__ . '/params.php';
 
+// define("ROOT_PATH", str_replace("\\", "/", dirname(__DIR__)) . '/');
+
+// 读取env配置
+if (!getenv("MYSQL_DB_DSN")) {
+    require_once ROOT_PATH . 'system/common/Env.php';
+    system\common\Env::loadFile(ROOT_PATH . '.env');
+}
+
 $MYSQL_USERNAME = getenv("MYSQL_USERNAME");
 $MYSQL_PASSWORD = getenv("MYSQL_PASSWORD");
 $MYSQL_DB_DSN = getenv("MYSQL_DB_DSN");

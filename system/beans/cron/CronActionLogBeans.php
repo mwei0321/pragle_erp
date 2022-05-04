@@ -25,4 +25,5 @@ class CronActionLogBeans extends BaseBean
     public $finish_score  = 0; // 完成所得积分数
     public $status        = 0; // 状态 (1.完成 0.未完成)
     public $obj_id        = 0; // 跟进id
+    public $ctime         = 0; // 创建时间
 }

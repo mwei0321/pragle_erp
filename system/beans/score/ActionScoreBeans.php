@@ -26,4 +26,5 @@ class ActionScoreBeans extends BaseBean
     public $year          = 0; // 年
     public $month         = 0; // 月
     public $day           = 0; // 日
+    public $ctime         = 0;
 }

@@ -21,4 +21,5 @@ class ActionStatBeans extends BaseBean
     public $year          = ''; // 年
     public $stime         = "";
     public $etime         = "";
+    public $page_size     = 30;
 }

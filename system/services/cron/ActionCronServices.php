@@ -89,6 +89,7 @@ class ActionCronServices
             $CronActionLogBeans->status       = ($CronActionLogBeans->finish >= $CronActionLogBeans->target) ? 1 : 0;
             $CronActionLogBeans->obj_id       = $v['id'];
             $CronActionLogBeans->action_score = $actionScore[$v["action_id"]] ?? 0;
+            $CronActionLogBeans->ctime        = strtotime("{$actionBeans->year}-{$actionBeans->month}-{$actionBeans->day} 02:00:00");
 
             // 处理异形处理,比如完成多少得多少分
             if (in_array($v["action_id"], ['228'])) {

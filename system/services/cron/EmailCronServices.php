@@ -27,7 +27,6 @@ class EmailCronServices
     {
         $cronActionBeans = new CronActionBeans();
         $time = $_date ? $_date : date("Y-m-d", strtotime("-1 day"));
-        // $time = date("Y-m-d", '1645204141');
         $cronActionBeans->stime = strtotime($time);
         $cronActionBeans->etime = strtotime($time . " 23:59:59");
 
@@ -42,7 +41,7 @@ class EmailCronServices
             ->where(["in", "id", $uesrIds])->indexBy("id")->all();
 
         // 日期处理
-        $time = $cronActionBeans->stime+3600;
+        $time = $cronActionBeans->stime + 3600;
         list($year, $month, $day, $week) = [date("Y", $time), date("m", $time), date("d", $time), date("W", $time)];
 
         // 实例化对象
