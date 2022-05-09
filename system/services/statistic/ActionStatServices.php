@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-04-09 20:11:22 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-05-09 14:46:38
+ * @Last Modified time: 2022-05-09 15:04:25
  */
 
 namespace system\services\statistic;
@@ -82,7 +82,7 @@ class ActionStatServices
 
         // 提示列表
         $list = $query->select($field)
-            ->leftJoin(["ad" => $adQuery], "ad.action_ids = c.id")
+            ->leftJoin(["ad" => $adQuery], "ad.action_id = c.id")
             ->limit($statBeans->limit)
             ->offset($statBeans->offset)
             ->all();
