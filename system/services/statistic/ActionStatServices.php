@@ -101,7 +101,7 @@ class ActionStatServices
             }
         }
 
-        uasort($list, (function ($a, $b) {
+        usort($list, (function ($a, $b) {
             if ($a['value'] > $b['value']) {
                 return -1;
             } elseif ($a['value'] == $b['value']) {
