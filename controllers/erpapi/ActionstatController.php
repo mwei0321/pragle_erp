@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-04-09 20:03:16 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-04-09 21:12:56
+ * @Last Modified time: 2022-05-09 14:45:41
  */
 
 namespace app\controllers\erpapi;
@@ -34,6 +34,13 @@ class ActionstatController extends InitController
         if ($statBeans->enterprise_id < 1 || !$statBeans->stime || !$statBeans->etime) {
             return $this->reJson([$statBeans], 'param error', 400);
         }
+
+        // $a = new \system\beans\user\DepartmentBeans();
+        // $a->enterprise_id = 91796;
+        // var_dump( // 实例化对象并调用
+        //     $srvObj = ServiceFactory::getInstance("DepartmentSrv")->getDepartmentList($a)
+        // );
+        // exit();
 
         // 提取结果
         $list = ServiceFactory::getInstance("ActionStatSrv")->getActionStatisticListForDate($statBeans);

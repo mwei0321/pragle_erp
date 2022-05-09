@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-04-09 20:11:22 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-04-09 21:15:07
+ * @Last Modified time: 2022-05-09 14:46:38
  */
 
 namespace system\services\statistic;
@@ -60,7 +60,12 @@ class ActionStatServices
 
         // 部门搜索
         if ($statBeans->department_id > 0) {
-            $adQuery->andWhere(["department_id" => $statBeans->department_id]);
+            // 提取部门下级
+            $departmentList = ServiceFactory::getInstance("DepartmentSrv")->getDepartmentList((new \system\beans\user\DepartmentBeans()));
+            $departmentIds = $departmentList[$statBeans->department_id]['child_ids'] ?? [];
+            $departmentIds[] = $statBeans->department_id;
+            // 部门搜索
+            $adQuery->andWhere(["IN", "department_id", $statBeans->department_id]);
             // ->groupBy("department_id,action_id");
         }
 
@@ -74,9 +79,10 @@ class ActionStatServices
         if ($statBeans->action_id > 0) {
             $adQuery->andWhere(["action_id" => $statBeans->action_id]);
         }
+
         // 提示列表
         $list = $query->select($field)
-            ->leftJoin(["ad" => $adQuery], "ad.action_id = c.id")
+            ->leftJoin(["ad" => $adQuery], "ad.action_ids = c.id")
             ->limit($statBeans->limit)
             ->offset($statBeans->offset)
             ->all();
@@ -85,17 +91,23 @@ class ActionStatServices
         return $list;
     }
 
-
+    /**
+     * 分类合并排序
+     * @param  [type] $_list
+     * date: 2022-05-09 14:46:30
+     * @author  <mawei.live>
+     * @return void
+     */
     function mergeGroup($_list)
     {
         $mergeParentsIds = [231, 202];
         $list = HelperFuns::fieldtokey($_list, 'action_id');
 
         foreach ($list as $k => $v) {
-            if (in_array($v['parent_id'], $mergeParentsIds)) {
-                $list[$v['parent_id']]['value'] = intval($v['value']);
-            } elseif ($v['parent_id'] == 0 && !in_array($v['parent_id'], $mergeParentsIds)) {
+            if ($v['parent_id'] == 0 && !in_array($v['parent_id'], $mergeParentsIds)) {
                 unset($list[$k]);
+            } elseif (in_array($v['parent_id'], $mergeParentsIds)) {
+                $list[$v['parent_id']]['value'] = intval($v['value']);
             } else {
                 $list[$k]['value'] = intval($v['value']);
             }

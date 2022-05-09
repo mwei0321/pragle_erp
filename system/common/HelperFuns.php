@@ -5,7 +5,7 @@
  * @Author: mawei
  * @Date:   2021-12-22
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-04-06 11:38:06
+ * @Last Modified time: 2022-05-09 14:32:28
  */
 
 namespace system\common;
@@ -515,7 +515,7 @@ class HelperFuns
      * @author MaWei (http://www.mawei.live)
      * @date 2018-08-01 16:37:16
      */
-    static function getTree($_list, $_level = 2, $_childrenkey = 'id')
+    static function getTreeLevel($_list, $_level = 2, $_childrenkey = 'id')
     {
         $pid = $pid2 = null;
         $tree = [];
@@ -538,6 +538,55 @@ class HelperFuns
     }
 
     /**
+     * 返回树形结构
+     * @param  array $_list
+     * date: 2022-05-09 10:52:41
+     * @author  <mawei.live>
+     * @return array
+     */
+    static function getTree($data, $pid = 0)
+    {
+        if (empty($data)) {
+            return array();
+        }
+
+        static $level = 0;
+
+        $returnArray = array();
+
+        foreach ($data as $node) {
+            if ($node['pid'] == $pid) {
+                $node['level'] = $level;
+                $returnArray[] = $node;
+
+                if (static::hasChild($node['id'], $data)) {
+                    $level++;
+
+                    $returnArray = array_merge($returnArray, static::getTree($data, $node['id']));
+
+                    $level--;
+                }
+            }
+        }
+
+        return $returnArray;
+    }
+
+    static function hasChild($cid, $data)
+    {
+        $hasChild = false;
+
+        foreach ($data as $node) {
+            if ($node['pid'] == $cid) {
+                $hasChild = true;
+                break;
+            }
+        }
+
+        return $hasChild;
+    }
+
+    /**
      * 把数组有PID的层次化
      * @param  array $_list
      * @param  int $_pid
@@ -548,14 +597,38 @@ class HelperFuns
     static function level($_menu, $_pid = 0, $_level = 0, $_flag = 1)
     {
         static $level = [];
+        static $childIds = [];
+        static $topParentIds = 0;
         $_flag && $level = [] && $_flag = 0;
         foreach ($_menu as $k => $v) {
+            // 存顶级id,为顶级写入子ID
             if ($v['pid'] == $_pid) {
+                // 存子ID
+                if ($v['pid'] > 0) {
+                    $childIds[$_pid][] = $v['id'];
+                    $childIds[0][] = $v['id'];
+                }
+                // 保存，并写入层级
                 $level[$v['id']] = $v;
                 $level[$v['id']]['level'] = $_level;
                 $level[$v['id']]['levelstr'] = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;|----', $_level);
                 unset($_menu[$k]);
+                // 递归处理层级
                 self::level($_menu, $v['id'], $_level + 1, 0);
+            }
+            $v["pid"] == 0 && $topParentIds = $v['id'];
+            if ($childIds && $_pid == 0) {
+                // 下级子id赋值
+                foreach ($childIds as $key => $val) {
+                    if ($key > 0) {
+                        isset($level[$key]) && $level[$key]['child_ids'] = array_unique($val);
+                    }
+                }
+                // 顶级子ID赋值
+                $level[$topParentIds]['child_ids'] = array_unique($childIds[0]);
+                // 重置初始化
+                $childIds = [];
+                $topParentIds = 0;
             }
         }
         return $level;
