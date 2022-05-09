@@ -15,6 +15,8 @@ use system\common\{ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
 use system\beans\statistic\ActionStatBeans;
 
+
+
 class ActionstatController extends InitController
 {
     use BindBeanParamsTrait;

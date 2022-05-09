@@ -11,7 +11,7 @@
 namespace system\services\statistic;
 
 use yii\db\Query;
-use system\common\{TableMap, ServiceFactory, SrvConfig};
+use system\common\{HelperFuns, TableMap, ServiceFactory, SrvConfig};
 use system\beans\statistic\ActionStatBeans;
 
 class ActionStatServices
@@ -26,14 +26,14 @@ class ActionStatServices
     function getActionStatisticListForDate(ActionStatBeans $statBeans)
     {
         // 字段
-        $field = "c.id AS action_id,project_name name,group_id,state,ad.value";
+        $field = "c.id AS action_id,c.parent_id,project_name name,group_id,state,ad.value";
 
         // 构建查询
         $query = (new Query())->from(TableMap::Config . ' AS c')
             ->where([
                 'and',
                 ['in', 'c.group_id', SrvConfig::$ActionGroup],
-                [">", "c.parent_id", 0]
+                // [">", "c.parent_id", 0]
             ]);
 
         // 总条数
@@ -74,17 +74,42 @@ class ActionStatServices
         if ($statBeans->action_id > 0) {
             $adQuery->andWhere(["action_id" => $statBeans->action_id]);
         }
-
         // 提示列表
         $list = $query->select($field)
             ->leftJoin(["ad" => $adQuery], "ad.action_id = c.id")
-            ->orderBy("action_id DESC")
             ->limit($statBeans->limit)
             ->offset($statBeans->offset)
             ->all();
+        $list = $this->mergeGroup($list);
+
+        return $list;
+    }
+
+
+    function mergeGroup($_list)
+    {
+        $mergeParentsIds = [231, 202];
+        $list = HelperFuns::fieldtokey($_list, 'action_id');
+
         foreach ($list as $k => $v) {
-            $list[$k]['value'] = intval($v['value']);
+            if (in_array($v['parent_id'], $mergeParentsIds)) {
+                $list[$v['parent_id']]['value'] = intval($v['value']);
+            } elseif ($v['parent_id'] == 0 && !in_array($v['parent_id'], $mergeParentsIds)) {
+                unset($list[$k]);
+            } else {
+                $list[$k]['value'] = intval($v['value']);
+            }
         }
+
+        uasort($list, (function ($a, $b) {
+            if ($a['value'] > $b['value']) {
+                return -1;
+            } elseif ($a['value'] == $b['value']) {
+                return 0;
+            } elseif ($a['value'] < $b['value']) {
+                return 1;
+            }
+        }));
 
         return $list;
     }
