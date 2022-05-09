@@ -3,7 +3,7 @@
  * @Author: MaWei 
  * @Date: 2022-04-06 09:32:07 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-05-09 14:42:36
+ * @Last Modified time: 2022-05-09 15:12:23
  */
 
 namespace system\services\user;
@@ -46,10 +46,10 @@ class DepartmentServices
     {
         $cacheKey = "department_" . $departmentBeans->parent_id . '_' . $departmentBeans->front_state;
         // 缓存
-        $list = \Yii::$app->cache->get($cacheKey);
-        if ($list !== false) {
-            return $list;
-        }
+        // $list = \Yii::$app->cache->get($cacheKey);
+        // if ($list !== false) {
+        //     return $list;
+        // }
 
         // 字段
         $field = "id,name,parent_id,parent_id pid,front_state";

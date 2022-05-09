@@ -5,7 +5,7 @@
  * @Author: MaWei 
  * @Date: 2022-04-09 20:11:22 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-05-09 15:04:25
+ * @Last Modified time: 2022-05-09 15:13:02
  */
 
 namespace system\services\statistic;
@@ -61,11 +61,14 @@ class ActionStatServices
         // 部门搜索
         if ($statBeans->department_id > 0) {
             // 提取部门下级
-            $departmentList = ServiceFactory::getInstance("DepartmentSrv")->getDepartmentList((new \system\beans\user\DepartmentBeans()));
+            $departmentBeans = (new \system\beans\user\DepartmentBeans());
+            $departmentBeans->enterprise_id = $statBeans->enterprise_id;
+            $departmentList = ServiceFactory::getInstance("DepartmentSrv")->getDepartmentList($departmentBeans);
             $departmentIds = $departmentList[$statBeans->department_id]['child_ids'] ?? [];
             $departmentIds[] = $statBeans->department_id;
+
             // 部门搜索
-            $adQuery->andWhere(["IN", "department_id", $statBeans->department_id]);
+            $adQuery->andWhere(["IN", "department_id", $departmentIds]);
             // ->groupBy("department_id,action_id");
         }
 
