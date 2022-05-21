@@ -9,59 +9,31 @@
 
 namespace app\controllers\erpapi;
 
-use Yii;
-use Closure;
-use app\controllers\InitController;
 use yii\web\Controller;
 use services\common\{ServiceFactory, TableMap};
 use services\traits\BindBeanParamsTrait;
-use services\beans\KpiBeans;
-
-
-class ab
-{
-
-    function dd(object $da)
-    {
-        var_dump($da->aa);
-    }
-}
-
-class at
-{
-}
+use system\common\HelperFuns;
 
 class IndexController extends Controller
 {
 
-    use BindBeanParamsTrait;
-
-    function actionIndex(KpiBeans $kpiData)
+    function actionIndex()
     {
-        $request = Yii::$app->request;
-
-        $obj = (object)['aa' => 1, 'bb' => 2];
-        $obj->aa = 11;
-        $obj->bb = 222;
-        var_dump($obj);
-        var_dump(isset($obj->cc));
-
-
-        $abobj = new ab();
-        $abobj->dd($obj);
-
-        exit();
-
-        // var_dump($kpiData);
-
-        // 初始化数据库
-        // $dbObj = ServiceFactory::getSrvObj('BaseDB',TableMap::Config);
+        $a = [
+            "module/cj-srv/db/record.go",
+            "module/cj-srv/handler/attend.go",
+            "module/cj-srv/handler/user.go",
+            "module/cj-srv/model/mc_self_check.go",
+            "module/cj-srv/model/record.go",
+            "module/cj-srv/model/result.go",
 
 
-        // var_dump($dbObj->getInfoById(90));
-        // exit();
 
 
-        return $this->reJson(['a' => 1111]);
+        ];
+
+        $path = "F:/GoCode/ancda/cj-srv/";
+
+        var_dump(HelperFuns::copyFile($path, $a));
     }
 }

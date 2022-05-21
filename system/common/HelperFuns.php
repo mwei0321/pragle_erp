@@ -389,9 +389,10 @@ class HelperFuns
      */
     static function copyFile($_path, $_fileList, $_prefix = "copy")
     {
+        $fileList = array_unique($_fileList);
         $cnt = 0;
         $path = dirname($_path) . '/' . $_prefix . '/';
-        foreach ($_fileList as $k => $v) {
+        foreach ($fileList as $k => $v) {
             $tmpPath = $path . $v;
             $tmpSource = $_path . $v;
             static::createDir(dirname($tmpPath));
