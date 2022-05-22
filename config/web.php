@@ -13,11 +13,14 @@ $MYSQL_USERNAME = getenv("MYSQL_USERNAME");
 $MYSQL_PASSWORD = getenv("MYSQL_PASSWORD");
 $MYSQL_DB_DSN = getenv("MYSQL_DB_DSN");
 $MYSQL_DB_DATA_DSN = getenv("MYSQL_DB_DATA_DSN");
+$MYSQL_DB_CENTER_DSN = getenv("MYSQL_DB_CENTER_DSN");
+$MYSQL_DB_CENTER1_DSN = getenv("MYSQL_DB_CENTER1_DSN");
 
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'timeZone' => 'Asia/Shanghai',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -56,6 +59,15 @@ $config = [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+
+                // 记录SQL日志
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning', 'info'],
+                    'logVars' => ['*'],
+                    'categories' => ['yii\db\*', 'app\models\*'],
+                    'logFile' => '@runtime/logs/sql' . date('Y-m-d') . '.log',
+                ],
             ],
         ],
         'db' => [
@@ -72,6 +84,21 @@ $config = [
             'password' => $MYSQL_PASSWORD,
             'charset' => 'utf8',
         ],
+        'dbcenter' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => $MYSQL_DB_CENTER_DSN,
+            'username' => $MYSQL_USERNAME,
+            'password' => $MYSQL_PASSWORD,
+            'charset' => 'utf8',
+        ],
+        'dbcenter_to' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => $MYSQL_DB_CENTER1_DSN,
+            'username' => $MYSQL_USERNAME,
+            'password' => $MYSQL_PASSWORD,
+            'charset' => 'utf8',
+        ],
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -79,6 +106,8 @@ $config = [
                 '<controller:\w+>/<action:\w+>/' => 'erpapi/<controller>/<action>',
             ],
         ],
+
+        // 开启SQL日志
 
     ],
     'params' => $params,

@@ -10,7 +10,14 @@
 namespace app\controllers\cron;
 
 use app\controllers\InitController;
+use system\common\ServiceFactory;
 
-class SyncdataContoller extends InitController
+class SyncdataController extends InitController
 {
+
+    function actionUser()
+    {
+
+        ServiceFactory::getInstance("SyncEnterpriseUserSrv")->syncEnterpriseUser();
+    }
 }

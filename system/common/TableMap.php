@@ -41,4 +41,40 @@ class TableMap
 	// dbDate 库
 	const TaskQueue               = "task_queue";
 	const TaskDistribute          = "task_distribute";
+
+
+	// dbcenter库
+	// 企业用户
+	const TbEnterprise            = "tbenterprise";
+	const TbUser                  = "tbUser";
+	const TbUserInfo              = "tbUserinfo";
+	// 设备
+	const TbDevice                = "tbDevice";
+	const TbDeviceFlow            = "tbdeviceflow";
+	const TbDevicePay             = "tbDevicePay";
+	const TbDeviceLimit           = "tbdevicelimit";
+	const TbDeviceStatus          = "tbdevicestatus";
+	const TbControllerList        = "tbcontrollist";
+	// 素材
+	const TbVedio                 = "tbvedio";
+	const TbAnalysis              = "tbanalysis";
+	// 节目
+	const TbMakeAddver            = "tbmakeaddver";
+	const TbPlayBase              = "tbplaybase";
+	const TbPlayList              = "tbplaylist";
+	const TbPlayListPlan          = "tbplaylistplan";
+	const AdvDownload             = "adv_download";
+	const TbPushRec               = "tbpushrec";
+	// 购买支付
+	const TbStock                 = "tbstock";
+	const TbOrder                 = "tborder";
+	const TbOrderItem             = "tborder_item";
+	const TbOrderLog              = "tborder_log";
+	const TbWallet                = "tbwallet";
+	const TbWalletLog             = "tbwallet_log";
+	// 流量统计
+	const TbFlowCord              = "tbflowcord";
+	const TbFlowRecord            = "tbflowrecord";
+	const TbStatisticsDevice      = "tbStatisticsDevice";
+	const UserActive = "user_active";
 }

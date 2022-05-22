@@ -37,6 +37,10 @@ class SrvMap
     public $CustomerCronSrv = 'system\services\cron\CustomerCronServices';
     public $OrderCronSrv    = 'system\services\cron\OrderCronServices';
 
+    // 数据同步
+    public $SyncEnterpriseUserSrv = "system\services\syncdata\EnterpriseUserSrv";
+    public $SyncDeviceSrv = "system\services\syncdata\DeviceSrv";
+
 
     // 引用旧的代码
 
