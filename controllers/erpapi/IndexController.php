@@ -1,10 +1,13 @@
 <?php
-
-/**
- * @Author: MaWei
- * @Date:   2021-12-19
- * @Last Modified by:   mawei
- * @Last Modified time: 2021-12-22
+/*
+ * @Author: MaWei 1123265518@qq.com
+ * @Date: 2022-03-09 12:32:17
+ * @LastEditors: MaWei 1123265518@qq.com
+ * @LastEditTime: 2022-05-24 16:46:55
+ * @FilePath: \pragle_erp\controllers\erpapi\IndexController.php
+ * @Description: 
+ * 
+ * Copyright (c) 2022 by MaWei 1123265518@qq.com, All Rights Reserved. 
  */
 
 namespace app\controllers\erpapi;
@@ -20,19 +23,10 @@ class IndexController extends Controller
     function actionIndex()
     {
         $a = [
-            "module/cj-srv/db/record.go",
-            "module/cj-srv/handler/attend.go",
-            "module/cj-srv/handler/user.go",
-            "module/cj-srv/model/mc_self_check.go",
-            "module/cj-srv/model/record.go",
-            "module/cj-srv/model/result.go",
-
-
-
-
+            "app/Api/V1/Services/OrderService.php",
         ];
 
-        $path = "F:/GoCode/ancda/cj-srv/";
+        $path = "F:/MaWei/code/ancda_crm/";
 
         var_dump(HelperFuns::copyFile($path, $a));
     }
