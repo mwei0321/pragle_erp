@@ -22,10 +22,16 @@ class SyncBaseBeans extends BaseBean
     public $from_enterprise_id = 0;
     public $from_uid           = 0;
     public $from_device_id     = 0;
+    public $from_order_id      = 0;
+    public $from_device_no     = 0;
     // 新参数
     public $to_id              = 0;
     public $to_enterprise_id   = 0;
     public $to_uid             = 0;
     public $to_device_id       = 0;
+    public $to_order_id        = 0;
+    public $to_device_no       = 0;
+
+
     public $page_size          = 30;
 }

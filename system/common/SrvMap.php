@@ -5,7 +5,7 @@
  * @Author: MaWei
  * @Date:   2021-10-27
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-05-09 10:36:03
+ * @Last Modified time: 2022-05-29 16:12:09
  */
 
 namespace system\common;
@@ -13,33 +13,37 @@ namespace system\common;
 class SrvMap
 {
     // 数据基础
-    public $BaseDB          = 'system\common\BaseDB';
+    public $BaseDB                = 'system\common\BaseDB';
 
     // service
-    public $MaketingKpiSrv  = 'system\services\kpi\MaketingKpiServices';
-    public $ActionKpiSrv    = 'system\services\kpi\ActionKpiServices';
-    public $KpiRecordSrv    = 'system\services\kpi\KpiRecordServices';
-    public $ActionLogSrv    = 'system\services\kpi\ActionLogServices';
-    public $KpiGraphicSrv   = 'system\services\graphic\KpiGraphicServices';
-    public $ScoreGraphiSrv  = 'system\services\graphic\ScroeGraphicServices';
-    public $ActionFollowSrv = 'system\services\follow\ActionFollowServices';
-    public $ActionScoreSrv  = 'system\services\score\ActionScoreServices';
-    public $ProductSrv      = 'system\services\product\ProductServices';
-    public $OrderSrv        = 'system\services\order\OrderServices';
-    public $DepartmentSrv   = 'system\services\user\DepartmentServices';
-    public $ActionStatSrv   = 'system\services\statistic\ActionStatServices';
+    public $MaketingKpiSrv        = 'system\services\kpi\MaketingKpiServices';
+    public $ActionKpiSrv          = 'system\services\kpi\ActionKpiServices';
+    public $KpiRecordSrv          = 'system\services\kpi\KpiRecordServices';
+    public $ActionLogSrv          = 'system\services\kpi\ActionLogServices';
+    public $KpiGraphicSrv         = 'system\services\graphic\KpiGraphicServices';
+    public $ScoreGraphiSrv        = 'system\services\graphic\ScroeGraphicServices';
+    public $ActionFollowSrv       = 'system\services\follow\ActionFollowServices';
+    public $ActionScoreSrv        = 'system\services\score\ActionScoreServices';
+    public $ProductSrv            = 'system\services\product\ProductServices';
+    public $OrderSrv              = 'system\services\order\OrderServices';
+    public $DepartmentSrv         = 'system\services\user\DepartmentServices';
+    public $ActionStatSrv         = 'system\services\statistic\ActionStatServices';
 
     // 定时任务
-    public $EmailCronSrv    = 'system\services\cron\EmailCronServices';
-    public $ActionCronSrv   = 'system\services\cron\ActionCronServices';
-    public $MarketCronSrv   = 'system\services\cron\MarketCronServices';
-    public $FollowCronSrv   = 'system\services\cron\FollowCronServices';
-    public $CustomerCronSrv = 'system\services\cron\CustomerCronServices';
-    public $OrderCronSrv    = 'system\services\cron\OrderCronServices';
+    public $EmailCronSrv          = 'system\services\cron\EmailCronServices';
+    public $ActionCronSrv         = 'system\services\cron\ActionCronServices';
+    public $MarketCronSrv         = 'system\services\cron\MarketCronServices';
+    public $FollowCronSrv         = 'system\services\cron\FollowCronServices';
+    public $CustomerCronSrv       = 'system\services\cron\CustomerCronServices';
+    public $OrderCronSrv          = 'system\services\cron\OrderCronServices';
 
     // 数据同步
     public $SyncEnterpriseUserSrv = "system\services\syncdata\EnterpriseUserSrv";
-    public $SyncDeviceSrv = "system\services\syncdata\DeviceSrv";
+    public $SyncDeviceSrv         = "system\services\syncdata\DeviceSrv";
+    public $SyncMaterialSrv       = "system\services\syncdata\MaterialSrv";
+    public $SyncOrderSrv          = "system\services\syncdata\OrderSrv";
+    public $SyncWalletSrv         = "system\services\syncdata\WalletSrv";
+    public $SyncFlowSrv           = "system\services\syncdata\FlowSrv";
 
 
     // 引用旧的代码

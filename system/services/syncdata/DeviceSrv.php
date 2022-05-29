@@ -9,9 +9,10 @@
 
 namespace system\services\syncdata;
 
-use system\common\TableMap;
-use yii\db\Query;
 use \Yii;
+use yii\db\Query;
+use system\common\{TableMap, HelperFuns};
+use system\beans\sync\SyncBaseBeans;
 
 class DeviceSrv
 {
@@ -116,6 +117,43 @@ class DeviceSrv
             ->all($this->syncToDB);
 
         return count($isExistList) > 0 ? array_column($isExistList, "Devno") : [];
+    }
+
+    /**
+     * 同步设备流量
+     * @param  \system\beans\sync\SyncBaseBeans $syncBaseBeans
+     * date: 2022-05-29 20:44:37
+     * @author  <mawei.live>
+     * @return void
+     */
+    function syncDeviceStatistic(SyncBaseBeans $syncBaseBeans)
+    {
+        // 提取用户钱包
+        $list = (new Query())->from(TableMap::TbStatisticsDevice)
+            ->where([
+                'devno'   => $syncBaseBeans->from_device_no,
+                "sync_id" => 0,
+            ])
+            ->all($this->syncFromDB);
+
+        $oldId = 0;
+        foreach ($list as $v) {
+            $v['CompanyId'] = $syncBaseBeans->to_enterprise_id;
+            $v['sync_id']    = $oldId = $v['statistics_id'];
+            unset($v['statistics_id']);
+            // 插入数据
+            $result = $this->syncToDB->createCommand()->insert(TableMap::TbStatisticsDevice, $v)->execute();
+            if ($result === false) {
+                HelperFuns::writeLog("error:{$oldId}", "device.log", "insert new syncDeviceStatistic");
+            }
+            $id = $this->syncToDB->getLastInsertID();
+
+            // 更新同步记录
+            $result = $this->syncFromDB->createCommand()->update(TableMap::TbStatisticsDevice, ["sync_id" => $id], ['statistics_id' => $oldId])->execute();
+            if ($result === false) {
+                HelperFuns::writeLog("error:{$id}", "device.log", "update old syncDeviceStatistic");
+            }
+        }
     }
 
     // 构造函数
