@@ -1,7 +1,7 @@
 -- 是否同步 1是,0否,-1,不需要
 -- 企业
 ALTER TABLE `tbenterprise` 
-ADD COLUMN `sync_id` tinyint(1) NULL DEFAULT 0 COMMENT ' 是否同步了' AFTER `user_del_type`;
+ADD COLUMN `sync_id` tinyint(1) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `user_del_type`;
 -- 企业用户员工
 ALTER TABLE `tbUser` 
 ADD COLUMN `sync_id` tinyint(1) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `updated_at`;

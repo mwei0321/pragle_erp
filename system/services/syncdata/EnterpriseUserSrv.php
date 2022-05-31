@@ -10,6 +10,7 @@
 
 namespace system\services\syncdata;
 
+use system\beans\sync\SyncBaseBeans;
 use system\common\TableMap;
 use yii\db\Query;
 use \Yii;
@@ -86,30 +87,45 @@ class EnterpriseUserSrv
         return true;
     }
 
+
+
     /**
      * 同步企业
      * date: 2022-05-22 00:36:39
      * @author  <mawei.live>
      * @return void
      */
-    function syncEnterprise($_enterpriseId)
+    function syncEnterprise(SyncBaseBeans $syncBaseBeans)
     {
         // 查询信息
-        $info = (new Query())->from(TableMap::TbEnterprise)->where(['id' => $_enterpriseId])->one($this->syncFromDB);
-        $info['sync_id'] = $info['id'];
+        $info = (new Query())->from(TableMap::TbEnterprise)
+            ->where([
+                'id'      => $syncBaseBeans->from_enterprise_id,
+                "sync_id" => 0,
+            ])->one($this->syncFromDB);
+        if (!$info || isset($info['id'])) {
+            return -1;
+        }
+
+        $info['sync_id'] = $oldId = $info['id'];
         unset($info['id']);
         unset($info['auto_power_off']);
         unset($info['is_sync']);
 
         // 同步信息
-        $result = $this->syncToDB->createCommand()
-            ->insert(TableMap::TbEnterprise, $info)
-            ->execute();
+        $result = $this->syncToDB->createCommand()->insert(TableMap::TbEnterprise, $info)->execute();
         if ($result === false) {
-            return false;
+            return -2;
         }
         //返回ID
-        return $this->syncToDB->getLastInsertID();
+        $newId = $this->syncToDB->getLastInsertID();
+
+        // 同步回写
+        if ($this->syncFromDB->createCommand()->update(TableMap::TbEnterprise, ["sync_id" => $newId], ['id' => $oldId])->execute() === false) {
+            return -3;
+        }
+
+        return 1;
     }
 
     /**
@@ -120,43 +136,56 @@ class EnterpriseUserSrv
      * @author  <mawei.live>
      * @return bool
      */
-    function syncUserInfo($_uidArr, $_enterpriseId)
+    function syncUserInfo(SyncBaseBeans $syncBaseBeans)
     {
-        foreach ($_uidArr as $val) {
-            // 查询企业员工
-            $userInfo = (new Query())->from(TableMap::TbUser)->where(['uid' => $val])->one($this->syncFromDB);
-
-            // 同步id
-            $userInfo['Company_id'] = $_enterpriseId;
-            $userInfo['sync_id']    = $userInfo['uid'];
-            unset($userInfo['uid']);
-            unset($userInfo['is_sync']);
-            // 同步企业员工
+        // 查询企业员工
+        $userList = (new Query())->from(TableMap::TbUser)
+            ->where([
+                'Company_id' => $syncBaseBeans->from_enterprise_id,
+                "sync_id"    => 0,
+            ])
+            ->all($this->syncFromDB);
+        foreach ($userList as $val) {
+            $oldUid = 0;
+            $val['Company_id'] = $syncBaseBeans->to_enterprise_id;
+            $val['sync_id']  = $oldUid  = $val['uid'];
+            unset($val['uid']);
             $result = $this->syncToDB->createCommand()
-                ->insert(TableMap::TbUser, $userInfo)
+                ->insert(TableMap::TbUser, $val)
                 ->execute();
             if ($result === false) {
-                return false;
+                return -1;
             }
             //返回ID
-            $uid = $this->syncToDB->getLastInsertID();
+            $newUid = $this->syncToDB->getLastInsertID();
+            // 更新同步id
+            $result = $this->syncFromDB->createCommand()->update(TableMap::TbUser, ["sync_id" => $newUid], ['uid' => $oldUid])->execute();
+            if ($result === false) {
+                return -2;
+            }
 
-            // 查询企业员工
+            // 查询企业员工详情
             $userDetail = (new Query())->from(TableMap::TbUserInfo)->where(['uid' => $val])->one($this->syncFromDB);
-            $userDetail['uid']        = $uid;
-            $userDetail['sync_id']    = $userDetail['id'];
+            $userDetail['uid']        = $newUid;
+            $userDetail['sync_id']  = $oldId  = $userDetail['id'];
             unset($userDetail['id']);
-            unset($userDetail['is_sync']);
             // 同步企业员工详情
             $result = $this->syncToDB->createCommand()
                 ->insert(TableMap::TbUserInfo, $userDetail)
                 ->execute();
             if ($result === false) {
-                return false;
+                return -3;
+            }
+            $newUid = $this->syncToDB->getLastInsertID();
+
+            // 更新同步
+            $result = $this->syncFromDB->createCommand()->update(TableMap::TbUserInfo, ["sync_id" => $newUid], ['uid' => $oldId])->execute();
+            if ($result === false) {
+                return -4;
             }
         }
 
-        return true;
+        return 1;
     }
 
 

@@ -28,12 +28,20 @@ class SyncdataController extends InitController
         $syncData->from_uid           = 195;
         $syncData->from_enterprise_id = 185;
         $syncData->to_uid             = 196;
-        $syncData->to_enterprise_id = 195;
+        $syncData->to_enterprise_id   = 195;
         // ServiceFactory::getInstance("SyncOrderSrv")->syncOrderByUid($syncData);
+
+        // 同步企业,用户
+        // $srvObj = ServiceFactory::getInstance("SyncEnterpriseUserSrv")->syncEnterprise($syncData);
+        $srvObj = ServiceFactory::getInstance("SyncEnterpriseUserSrv")->syncUserInfo($syncData);
 
         // 流量统计
         // $srvObj = ServiceFactory::getInstance("SyncFlowSrv")->syncFlowCordByUid($syncData);
         // $srvObj = ServiceFactory::getInstance("SyncFlowSrv")->syncFlowRecordByUid($syncData);
-        $srvObj = ServiceFactory::getInstance("SyncDeviceSrv")->syncDeviceStatistic($syncData);
+        // $srvObj = ServiceFactory::getInstance("SyncDeviceSrv")->syncDeviceStatistic($syncData);
+
+
+        var_dump($srvObj);
+        exit();
     }
 }
