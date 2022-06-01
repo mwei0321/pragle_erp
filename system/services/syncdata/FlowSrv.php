@@ -31,6 +31,9 @@ class FlowSrv
                 "sync_id" => 0,
             ])
             ->all($this->syncFromDB);
+        if (count($list) < 1) {
+            return 1;
+        }
         $oldId = 0;
         foreach ($list as $v) {
             $v['uid']        = $syncBaseBeans->to_uid;
@@ -67,6 +70,9 @@ class FlowSrv
                 "sync_id" => 0,
             ])
             ->all($this->syncFromDB);
+        if (count($list) < 1) {
+            return 1;
+        }
         $oldId = 0;
         foreach ($list as $v) {
             $v['uid']        = $syncBaseBeans->to_uid;
@@ -88,6 +94,48 @@ class FlowSrv
         }
     }
 
+    /**
+     * 同步设备流量
+     * @param  \system\beans\sync\SyncBaseBeans $syncBaseBeans
+     * date: 2022-06-01 10:09:06
+     * @author  <mawei.live>
+     * @return void
+     */
+    function syncDeviceFlowByDevno(SyncBaseBeans $syncBaseBeans)
+    {
+        // 提取同步设备流量
+        $list = (new Query())->from(TableMap::TbDeviceFlow)
+            ->where([
+                'Devno'     => $syncBaseBeans->from_device_no,
+                "sync_id" => 0,
+            ])
+            ->all($this->syncFromDB);
+        if (count($list) < 1) {
+            return 1;
+        }
+        $oldId = 0;
+        foreach ($list as $v) {
+            $v['Company_id'] = $syncBaseBeans->to_enterprise_id;
+            $v['sync_id']    = $oldId = $v['id'];
+            unset($v['Id']);
+            // 插入数据
+            $result = $this->syncToDB->createCommand()->insert(TableMap::TbDeviceFlow, $v)->execute();
+            if ($result === false) {
+                HelperFuns::writeLog("error:{$oldId}", "device.log", "insert new flowrecord");
+                return -1;
+            }
+            $id = $this->syncToDB->getLastInsertID();
+
+            // 更新同步记录
+            $result = $this->syncFromDB->createCommand()->update(TableMap::TbDeviceFlow, ["sync_id" => $id], ['id' => $oldId])->execute();
+            if ($result === false) {
+                HelperFuns::writeLog("error:{$oldId}", "device.log", "update old flowrecord");
+                return -3;
+            }
+        }
+
+        return 1;
+    }
 
     // 构造函数
     function __construct()

@@ -17,77 +17,6 @@ use \Yii;
 
 class EnterpriseUserSrv
 {
-    /**
-     * 同步企业用户
-     * 查询A库TbUser表里面的email在B库的TbUser的email是否存在,如果存在,不同步企业和企业的用户员工
-     * date: 2022-05-21 20:31:56
-     * @author  <mawei.live>
-     * @return void
-     */
-    function syncEnterpriseUser()
-    {
-        // 提取未同步企业id列表
-        $enterpirseList = (new Query())->from(TableMap::TbUser . " AS u")
-            ->leftJoin(TableMap::TbUserInfo . " AS ui", "ui.uid = u.uid")
-            ->select("u.Company_id cy_id,GROUP_CONCAT(u.`uid`) `uid`,GROUP_CONCAT(`ui`.`Email`) `email`")
-            ->where([
-                "u.is_sync" => 0,
-            ])
-            ->groupBy("u.Company_id")
-            ->orderBy("cy_id ASC")
-            ->limit(2)
-            ->all($this->syncFromDB);
-        // 开启事务
-        $connection = $this->syncFromDB->beginTransaction();
-
-        // 查询企业员工是否存在,存在跳过,不同步
-        foreach ($enterpirseList as $val) {
-            if (!$val['email']) {
-                continue;
-            }
-            $uidArr = explode(",", $val['uid']);
-            $emailArr = explode(",", $val['email']);
-
-            // 查询是否存在
-            $isExist = $this->checkEmailIsExist($emailArr);
-            if ($isExist) {
-                // 更新数据为不需求同步
-                $this->updateSyncState($uidArr, $val['cy_id']);
-                // 跳过,不同步
-                continue;
-            }
-
-            // 不存在,同步数据
-            $enterpriseId = $this->syncEnterprise($val['cy_id']);
-
-            // 同步企业
-            if ($enterpriseId < 1) {
-                //失败回滚
-                $connection->rollback();
-                continue;
-            }
-            // 同步企业员工信息
-            if ($this->syncUserInfo($uidArr, $enterpriseId) < 1) {
-                //失败回滚
-                $connection->rollback();
-                continue;
-            }
-
-            // 更新同步成功状态
-            $this->updateSyncState($uidArr, $val['cy_id']);
-
-            // 提交事务
-            $connection->commit();
-            exit;
-        }
-
-        // 提交事务
-        $connection->commit();
-
-        return true;
-    }
-
-
 
     /**
      * 同步企业
@@ -95,22 +24,22 @@ class EnterpriseUserSrv
      * @author  <mawei.live>
      * @return void
      */
-    function syncEnterprise(SyncBaseBeans $syncBaseBeans)
+    function syncEnterpriseById(SyncBaseBeans $syncBaseBeans)
     {
         // 查询信息
         $info = (new Query())->from(TableMap::TbEnterprise)
             ->where([
                 'id'      => $syncBaseBeans->from_enterprise_id,
-                "sync_id" => 0,
             ])->one($this->syncFromDB);
-        if (!$info || isset($info['id'])) {
+        if (!$info || !isset($info['id'])) {
             return -1;
         }
 
         $info['sync_id'] = $oldId = $info['id'];
         unset($info['id']);
         unset($info['auto_power_off']);
-        unset($info['is_sync']);
+        // 待确认
+        unset($info['user_del_type']);
 
         // 同步信息
         $result = $this->syncToDB->createCommand()->insert(TableMap::TbEnterprise, $info)->execute();
@@ -119,11 +48,12 @@ class EnterpriseUserSrv
         }
         //返回ID
         $newId = $this->syncToDB->getLastInsertID();
-
         // 同步回写
         if ($this->syncFromDB->createCommand()->update(TableMap::TbEnterprise, ["sync_id" => $newId], ['id' => $oldId])->execute() === false) {
             return -3;
         }
+
+        $syncBaseBeans->to_enterprise_id = $newId;
 
         return 1;
     }
@@ -136,16 +66,18 @@ class EnterpriseUserSrv
      * @author  <mawei.live>
      * @return bool
      */
-    function syncUserInfo(SyncBaseBeans $syncBaseBeans)
+    function syncUserInfoById(SyncBaseBeans $syncBaseBeans)
     {
         // 查询企业员工
-        $userList = (new Query())->from(TableMap::TbUser)
+        $list = (new Query())->from(TableMap::TbUser)
             ->where([
-                'Company_id' => $syncBaseBeans->from_enterprise_id,
-                "sync_id"    => 0,
+                'uid' => $syncBaseBeans->from_uid,
             ])
-            ->all($this->syncFromDB);
-        foreach ($userList as $val) {
+            ->one($this->syncFromDB);
+        if (count($list) < 1) {
+            return 1;
+        }
+        foreach ($list as $val) {
             $oldUid = 0;
             $val['Company_id'] = $syncBaseBeans->to_enterprise_id;
             $val['sync_id']  = $oldUid  = $val['uid'];
@@ -188,54 +120,63 @@ class EnterpriseUserSrv
         return 1;
     }
 
+    /**
+     * 同步用户信息
+     * @param  array $_uidArr
+     * @param  int $_enterpriseId
+     * date: 2022-05-22 00:53:54
+     * @author  <mawei.live>
+     * @return bool
+     */
+    function getEnterpriseSyncUserId(SyncBaseBeans $syncBaseBeans)
+    {
+        // 查询企业员工
+        $list = (new Query())->from(TableMap::TbUser)
+            ->select("uid")
+            ->where([
+                'Company_id' => $syncBaseBeans->from_enterprise_id,
+                "sync_id"    => 0,
+            ])
+            ->all($this->syncFromDB);
+
+        return $list ? array_column($list, "uid") : [];
+    }
 
     /**
-     * 更新同步状态
-     * date: 2022-05-22 00:22:41
+     * 同步统计记录
+     * @param  \system\beans\sync\SyncBaseBeans $syncBaseBeans
+     * date: 2022-06-01 11:15:47
      * @author  <mawei.live>
      * @return void
      */
-    function updateSyncState($_uidArr, $_enterpriseId, $_state = 1)
+    function syncUserActiveByEnterpriseId(SyncBaseBeans $syncBaseBeans)
     {
-        // 开启事务
-        $connection = $this->syncToDB->beginTransaction();
+        // 查询信息
+        $info = (new Query())->from(TableMap::UserActive)
+            ->where([
+                'company_id'      => $syncBaseBeans->from_enterprise_id,
+            ])->one($this->syncFromDB);
+        if (!$info || isset($info['id'])) {
+            return -1;
+        }
+        $info['sync_id'] = $oldId = $info['id'];
+        unset($info['id']);
 
-        // 更新企业表
-        $isSuccess = $this->syncFromDB->createCommand()
-            ->update(TableMap::TbEnterprise, ["is_sync" => $_state], ['id' => $_enterpriseId])
-            ->execute();
-        if ($isSuccess === false) {
-            //失败回滚
-            $connection->rollback();
-            return false;
+        // 同步信息
+        $result = $this->syncToDB->createCommand()->insert(TableMap::UserActive, $info)->execute();
+        if ($result === false) {
+            return -2;
+        }
+        //返回ID
+        $newId = $this->syncToDB->getLastInsertID();
+
+        // 同步回写
+        if ($this->syncFromDB->createCommand()->update(TableMap::UserActive, ["sync_id" => $newId], ['id' => $oldId])->execute() === false) {
+            return -3;
         }
 
-        // 更新企业员工详情表
-        $isSuccess = $this->syncFromDB->createCommand()
-            ->update(TableMap::TbUserInfo, ["is_sync" => $_state], ['uid' => $_uidArr])
-            ->execute();
-        if ($isSuccess === false) {
-            //失败回滚
-            $connection->rollback();
-            return false;
-        }
-
-        // 更新企业员工表
-        $isSuccess = $this->syncFromDB->createCommand()
-            ->update(TableMap::TbUser, ["is_sync" => $_state], ['uid' => $_uidArr])
-            ->execute();
-        if ($isSuccess === false) {
-            //失败回滚
-            $connection->rollback();
-            return false;
-        }
-
-        // 提交事务
-        $connection->commit();
-
-        return true;
+        return 1;
     }
-
 
     /**
      * 查询email是否存在

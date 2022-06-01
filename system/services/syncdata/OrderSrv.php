@@ -25,6 +25,7 @@ class OrderSrv
      */
     function syncOrderByUid(SyncBaseBeans $syncBaseBeans)
     {
+        echo "同步订单开始……";
         // 提取用户订单
         $list = (new Query())->from(TableMap::TbOrder)
             ->where([
@@ -32,6 +33,9 @@ class OrderSrv
                 "sync_id" => 0,
             ])
             ->all($this->syncFromDB);
+        if (count($list) < 1) {
+            return 1;
+        }
         $oldId = 0;
         foreach ($list as $v) {
             $v['uid'] = $syncBaseBeans->to_uid;
@@ -42,6 +46,8 @@ class OrderSrv
             $result = $this->syncToDB->createCommand()->insert(TableMap::TbOrder, $v)->execute();
             if ($result === false) {
                 HelperFuns::writeLog("error:{$oldId}", "syncOrder.log", "insert new order");
+                echo "同步主订单失败:json_encode({$v})";
+                return -1;
             }
             $id = $this->syncToDB->getLastInsertID();
 
@@ -49,6 +55,8 @@ class OrderSrv
             $result = $this->syncFromDB->createCommand()->update(TableMap::TbOrder, ["sync_id" => $id], ['order_id' => $oldId])->execute();
             if ($result === false) {
                 HelperFuns::writeLog("error:{$oldId}", "syncOrder.log", "update old order");
+                echo "同步订单失败:json_encode({$v})";
+                return -2;
             }
 
             // 更新order_item
@@ -67,6 +75,7 @@ class OrderSrv
                 $result = $this->syncFromDB->createCommand()->update(TableMap::TbOrderItem, ["sync_id" => $itemId], ['order_item_id' => $itemOldId])->execute();
                 if ($result === false) {
                     HelperFuns::writeLog("error:{$itemOldId}", "syncOrder.log", "update old orderItem");
+                    return -3;
                 }
             }
 
@@ -80,12 +89,14 @@ class OrderSrv
                 $result = $this->syncToDB->createCommand()->insert(TableMap::TbOrderLog, $orderLog)->execute();
                 if ($result === false) {
                     HelperFuns::writeLog("error:{$logOldId}", "syncOrder.log", "insert new orderLog");
+                    return -4;
                 }
                 $itemId = $this->syncToDB->getLastInsertID();
                 // 更新同步记录
                 $result = $this->syncFromDB->createCommand()->update(TableMap::TbOrderLog, ["sync_id" => $itemId], ['log_id' => $logOldId])->execute();
                 if ($result === false) {
                     HelperFuns::writeLog("error:{$logOldId}", "syncOrder.log", "update old orderLog");
+                    return -5;
                 }
             }
 
@@ -93,7 +104,12 @@ class OrderSrv
             $syncBaseBeans->from_order_id = $oldId;
             $syncBaseBeans->to_order_id   = $id;
             $result = ServiceFactory::getInstance("SyncWalletSrv")->syncWallLogByOrderId($syncBaseBeans);
+            if ($result < 0) {
+                HelperFuns::writeLog("error:{$logOldId}", "syncOrder.log", "update old wallet");
+                return -6;
+            }
         }
+        return 1;
     }
 
     // 构造函数

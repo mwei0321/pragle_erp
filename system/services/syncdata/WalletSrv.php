@@ -16,40 +16,42 @@ use system\beans\sync\SyncBaseBeans;
 class WalletSrv
 {
     /**
-     * 根据uid同步钱包
+     * 根据enterprise_id同步钱包
      * @param \system\beans\sync\SyncBaseBeans $syncBaseBeans
      * date: 2022-05-28 16:51:24
      * @author <mawei.live>
      * @return void
      */
-    function syncWallByUid(SyncBaseBeans $syncBaseBeans)
+    function syncWallByEnterpriseId(SyncBaseBeans $syncBaseBeans)
     {
         // 提取用户钱包
-        $list = (new Query())->from(TableMap::TbWallet)
+        $info = (new Query())->from(TableMap::TbWallet)
             ->where([
-                'uid' => $syncBaseBeans->from_uid,
-                "sync_id" => 0,
+                'Company_id' => $syncBaseBeans->from_enterprise_id,
             ])
-            ->all($this->syncFromDB);
-        $oldId = 0;
-        foreach ($list as $v) {
-            $v['uid'] = $syncBaseBeans->to_uid;
-            $v['Company_id'] = $syncBaseBeans->to_enterprise_id;
-            $v['sync_id'] = $oldId = $v['wallet_id'];
-            unset($v['wallet_id']);
-            // 插入数据
-            $result = $this->syncToDB->createCommand()->insert(TableMap::TbWallet, $v)->execute();
-            if ($result === false) {
-                HelperFuns::writeLog("error:{$oldId}", "syncOrder.log", "insert new order");
-            }
-            $id = $this->syncToDB->getLastInsertID();
-
-            // 更新同步记录
-            $result = $this->syncFromDB->createCommand()->update(TableMap::TbWallet, ["sync_id" => $id], ['wallet_id' => $oldId])->execute();
-            if ($result === false) {
-                HelperFuns::writeLog("error:{$oldId}", "syncOrder.log", "update old order");
-            }
+            ->one($this->syncFromDB);
+        if (!$info || !isset($info['wallet_id'])) {
+            return 1;
         }
+        $oldId = 0;
+        $info['Company_id'] = $syncBaseBeans->to_enterprise_id;
+        $info['sync_id'] = $oldId = $info['wallet_id'];
+        unset($info['wallet_id']);
+        // 插入数据
+        $result = $this->syncToDB->createCommand()->insert(TableMap::TbWallet, $info)->execute();
+        if ($result === false) {
+            HelperFuns::writeLog("error:{$oldId}", "syncOrder.log", "insert new order");
+            return -1;
+        }
+        $id = $this->syncToDB->getLastInsertID();
+
+        // 更新同步记录
+        $result = $this->syncFromDB->createCommand()->update(TableMap::TbWallet, ["sync_id" => $id], ['wallet_id' => $oldId])->execute();
+        if ($result === false) {
+            HelperFuns::writeLog("error:{$oldId}", "syncOrder.log", "update old order");
+            return -3;
+        }
+        return 1;
     }
 
     /**
@@ -73,13 +75,16 @@ class WalletSrv
             $result = $this->syncToDB->createCommand()->insert(TableMap::TbWalletLog, $walletLogInfo)->execute();
             if ($result === false) {
                 HelperFuns::writeLog("error_order_id:" . $syncBaseBeans->to_order_id, "syncOrder.log", "insert new walletlog");
+                return -1;
             }
             $logId = $this->syncToDB->getLastInsertID();
             // 更新同步记录
             $result = $this->syncFromDB->createCommand()->update(TableMap::TbWalletLog, ["sync_id" => $logId], ['wallet_log_id' => $logOldId])->execute();
             if ($result === false) {
                 HelperFuns::writeLog("error_order_id" . $logId, "syncOrder.log", "update old order");
+                return -2;
             }
+            return 1;
         }
     }
 

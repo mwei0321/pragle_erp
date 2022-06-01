@@ -56,7 +56,7 @@ class TableMap
 	const TbDeviceStatus          = "tbdevicestatus";
 	const TbControllerList        = "tbcontrollist";
 	// 素材
-	const TbVedio                 = "tbvedio";
+	const TbVedio                 = "tbVedio";
 	const TbAnalysis              = "tbanalysis";
 	// 节目
 	const TbMakeAddver            = "tbmakeaddver";
@@ -76,5 +76,5 @@ class TableMap
 	const TbFlowCord              = "tbflowcord";
 	const TbFlowRecord            = "tbflowrecord";
 	const TbStatisticsDevice      = "tbStatisticsDevice";
-	const UserActive = "user_active";
+	const UserActive              = "user_active";
 }

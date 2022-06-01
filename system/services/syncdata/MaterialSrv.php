@@ -32,11 +32,11 @@ class MaterialSrv
         $list = (new Query())->from(TableMap::TbVedio)
             ->where([
                 'uid'     => $syncBase->from_uid,
-                "is_sync" => 0,
-                "Delete"  => 0,
             ])
             ->all($this->syncFromDB);
-
+        if (count($list) < 1) {
+            return 1;
+        }
         $oldId = 0;
         foreach ($list as $v) {
             $v['uid'] = $syncBase->to_uid;
@@ -47,14 +47,18 @@ class MaterialSrv
             $result = $this->syncToDB->createCommand()->insert(TableMap::TbVedio, $v)->execute();
             if ($result === false) {
                 HelperFuns::writeLog("error:{$oldId}", "syncMaterial.log", "insert new video");
+                return -1;
             }
             $id = $this->syncToDB->getLastInsertID();
             // 更新同步记录
-            $result = $this->syncFromDB->createCommand()->update(TableMap::TbVedio, ["sync_id" => $id, ['Vid' => $oldId]])->execute();
+            $result = $this->syncFromDB->createCommand()->update(TableMap::TbVedio, ["sync_id" => $id], ['Vid' => $oldId])->execute();
             if ($result === false) {
                 HelperFuns::writeLog("error:{$oldId}", "syncMaterial.log", "update old video");
+                return -2;
             }
         }
+
+        return 1;
     }
 
     /**
@@ -69,28 +73,33 @@ class MaterialSrv
         $list = (new Query())->from(TableMap::TbAnalysis)
             ->where([
                 'uid'     => $syncBase->from_uid,
-                "is_sync" => 0,
             ])
             ->all($this->syncFromDB);
-
+        if (count($list) < 1) {
+            return 1;
+        }
         $oldId = 0;
         foreach ($list as $v) {
-            $v['uid'] = $syncBase->to_uid;
+            $v['uid']        = $syncBase->to_uid;
             $v['Company_id'] = $syncBase->to_enterprise_id;
-            $v['sync_id'] = $oldId = $v['Vid'];
-            unset($v['Vid']);
+            $v['sync_id']    = $oldId = $v['id'];
+            unset($v['id']);
             // 插入数据
             $result = $this->syncToDB->createCommand()->insert(TableMap::TbAnalysis, $v)->execute();
             if ($result === false) {
                 HelperFuns::writeLog("error:{$oldId}", "syncMaterial.log", "insert new analysis");
+                return -1;
             }
             $id = $this->syncToDB->getLastInsertID();
             // 更新同步记录
-            $result = $this->syncFromDB->createCommand()->update(TableMap::TbAnalysis, ["sync_id" => $id, ['id' => $oldId]])->execute();
+            $result = $this->syncFromDB->createCommand()->update(TableMap::TbAnalysis, ["sync_id" => $id], ['id' => $oldId])->execute();
             if ($result === false) {
                 HelperFuns::writeLog("error:{$oldId}", "syncMaterial.log", "update old analysis");
+                return -3;
             }
         }
+
+        return 1;
     }
 
     // 构造函数
