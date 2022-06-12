@@ -73,7 +73,7 @@ class EnterpriseUserSrv
             ->where([
                 'uid' => $syncBaseBeans->from_uid,
             ])
-            ->one($this->syncFromDB);
+            ->all($this->syncFromDB);
         if (count($list) < 1) {
             return 1;
         }
@@ -121,7 +121,7 @@ class EnterpriseUserSrv
     }
 
     /**
-     * 同步用户信息
+     * 查询企业员工同步用户信息
      * @param  array $_uidArr
      * @param  int $_enterpriseId
      * date: 2022-05-22 00:53:54
@@ -157,6 +157,7 @@ class EnterpriseUserSrv
                 'company_id'      => $syncBaseBeans->from_enterprise_id,
             ])->one($this->syncFromDB);
         if (!$info || isset($info['id'])) {
+            echo "来源企业没有查询到:" . $syncBaseBeans->from_enterprise_id;
             return -1;
         }
         $info['sync_id'] = $oldId = $info['id'];
@@ -165,13 +166,15 @@ class EnterpriseUserSrv
         // 同步信息
         $result = $this->syncToDB->createCommand()->insert(TableMap::UserActive, $info)->execute();
         if ($result === false) {
+            echo "同步来源企业失败:" . json_encode($result);
             return -2;
         }
         //返回ID
         $newId = $this->syncToDB->getLastInsertID();
 
         // 同步回写
-        if ($this->syncFromDB->createCommand()->update(TableMap::UserActive, ["sync_id" => $newId], ['id' => $oldId])->execute() === false) {
+        if ($result = $this->syncFromDB->createCommand()->update(TableMap::UserActive, ["sync_id" => $newId], ['id' => $oldId])->execute() === false) {
+            echo "同步回写来源企业失败:" . json_encode($result);
             return -3;
         }
 
@@ -200,7 +203,7 @@ class EnterpriseUserSrv
     // 构造函数
     function __construct()
     {
-        $this->syncFromDB = \Yii::$app->dbcenter;
+        $this->syncFromDB = \Yii::$app->dbcenter_from;
         $this->syncToDB = \Yii::$app->dbcenter_to;
     }
 

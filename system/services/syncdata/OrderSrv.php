@@ -115,7 +115,7 @@ class OrderSrv
     // 构造函数
     function __construct()
     {
-        $this->syncFromDB = \Yii::$app->dbcenter;
+        $this->syncFromDB = \Yii::$app->dbcenter_from;
         $this->syncToDB = \Yii::$app->dbcenter_to;
     }
 

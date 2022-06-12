@@ -6,7 +6,7 @@ ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTE
 ALTER TABLE `tbUser` 
 ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `updated_at`;
 -- 企业用户员工详情
-ALTER TABLE `tbuserinfo` 
+ALTER TABLE `tbUserinfo` 
 ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Mobile`;
 
 -- 设备
@@ -61,6 +61,9 @@ ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTE
 -- to 新增
 ALTER TABLE `dbcenter_to`.`tbdevicestatus` 
 ADD COLUMN `access` int(255) NULL DEFAULT 0 COMMENT '0进,1出,2进出' AFTER `face_flag`;
+
+ALTER TABLE `tbUser` 
+ADD COLUMN `delete_state` tinyint(1) NULL DEFAULT 0 COMMENT '考勤用户是否要删除，0否，1是' AFTER `sync_id`;
 
 
 

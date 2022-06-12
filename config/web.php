@@ -13,8 +13,8 @@ $MYSQL_USERNAME = getenv("MYSQL_USERNAME");
 $MYSQL_PASSWORD = getenv("MYSQL_PASSWORD");
 $MYSQL_DB_DSN = getenv("MYSQL_DB_DSN");
 $MYSQL_DB_DATA_DSN = getenv("MYSQL_DB_DATA_DSN");
-$MYSQL_DB_CENTER_DSN = getenv("MYSQL_DB_CENTER_DSN");
-$MYSQL_DB_CENTER1_DSN = getenv("MYSQL_DB_CENTER1_DSN");
+$MYSQL_DB_CENTER_FROM_DSN = getenv("MYSQL_DB_CENTER_FROM_DSN");
+$MYSQL_DB_CENTER_TO_DSN = getenv("MYSQL_DB_CENTER_TO_DSN");
 
 $config = [
     'id' => 'basic',
@@ -84,16 +84,16 @@ $config = [
             'password' => $MYSQL_PASSWORD,
             'charset' => 'utf8',
         ],
-        'dbcenter' => [
+        'dbcenter_from' => [
             'class' => 'yii\db\Connection',
-            'dsn' => $MYSQL_DB_CENTER_DSN,
+            'dsn' => $MYSQL_DB_CENTER_FROM_DSN,
             'username' => $MYSQL_USERNAME,
             'password' => $MYSQL_PASSWORD,
             'charset' => 'utf8',
         ],
         'dbcenter_to' => [
             'class' => 'yii\db\Connection',
-            'dsn' => $MYSQL_DB_CENTER1_DSN,
+            'dsn' => $MYSQL_DB_CENTER_TO_DSN,
             'username' => $MYSQL_USERNAME,
             'password' => $MYSQL_PASSWORD,
             'charset' => 'utf8',
