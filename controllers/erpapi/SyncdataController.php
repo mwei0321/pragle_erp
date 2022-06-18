@@ -64,6 +64,9 @@ class SyncdataController extends InitController
         if (ServiceFactory::getInstance("SyncMaterialSrv")->syncVideoByUid($syncBaseBeans) > 0) {
             echo "同步企业流量成功……";
         }
+        // 节目
+        
+
         if (ServiceFactory::getInstance("SyncMaterialSrv")->syncAnalysisByUid($syncBaseBeans) > 0) {
             echo "同步企业统计分析成功……";
         }

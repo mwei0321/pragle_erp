@@ -8,6 +8,10 @@ ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTE
 -- 企业用户员工详情
 ALTER TABLE `tbUserinfo` 
 ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Mobile`;
+ALTER TABLE `tbrole` 
+ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `id`;
+ALTER TABLE `tbgroup` 
+ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `id`;
 
 -- 设备
 ALTER TABLE `tbDevice` 
@@ -91,3 +95,23 @@ ALTER TABLE `tbwallet_log` DROP COLUMN `sync_id`;
 ALTER TABLE `tbflowcord` DROP COLUMN `sync_id`;
 ALTER TABLE `tbflowrecord` DROP COLUMN `sync_id`;
 ALTER TABLE `tbStatisticsDevice` DROP COLUMN `sync_id`;
+
+
+
+-- sync_from
+UPDATE tbUser SET sync_id=0;
+UPDATE tbenterprise SET sync_id=0;
+
+--  sync_to
+SELECT uid,`username`,role_id FROM tbUser	ORDER BY uid desc limit 4;
+SELECT * FROM tbrole ORDER BY id desc LIMIT 5;
+SELECT * FROM tbgroup ORDER BY id desc LIMIT 5;
+SELECT * FROM tbDevice WHERE Devno="38A194E99D2D7AD9";
+SELECT * FROM tbdevicestatus WHERE devicenum = "38A194E99D2D7AD9";
+
+
+DELETE FROM tbUser WHERE uid in (SELECT * FROM (SELECT uid FROM tbUser ORDER BY uid desc LIMIT 2) s);
+DELETE FROM tbUserinfo WHERE id in (SELECT * FROM (SELECT id FROM tbUserinfo ORDER BY id desc LIMIT 2)s);
+DELETE FROM tbDevice WHERE Devno="38A194E99D2D7AD9";
+DELETE FROM tbdevicestatus WHERE devicenum = "38A194E99D2D7AD9";
+DELETE FROM tbpushrec WHERE Devno="38A194E99D2D7AD9";

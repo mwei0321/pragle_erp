@@ -37,17 +37,17 @@ class DeviceSrv
             return 1;
         }
         // 提取
-        // $devSn = array_column($list, 'Devno');
+        $devSn = array_column($list, 'Devno');
         // 过滤设备
-        // $existList = $this->checkDevSnIsExsit($devSn);
-        // var_dump($existList, $list);
+        $existList = $this->checkDevSnIsExsit($devSn);
+        var_dump($existList, $list);
         // exit();
         // 处理设备是否同步
         foreach ($list as $val) {
             // 存在跳过
-            // if (!in_array($val['Devno'], $existList)) {
-            //     continue;
-            // }
+            if (in_array($val['Devno'], $existList)) {
+                continue;
+            }
             // 提取设备信息
             $devInfo = (new Query())->from(TableMap::TbDevice)->where(['Did' => $val['Did']])->one($this->syncFromDB);
             $oldId = $devInfo['Did'];

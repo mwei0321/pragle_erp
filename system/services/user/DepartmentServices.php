@@ -15,6 +15,16 @@ use system\beans\user\DepartmentBeans;
 class DepartmentServices
 {
 
+    function getDepartmentStaffById($_departmentId) {
+        $list = (new Query())->from(TableMap::Group)
+            ->select("id")
+            ->where([
+                "department" => $_departmentId,
+            ])->all();
+
+        return $list ? array_column($list,"id") : [];
+    }
+
     /**
      * 返回部门下的子部门
      * @param  [type] $_departmentId

@@ -17,6 +17,59 @@ use yii\db\Expression;
 class OrderServices
 {
 
+    function getList(OrderBeans $orderBeans) {
+        $field = '`o`.`id` AS `order_id`,`o`.`enterprise_id` as `buyer_enterprise_id`,`o`.`user_id` as `buyer_user_id`,`target_id`,`parent_id`,`o`.`order_num`,`order_type`,`post_num`,';
+        $field .= '`receiver_mobile`,`receiver_name`,`receiver_address`,`real_amount`,`total_amount`,`post_amount`,`o`.`fee`,`o`.`commission`,`o`.`currency`,`o`.`exchange_rate`,`o`.`total_rmb`,';
+        $field .= '`o`.`pay_type`,`o`.`pay_at`,`o`.`status`,`description`,`o`.`money_type`,`o`.`created_at`,`o`.`updated_at`,od.user_id as seller_user_id,od.enterprise_id as seller_enterprise_id';
+
+        // 构建查询
+        $query = (new Query())->from(TableMap::Order." AS o")
+            ->leftJoin(TableMap::OrderDetail." AS od","od.order_num = o.order_num")
+            ->where([
+                "is_delete" => 0,
+            ]);
+
+        // 部门搜索
+        if ($orderBeans->department_id > 0) {
+            $staffIds = ServiceFactory::getInstance("DepartmentSrv")->getDepartmentStaffById($orderBeans->department_id);
+            if($staffIds) {
+                $query->andWhere(["in",'od.user_id',$staffIds]);
+            }else {
+                return [];
+            }
+        }
+        
+        // 订单号搜索
+        if ($orderBeans->order_num) {
+            $query->andWhere(['order_num' => $orderBeans->order_num]);
+        }
+
+        // 用户搜索
+        if($orderBeans->staff_id > 0) {
+            $query->andWhere(['od.user_id' => $orderBeans->staff_id]);
+        }
+
+        $count = $query->select("od.id")->count();
+        // 分页
+        $orderBeans->page($count);
+
+        // 排序提取
+        $list = $query->select($field)
+            ->limit($orderBeans->limit)
+            ->offset($orderBeans->offset)
+            ->orderBy("o.id DESC")
+            ->all();
+
+        // 企业
+        foreach($list as $k => $v) {
+            $list[$k]['enterprise'] = ServiceFactory::getInstance("BaseDB",TableMap::Enterprise)->getInfoById($v["buyer_enterprise_id"],"id,fullname,shortname");
+        }
+
+        return $list;
+    }
+
+
+
     /**
      * 返回员工订单销售统计
      * @param  array $_staffIds

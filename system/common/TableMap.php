@@ -48,6 +48,8 @@ class TableMap
 	const TbEnterprise            = "tbenterprise";
 	const TbUser                  = "tbUser";
 	const TbUserInfo              = "tbUserinfo";
+	const TbGroup = "tbgroup";
+	const TbRole = "tbrole";
 	// 设备
 	const TbDevice                = "tbDevice";
 	const TbDeviceFlow            = "tbdeviceflow";
@@ -59,11 +61,11 @@ class TableMap
 	const TbVedio                 = "tbVedio";
 	const TbAnalysis              = "tbanalysis";
 	// 节目
-	const TbMakeAddver            = "tbmakeaddver";
-	const TbPlayBase              = "tbplaybase";
-	const TbPlayList              = "tbplaylist";
-	const TbPlayListPlan          = "tbplaylistplan";
-	const AdvDownload             = "adv_download";
+	const TbMakeAddver            = "tbmakeaddver"; // 节日主表 1
+	const TbPlayBase              = "tbplaybase"; 
+	const TbPlayList              = "tbplaylist"; // 播放列表
+	const TbPlayListPlan          = "tbplaylistplan";  // 播放计划
+	const AdvDownload             = "adv_download"; // 下载记录
 	const TbPushRec               = "tbpushrec";
 	// 购买支付
 	const TbStock                 = "tbstock";

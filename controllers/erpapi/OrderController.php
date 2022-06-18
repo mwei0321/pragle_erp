@@ -16,13 +16,19 @@ use system\beans\order\OrderBeans;
 
 class OrderController extends InitController
 {
-
 	use BindBeanParamsTrait;
 
+	/**
+	 * 
+	 */
+	function actionGetlist(OrderBeans $orderBeans) {
 
-	function actionIndex()
-	{
-		var_dump(ServiceFactory::getInstance("OrderCronSrv")->getYesterdayMarket());
+		$list = ServiceFactory::getInstance("OrderSrv")->getList($orderBeans);
+		
+        return $this->reJson([
+            'items' => $list,
+            'count' => $orderBeans->count,
+        ]);
 	}
 
 	/**
