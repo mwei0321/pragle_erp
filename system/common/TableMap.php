@@ -5,7 +5,7 @@
  * @Author: MaWei
  * @Date:   2021-10-26
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-02-19 21:04:45
+ * @Last Modified time: 2022-06-19 20:07:46
  */
 
 namespace system\common;
@@ -48,8 +48,8 @@ class TableMap
 	const TbEnterprise            = "tbenterprise";
 	const TbUser                  = "tbUser";
 	const TbUserInfo              = "tbUserinfo";
-	const TbGroup = "tbgroup";
-	const TbRole = "tbrole";
+	const TbGroup                 = "tbgroup";
+	const TbRole                  = "tbrole";
 	// 设备
 	const TbDevice                = "tbDevice";
 	const TbDeviceFlow            = "tbdeviceflow";
@@ -62,7 +62,7 @@ class TableMap
 	const TbAnalysis              = "tbanalysis";
 	// 节目
 	const TbMakeAddver            = "tbmakeaddver"; // 节日主表 1
-	const TbPlayBase              = "tbplaybase"; 
+	const TbPlayBase              = "tbplaybase";
 	const TbPlayList              = "tbplaylist"; // 播放列表
 	const TbPlayListPlan          = "tbplaylistplan";  // 播放计划
 	const AdvDownload             = "adv_download"; // 下载记录

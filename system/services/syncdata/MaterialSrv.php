@@ -12,13 +12,13 @@
 
 namespace system\services\syncdata;
 
-use \Yii;
 use yii\db\Query;
 use system\common\TableMap;
 use system\beans\sync\SyncBaseBeans;
 use system\common\HelperFuns;
+use system\services\syncdata\SyncBaseSrv;
 
-class MaterialSrv
+class MaterialSrv extends SyncBaseSrv
 {
     /**
      * 同步video素材
@@ -102,13 +102,29 @@ class MaterialSrv
         return 1;
     }
 
+    /**
+     * 根据旧的素材id返回新的id
+     * @param  array $_oldMaterialIds
+     * date: 2022-06-19 18:12:55
+     * @author  <mawei.live>
+     * @return array
+     */
+    function getNewMaterialIdsByOldIds($_oldMaterialIds)
+    {
+        $data = [];
+        $ids = (new Query())->from(TableMap::TbVedio)->select('Vid,sync_id')
+            ->where(["in", "Vid", $_oldMaterialIds])
+            ->all($this->syncFromDB);
+        if ($ids) {
+            $data = array_combine(array_column($ids, "Vid"), array_column($ids, "sync_id"));
+        }
+
+        return $data;
+    }
+
     // 构造函数
     function __construct()
     {
-        $this->syncFromDB = \Yii::$app->dbcenter_from;
-        $this->syncToDB = \Yii::$app->dbcenter_to;
+        parent::__construct();
     }
-
-    private $syncToDB;
-    private $syncFromDB;
 }

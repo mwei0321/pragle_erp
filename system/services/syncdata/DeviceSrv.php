@@ -4,7 +4,7 @@
  * @Author: MaWei 
  * @Date: 2022-05-22 10:22:20 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-05-22 12:51:09
+ * @Last Modified time: 2022-06-19 19:06:51
  */
 
 namespace system\services\syncdata;
@@ -13,8 +13,9 @@ use \Yii;
 use yii\db\Query;
 use system\common\{TableMap, HelperFuns};
 use system\beans\sync\SyncBaseBeans;
+use system\services\syncdata\SyncBaseSrv;
 
-class DeviceSrv
+class DeviceSrv extends SyncBaseSrv
 {
 
     /**
@@ -354,10 +355,6 @@ class DeviceSrv
     // 构造函数
     function __construct()
     {
-        $this->syncFromDB = \Yii::$app->dbcenter_from;
-        $this->syncToDB = \Yii::$app->dbcenter_to;
+        parent::__construct();
     }
-
-    private $syncToDB;
-    private $syncFromDB;
 }

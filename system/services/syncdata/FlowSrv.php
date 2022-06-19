@@ -4,7 +4,7 @@
  * @Author: MaWei 
  * @Date: 2022-05-29 15:59:28 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-05-29 16:57:01
+ * @Last Modified time: 2022-06-19 19:08:14
  */
 
 namespace system\services\syncdata;
@@ -12,8 +12,9 @@ namespace system\services\syncdata;
 use yii\db\Query;
 use system\common\{TableMap, HelperFuns};
 use system\beans\sync\SyncBaseBeans;
+use system\services\syncdata\SyncBaseSrv;
 
-class FlowSrv
+class FlowSrv extends SyncBaseSrv
 {
     /**
      * 根据uid同步流量
@@ -140,10 +141,6 @@ class FlowSrv
     // 构造函数
     function __construct()
     {
-        $this->syncFromDB = \Yii::$app->dbcenter_from;
-        $this->syncToDB = \Yii::$app->dbcenter_to;
+        parent::__construct();
     }
-
-    private $syncToDB;
-    private $syncFromDB;
 }

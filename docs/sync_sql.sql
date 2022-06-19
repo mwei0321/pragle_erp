@@ -28,12 +28,16 @@ ALTER TABLE `tbdevicelimit`
 ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Company_id`;
 
 -- 节目
-ALTER TABLE `tbmakeaddver` 
-ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Company_id`;
 ALTER TABLE `tbVedio` 
-ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Company_id`;
-ALTER TABLE `tbanalysis` 
-ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Company_id`;
+ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Vid`;
+ALTER TABLE `tbmakeaddver` 
+ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `id`;
+ALTER TABLE `tbplaybase` 
+ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Pid`;
+ALTER TABLE `tbplaylist` 
+ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Pid`;
+ALTER TABLE `tbplaylistplan` 
+ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Pid`;
 ALTER TABLE `tbpushrec` 
 ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Devno`;
 

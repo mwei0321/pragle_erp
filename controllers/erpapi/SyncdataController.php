@@ -4,7 +4,7 @@
  * @Author: MaWei 
  * @Date: 2022-05-17 19:36:22 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-05-17 19:37:28
+ * @Last Modified time: 2022-06-19 22:08:56
  */
 
 namespace app\controllers\erpapi;
@@ -21,7 +21,23 @@ class SyncdataController extends InitController
 
         $syncBaseBeans = new SyncBaseBeans();
         // $syncBaseBeans->from_enterprise_id = 264;
-        $syncBaseBeans->from_enterprise_id = 145080;
+        // $syncBaseBeans->from_enterprise_id = 145080;
+        $syncBaseBeans->from_parent_enterprise = 338;
+        $syncBaseBeans->from_enterprise_id = 1666;
+        $syncBaseBeans->from_uid = 1553;
+        $syncBaseBeans->from_ad_id = 12375;
+        $syncBaseBeans->from_play_id = 8152408;
+        $syncBaseBeans->to_play_id = 123;
+        $syncBaseBeans->to_uid = 123;
+        $syncBaseBeans->to_ad_id = 123;
+        $syncBaseBeans->to_parent_enterprise = 123;
+        $syncBaseBeans->to_enterprise_id = 123;
+
+        $a = ServiceFactory::getInstance("SyncPlaySrv")->syncAddverByUId($syncBaseBeans);
+
+        var_dump($a);
+        exit();
+
 
         // $connection = \Yii::$app->dbcenter_to->beginTransaction();
 
@@ -65,7 +81,7 @@ class SyncdataController extends InitController
             echo "同步企业流量成功……";
         }
         // 节目
-        
+
 
         if (ServiceFactory::getInstance("SyncMaterialSrv")->syncAnalysisByUid($syncBaseBeans) > 0) {
             echo "同步企业统计分析成功……";

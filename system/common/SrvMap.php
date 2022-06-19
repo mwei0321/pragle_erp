@@ -42,6 +42,7 @@ class SrvMap
     public $SyncDeviceSrv         = "system\services\syncdata\DeviceSrv";
     public $SyncMaterialSrv       = "system\services\syncdata\MaterialSrv";
     public $SyncOrderSrv          = "system\services\syncdata\OrderSrv";
+    public $SyncPlaySrv          = "system\services\syncdata\PlaySrv";
     public $SyncWalletSrv         = "system\services\syncdata\WalletSrv";
     public $SyncFlowSrv           = "system\services\syncdata\FlowSrv";
 

@@ -4,7 +4,7 @@
  * @Author: MaWei 
  * @Date: 2022-05-22 10:22:20 
  * @Last Modified by: MaWei
- * @Last Modified time: 2022-05-29 16:57:50
+ * @Last Modified time: 2022-06-19 19:08:25
  */
 
 namespace system\services\syncdata;
@@ -12,8 +12,9 @@ namespace system\services\syncdata;
 use yii\db\Query;
 use system\common\{TableMap, HelperFuns, ServiceFactory};
 use system\beans\sync\SyncBaseBeans;
+use system\services\syncdata\SyncBaseSrv;
 
-class OrderSrv
+class OrderSrv extends SyncBaseSrv
 {
 
     /**
@@ -115,10 +116,6 @@ class OrderSrv
     // 构造函数
     function __construct()
     {
-        $this->syncFromDB = \Yii::$app->dbcenter_from;
-        $this->syncToDB = \Yii::$app->dbcenter_to;
+        parent::__construct();
     }
-
-    private $syncToDB;
-    private $syncFromDB;
 }
