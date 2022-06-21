@@ -12,11 +12,43 @@ namespace app\controllers\erpapi;
 use app\controllers\InitController;
 use system\common\ServiceFactory;
 use system\beans\sync\SyncBaseBeans;
+use system\common\HelperFuns;
 
 class SyncdataController extends InitController
 {
 
+    function actionSync()
+    {
+        set_time_limit(0);
 
+        $syncBaseBeans = new SyncBaseBeans();
+        // 实例化对象并调用
+        ServiceFactory::getInstance("SyncEnterpriseUserSrv")->getSyncEnterpriseId($syncBaseBeans);
+        if ($syncBaseBeans->to_enterprise_id > 1) {
+            HelperFuns::writeLog("no need sync", "syncexist.txt", "enterprise exist");
+            echo "不需要同步:" . json_encode($syncBaseBeans->toArray());
+            return 1;
+        }
+
+        // 同步企业,用户,相关统计
+        if (ServiceFactory::getInstance("SyncEnterpriseUserSrv")->syncEnterpriseById($syncBaseBeans) > 0) {
+            echo "同步企业成功……";
+        }
+        if (ServiceFactory::getInstance("SyncEnterpriseUserSrv")->syncUserActiveByEnterpriseId($syncBaseBeans) > 0) {
+            echo "同步企业统计成功……";
+        }
+        if (ServiceFactory::getInstance("SyncDeviceSrv")->syncDeviceStockByEnterpriseId($syncBaseBeans) > 0) {
+            echo "同步企业存取成功……";
+        }
+
+        // 提取企业下的员工
+        $uid = ServiceFactory::getInstance("SyncEnterpriseUserSrv")->getEnterpriseSyncUserId($syncBaseBeans);
+        foreach ($uid as $v) {
+            $syncBaseBeans->from_uid = $v;
+            $this->syncForUid($syncBaseBeans);
+            HelperFuns::writeLog(json_encode($syncBaseBeans->toArray()), "sync.txt", "sync success");
+        }
+    }
 
     function actionTest()
     {
@@ -60,7 +92,7 @@ class SyncdataController extends InitController
         foreach ($uid as $v) {
             $syncBaseBeans->from_uid = $v;
             $this->syncForUid($syncBaseBeans);
-            var_dump($syncBaseBeans);
+            echo "同步成功:" . json_encode($syncBaseBeans->toArray());
         }
     }
 

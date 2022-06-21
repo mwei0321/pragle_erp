@@ -18,34 +18,45 @@ use system\services\syncdata\SyncBaseSrv;
 class EnterpriseUserSrv extends SyncBaseSrv
 {
 
-    function getSyncEnterpriseId()
+    function getSyncEnterpriseId(SyncBaseBeans $syncBaseBeans)
     {
         // 查询企业
-        $enterpriseId = (new Query())->select("id")
+        $enterpriseInfo = (new Query())->select("id,parentID,sync_id")
             ->from(TableMap::TbEnterprise)
             ->where([
                 "sync_id" => 0,
-                "parentID" => 0,
+                // "parentID" => 0,
             ])->one($this->syncFromDB);
+        if (!$enterpriseInfo) {
+            return 1;
+        }
+        $syncBaseBeans->from_enterprise_id = $enterpriseInfo['id'];
+        $syncBaseBeans->from_parent_enterpirse = $enterpriseInfo['parentID'];
+        $syncBaseBeans->to_parent_enterpirse = $enterpriseInfo['sync_id'];
         // 查询信息
-        $list = (new Query())->select("u.uid,u.Email email")
+        $list = (new Query())->select("u.uid,ui.Email email")
             ->from(TableMap::TbUser . " u", "u.Company_id = e.id")
             ->leftJoin(TableMap::TbUserInfo . " ui", "ui.uid = u.uid")
             ->where([
-                "u.Company_id" => $enterpriseId,
+                "u.Company_id" => $syncBaseBeans->from_enterprise_id,
             ])->all($this->syncFromDB);
         // 提取邮箱
         $emails = array_column($list, "email");
         // 判断是否存在同步库
-        $count = (new Query())->from(TableMap::TbUserInfo)->where(["in", "Email", $emails])->count();
-        if ($count > 0) {
+        $comInfo = (new Query())->select("Company_id")
+            ->from(TableMap::TbUserInfo . " ui")
+            ->leftJoin(TableMap::TbUser . " u", "u.uid = ui.uid")
+            ->where(["in", "Email", $emails])
+            ->one($this->syncToDB);
+        $syncBaseBeans->to_enterprise_id = $comInfo['Company_id'] ?? 0;
+        if ($syncBaseBeans->to_enterprise_id > 1) {
             // 更新同步状态 
-            $this->syncFromDB->createCommand()->update(TableMap::TbEnterprise, ["sync_id" => -1], ['id' => $enterpriseId])->execute();
-            $this->syncFromDB->createCommand()->update(TableMap::TbUser, ["sync_id" => -1], ['Company_id' => $enterpriseId])->execute();
+            $this->syncFromDB->createCommand()->update(TableMap::TbEnterprise, ["sync_id" => -$syncBaseBeans->to_enterprise_id], ['id' => $syncBaseBeans->from_enterprise_id])->execute();
+            $this->syncFromDB->createCommand()->update(TableMap::TbUser, ["sync_id" => -$syncBaseBeans->to_enterprise_id], ['Company_id' => $syncBaseBeans->from_enterprise_id])->execute();
             return 1;
         }
 
-        return $enterpriseId;
+        return $syncBaseBeans;
     }
 
     /**

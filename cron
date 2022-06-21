@@ -2,3 +2,6 @@
 25 8 * * * /usr/local/bin/php /var/www/html/yii action/everyday
 30 8 1-12 * * /usr/local/bin/php /var/www/html/yii action/everymonth
 40 8 * * 1 /usr/local/bin/php /var/www/html/yii action/everyweek
+
+
+* * * * * curl -o /var/www/html/crontest.txt https://industryapi.domedea.com/erpapi/syncdata/sync
