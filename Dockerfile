@@ -1,4 +1,4 @@
-FROM pragle-erp-runtime
+FROM registry-vpc.cn-hongkong.aliyuncs.com/domedeahk/erp_pragle_runtime:latest
 
 COPY . /var/www/html/
 COPY ./vhost.conf /etc/apache2/sites-enabled/
