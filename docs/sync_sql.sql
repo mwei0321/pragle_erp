@@ -112,10 +112,10 @@ SELECT * FROM tbrole ORDER BY id desc LIMIT 5;
 SELECT * FROM tbgroup ORDER BY id desc LIMIT 5;
 SELECT * FROM tbDevice WHERE Devno="38A194E99D2D7AD9";
 SELECT * FROM tbdevicestatus WHERE devicenum = "38A194E99D2D7AD9";
-
-
+-- sync_delete_test
 DELETE FROM tbUser WHERE uid in (SELECT * FROM (SELECT uid FROM tbUser ORDER BY uid desc LIMIT 2) s);
 DELETE FROM tbUserinfo WHERE id in (SELECT * FROM (SELECT id FROM tbUserinfo ORDER BY id desc LIMIT 2)s);
 DELETE FROM tbDevice WHERE Devno="38A194E99D2D7AD9";
 DELETE FROM tbdevicestatus WHERE devicenum = "38A194E99D2D7AD9";
 DELETE FROM tbpushrec WHERE Devno="38A194E99D2D7AD9";
+DELETE FROM tbwallet WHERE wallet_id in (SELECT * FROM (SELECT wallet_id FROM tbwallet ORDER BY wallet_id desc LIMIT 2)s)

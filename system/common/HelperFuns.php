@@ -399,7 +399,10 @@ class HelperFuns
             copy($tmpSource, $tmpPath);
             $cnt++;
         }
-        return $cnt;
+        return [
+            "count" => $cnt,
+            "list"  => $fileList,
+        ];
     }
 
     /**

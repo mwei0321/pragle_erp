@@ -18,6 +18,36 @@ use system\services\syncdata\SyncBaseSrv;
 class EnterpriseUserSrv extends SyncBaseSrv
 {
 
+    function getSyncEnterpriseId()
+    {
+        // 查询企业
+        $enterpriseId = (new Query())->select("id")
+            ->from(TableMap::TbEnterprise)
+            ->where([
+                "sync_id" => 0,
+                "parentID" => 0,
+            ])->one($this->syncFromDB);
+        // 查询信息
+        $list = (new Query())->select("u.uid,u.Email email")
+            ->from(TableMap::TbUser . " u", "u.Company_id = e.id")
+            ->leftJoin(TableMap::TbUserInfo . " ui", "ui.uid = u.uid")
+            ->where([
+                "u.Company_id" => $enterpriseId,
+            ])->all($this->syncFromDB);
+        // 提取邮箱
+        $emails = array_column($list, "email");
+        // 判断是否存在同步库
+        $count = (new Query())->from(TableMap::TbUserInfo)->where(["in", "Email", $emails])->count();
+        if ($count > 0) {
+            // 更新同步状态 
+            $this->syncFromDB->createCommand()->update(TableMap::TbEnterprise, ["sync_id" => -1], ['id' => $enterpriseId])->execute();
+            $this->syncFromDB->createCommand()->update(TableMap::TbUser, ["sync_id" => -1], ['Company_id' => $enterpriseId])->execute();
+            return 1;
+        }
+
+        return $enterpriseId;
+    }
+
     /**
      * 同步企业
      * date: 2022-05-22 00:36:39

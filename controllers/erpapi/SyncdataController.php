@@ -15,28 +15,31 @@ use system\beans\sync\SyncBaseBeans;
 
 class SyncdataController extends InitController
 {
+
+
+
     function actionTest()
     {
         set_time_limit(0);
 
         $syncBaseBeans = new SyncBaseBeans();
         // $syncBaseBeans->from_enterprise_id = 264;
-        // $syncBaseBeans->from_enterprise_id = 145080;
-        $syncBaseBeans->from_parent_enterprise = 338;
-        $syncBaseBeans->from_enterprise_id = 1666;
-        $syncBaseBeans->from_uid = 1553;
-        $syncBaseBeans->from_ad_id = 12375;
-        $syncBaseBeans->from_play_id = 8152408;
-        $syncBaseBeans->to_play_id = 123;
-        $syncBaseBeans->to_uid = 123;
-        $syncBaseBeans->to_ad_id = 123;
-        $syncBaseBeans->to_parent_enterprise = 123;
-        $syncBaseBeans->to_enterprise_id = 123;
+        $syncBaseBeans->from_enterprise_id = 145080;
+        // $syncBaseBeans->from_parent_enterprise = 338;
+        // $syncBaseBeans->from_enterprise_id = 1666;
+        // $syncBaseBeans->from_uid = 1553;
+        // $syncBaseBeans->from_ad_id = 12375;
+        // $syncBaseBeans->from_play_id = 8152408;
+        // $syncBaseBeans->to_play_id = 123;
+        // $syncBaseBeans->to_uid = 123;
+        // $syncBaseBeans->to_ad_id = 123;
+        // $syncBaseBeans->to_parent_enterprise = 123;
+        // $syncBaseBeans->to_enterprise_id = 123;
 
-        $a = ServiceFactory::getInstance("SyncPlaySrv")->syncAddverByUId($syncBaseBeans);
+        // $a = ServiceFactory::getInstance("SyncPlaySrv")->syncAddverByUId($syncBaseBeans);
 
-        var_dump($a);
-        exit();
+        // var_dump($a);
+        // exit();
 
 
         // $connection = \Yii::$app->dbcenter_to->beginTransaction();
@@ -81,20 +84,20 @@ class SyncdataController extends InitController
             echo "同步企业流量成功……";
         }
         // 节目
+        if (ServiceFactory::getInstance("SyncPlaySrv")->syncAddverByUId($syncBaseBeans) > 0) {
+            echo "同步企业流量成功……";
+        }
 
+        if (ServiceFactory::getInstance("SyncWalletSrv")->syncWallByEnterpriseId($syncBaseBeans) > 0) {
+            echo "同步钱包成功……";
+        }
 
-        if (ServiceFactory::getInstance("SyncMaterialSrv")->syncAnalysisByUid($syncBaseBeans) > 0) {
-            echo "同步企业统计分析成功……";
+        if (ServiceFactory::getInstance("SyncDeviceSrv")->syncDevicePayByOrderId($syncBaseBeans) > 0) {
+            echo "同步设备支付成功……";
         }
         // 订单支付
         if (ServiceFactory::getInstance("SyncOrderSrv")->syncOrderByUid($syncBaseBeans) > 0) {
             echo "同步订单成功……";
-        }
-        if (ServiceFactory::getInstance("SyncDeviceSrv")->syncDevicePayByOrderId($syncBaseBeans) > 0) {
-            echo "同步设备支付成功……";
-        }
-        if (ServiceFactory::getInstance("SyncWalletSrv")->syncWallByEnterpriseId($syncBaseBeans) > 0) {
-            echo "同步钱包成功……";
         }
 
         // 流量统计
@@ -103,6 +106,10 @@ class SyncdataController extends InitController
         }
         if (ServiceFactory::getInstance("SyncFlowSrv")->syncFlowRecordByUid($syncBaseBeans) > 0) {
             echo "同步企业流量记录成功……";
+        }
+
+        if (ServiceFactory::getInstance("SyncMaterialSrv")->syncAnalysisByUid($syncBaseBeans) > 0) {
+            echo "同步企业统计分析成功……";
         }
     }
 }
