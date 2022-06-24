@@ -3,8 +3,8 @@
  * @Author: MaWei 1123265518@qq.com
  * @Date: 2022-05-23 09:08:49
  * @LastEditors: MaWei 1123265518@qq.com
- * @LastEditTime: 2022-05-23 09:46:23
- * @FilePath: \pragle_erp\system\services\syncdata\MaterialSrv.php
+ * @LastEditTime: 2022-06-24
+ * @FilePath: \Pragle_erp\system\services\syncdata\MaterialSrv.php
  * @Description: 素材同步
  * 
  * Copyright (c) 2022 by MaWei 1123265518@qq.com, All Rights Reserved. 
@@ -22,16 +22,16 @@ class MaterialSrv extends SyncBaseSrv
 {
     /**
      * 同步video素材
-     * @param  \system\beans\sync\SyncBaseBeans $syncBase
+     * @param  \system\beans\sync\SyncBaseBeans $syncBaseBeans
      * date: 2022-05-28 16:44:19
      * @author  <mawei.live>
      * @return void
      */
-    function syncVideoByUid(SyncBaseBeans $syncBase)
+    function syncVideoByUid(SyncBaseBeans $syncBaseBeans)
     {
         $list = (new Query())->from(TableMap::TbVedio)
             ->where([
-                'uid'     => $syncBase->from_uid,
+                'uid'     => $syncBaseBeans->from_uid,
             ])
             ->all($this->syncFromDB);
         if (count($list) < 1) {
@@ -39,8 +39,8 @@ class MaterialSrv extends SyncBaseSrv
         }
         $oldId = 0;
         foreach ($list as $v) {
-            $v['uid'] = $syncBase->to_uid;
-            $v['Company_id'] = $syncBase->to_enterprise_id;
+            $v['uid'] = $syncBaseBeans->to_uid;
+            $v['Company_id'] = $syncBaseBeans->to_enterprise_id;
             $v['sync_id'] = $oldId = $v['Vid'];
             unset($v['Vid']);
             // 插入数据
@@ -63,16 +63,16 @@ class MaterialSrv extends SyncBaseSrv
 
     /**
      * 同步analysis 记录
-     * @param  \system\beans\sync\SyncBaseBeans $syncBase
+     * @param  \system\beans\sync\SyncBaseBeans $syncBaseBeans
      * date: 2022-05-28 16:44:43
      * @author  <mawei.live>
      * @return void
      */
-    function syncAnalysisByUid(SyncBaseBeans $syncBase)
+    function syncAnalysisByUid(SyncBaseBeans $syncBaseBeans)
     {
         $list = (new Query())->from(TableMap::TbAnalysis)
             ->where([
-                'uid'     => $syncBase->from_uid,
+                'uid'     => $syncBaseBeans->from_uid,
             ])
             ->all($this->syncFromDB);
         if (count($list) < 1) {
@@ -80,8 +80,8 @@ class MaterialSrv extends SyncBaseSrv
         }
         $oldId = 0;
         foreach ($list as $v) {
-            $v['uid']        = $syncBase->to_uid;
-            $v['Company_id'] = $syncBase->to_enterprise_id;
+            $v['uid']        = $syncBaseBeans->to_uid;
+            $v['Company_id'] = $syncBaseBeans->to_enterprise_id;
             $v['sync_id']    = $oldId = $v['id'];
             unset($v['id']);
             // 插入数据

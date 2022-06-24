@@ -41,7 +41,6 @@ class DeviceSrv extends SyncBaseSrv
         $devSn = array_column($list, 'Devno');
         // 过滤设备
         $existList = $this->checkDevSnIsExsit($devSn);
-        var_dump($existList, $list);
         // exit();
         // 处理设备是否同步
         foreach ($list as $val) {
@@ -54,6 +53,7 @@ class DeviceSrv extends SyncBaseSrv
             $oldId = $devInfo['Did'];
             $devInfo['sync_id'] = $oldId;
             $devInfo["Company_id"] = $syncBaseBeans->to_enterprise_id;
+            $devInfo["CpID"] = $syncBaseBeans->to_parent_enterpirse;
             unset($devInfo['Did']);
             $result = $this->syncToDB->createCommand()->insert(TableMap::TbDevice, $devInfo)->execute();
             if ($result === false) {

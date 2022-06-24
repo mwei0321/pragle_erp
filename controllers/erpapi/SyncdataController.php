@@ -55,23 +55,16 @@ class SyncdataController extends InitController
         set_time_limit(0);
 
         $syncBaseBeans = new SyncBaseBeans();
-        // $syncBaseBeans->from_enterprise_id = 264;
-        $syncBaseBeans->from_enterprise_id = 145080;
-        // $syncBaseBeans->from_parent_enterprise = 338;
-        // $syncBaseBeans->from_enterprise_id = 1666;
-        // $syncBaseBeans->from_uid = 1553;
-        // $syncBaseBeans->from_ad_id = 12375;
-        // $syncBaseBeans->from_play_id = 8152408;
-        // $syncBaseBeans->to_play_id = 123;
-        // $syncBaseBeans->to_uid = 123;
-        // $syncBaseBeans->to_ad_id = 123;
-        // $syncBaseBeans->to_parent_enterprise = 123;
-        // $syncBaseBeans->to_enterprise_id = 123;
+        $syncBaseBeans->from_enterprise_id = 1458;
+        $syncBaseBeans->from_parent_enterprise = 338;
+        $syncBaseBeans->from_uid = 1340;
 
-        // $a = ServiceFactory::getInstance("SyncPlaySrv")->syncAddverByUId($syncBaseBeans);
 
-        // var_dump($a);
-        // exit();
+        ServiceFactory::getInstance("SyncMaterialSrv")->syncVideoByUid($syncBaseBeans);
+        ServiceFactory::getInstance("SyncPlaySrv")->syncAddverByUId($syncBaseBeans);
+
+        var_dump($syncBaseBeans);
+        exit();
 
 
         // $connection = \Yii::$app->dbcenter_to->beginTransaction();

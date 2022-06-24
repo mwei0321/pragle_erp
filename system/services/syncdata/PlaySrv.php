@@ -28,13 +28,13 @@ class PlaySrv extends SyncBaseSrv
     {
         $advlist = (new Query())->from(TableMap::TbMakeAddver)->where(['uid' => $syncBaseBeans->from_uid])->orderBy("id desc")->all($this->syncFromDB);
         if ($advlist) {
-            foreach ($advlist as $k => $v) {
+            foreach ($advlist as $v) {
                 $old                       = $v['id'];
                 $v['sync_id']              = $old;
                 $v['uid']                  = $syncBaseBeans->to_uid;
                 $v['Company_id']           = $syncBaseBeans->to_enterprise_id;
                 $v["CpID"]                 = $syncBaseBeans->to_parent_enterpirse;
-                $syncBaseBeans->from_ad_id =  $old;
+                $syncBaseBeans->from_ad_id = $old;
                 unset($v['id']);
                 // 素材id转数组
                 $mIds = explode('","', substr($v['media_id'], 2, -2));

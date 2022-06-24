@@ -3,8 +3,8 @@
  * @Author: MaWei 1123265518@qq.com
  * @Date: 2022-05-23 09:42:09
  * @LastEditors: MaWei 1123265518@qq.com
- * @LastEditTime: 2022-05-23 09:45:39
- * @FilePath: \pragle_erp\system\beans\sync\SyncBaseBeans.php
+ * @LastEditTime: 2022-06-24
+ * @FilePath: \Pragle_erp\system\beans\sync\SyncBaseBeans.php
  * @Description: 数据同步基础参数
  * 
  * Copyright (c) 2022 by MaWei 1123265518@qq.com, All Rights Reserved. 
@@ -27,8 +27,8 @@ class SyncBaseBeans extends BaseBean
     public $from_device_no         = 0;
     public $from_role_id           = 0;
     public $from_group_id          = 0;
-    public $from_paly_id           = 0; // 旧播放id
-    public $from_ad_id           = 0; // 旧节目id
+    public $from_play_id           = 0; // 旧播放id
+    public $from_ad_id             = 0; // 旧节目id
 
     // 新参数
     public $to_id                  = 0;
@@ -41,7 +41,7 @@ class SyncBaseBeans extends BaseBean
     public $to_role_id             = 0;
     public $to_group_id            = 0;
     public $to_play_id             = 0; // 旧播放id
-    public $to_ad_id             = 0; // 新节目id
+    public $to_ad_id               = 0; // 新节目id
     // 不变
     public $is_main                = 0;
 
