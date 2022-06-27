@@ -72,13 +72,13 @@ class DeviceSrv extends SyncBaseSrv
             $syncBaseBeans->to_device_id = $newId;
 
             // 同步设备统计
-            $this->syncDeviceStatisticByDevno($syncBaseBeans);
+            // $this->syncDeviceStatisticByDevno($syncBaseBeans);
 
             // 同步设备状态
-            $this->syncDeviceStatusByDevno($syncBaseBeans);
+            // $this->syncDeviceStatusByDevno($syncBaseBeans);
 
             // 同步设备状态
-            $this->syncDevicePushRecByDevno($syncBaseBeans);
+            // $this->syncDevicePushRecByDevno($syncBaseBeans);
         }
         return 1;
     }

@@ -43,6 +43,7 @@ class SyncBaseBeans extends BaseBean
     public $to_play_id             = 0; // 旧播放id
     public $to_ad_id               = 0; // 新节目id
     // 不变
+    public $devno                  = "";
     public $is_main                = 0;
 
     public $page_size              = 30;

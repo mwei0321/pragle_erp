@@ -51,11 +51,11 @@ class TableMap
 	const TbGroup                 = "tbgroup";
 	const TbRole                  = "tbrole";
 	// 设备
-	const TbDevice                = "tbDevice";
-	const TbDeviceFlow            = "tbdeviceflow";
+	const TbDevice                = "tbDevice"; #
+	const TbDeviceFlow            = "tbdeviceflow"; #
 	const TbDevicePay             = "tbDevicePay";
 	const TbDeviceLimit           = "tbdevicelimit";
-	const TbDeviceStatus          = "tbdevicestatus";
+	const TbDeviceStatus          = "tbdevicestatus"; #
 	const TbControllerList        = "tbcontrollist";
 	// 素材
 	const TbVedio                 = "tbVedio";
@@ -75,8 +75,8 @@ class TableMap
 	const TbWallet                = "tbwallet";
 	const TbWalletLog             = "tbwallet_log";
 	// 流量统计
-	const TbFlowCord              = "tbflowcord";
-	const TbFlowRecord            = "tbflowrecord";
+	const TbFlowCord              = "tbflowcord"; #
+	const TbFlowRecord            = "tbflowrecord"; #
 	const TbStatisticsDevice      = "tbStatisticsDevice";
 	const UserActive              = "user_active";
 }

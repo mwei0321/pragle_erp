@@ -39,9 +39,10 @@ class MaterialSrv extends SyncBaseSrv
         }
         $oldId = 0;
         foreach ($list as $v) {
-            $v['uid'] = $syncBaseBeans->to_uid;
+            $v['uid']        = $syncBaseBeans->to_uid;
             $v['Company_id'] = $syncBaseBeans->to_enterprise_id;
-            $v['sync_id'] = $oldId = $v['Vid'];
+            $v['CpID']       = $syncBaseBeans->to_parent_enterpirse;
+            $v['sync_id']    = $oldId = $v['Vid'];
             unset($v['Vid']);
             // 插入数据
             $result = $this->syncToDB->createCommand()->insert(TableMap::TbVedio, $v)->execute();
@@ -82,6 +83,7 @@ class MaterialSrv extends SyncBaseSrv
         foreach ($list as $v) {
             $v['uid']        = $syncBaseBeans->to_uid;
             $v['Company_id'] = $syncBaseBeans->to_enterprise_id;
+            $v['CpID']       = $syncBaseBeans->to_parent_enterpirse;
             $v['sync_id']    = $oldId = $v['id'];
             unset($v['id']);
             // 插入数据

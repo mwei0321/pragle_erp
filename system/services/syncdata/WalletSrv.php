@@ -25,6 +25,16 @@ class WalletSrv extends SyncBaseSrv
      */
     function syncWallByEnterpriseId(SyncBaseBeans $syncBaseBeans)
     {
+        // 判断钱包是否存在
+        $info = (new Query())->from(TableMap::TbWallet)
+            ->where([
+                'Company_id' => $syncBaseBeans->to_enterprise_id,
+            ])
+            ->one($this->syncToDB);
+        if ($info) {
+            return 1;
+        }
+
         // 提取用户钱包
         $info = (new Query())->from(TableMap::TbWallet)
             ->where([

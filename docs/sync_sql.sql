@@ -62,6 +62,8 @@ ALTER TABLE `tbflowrecord`
 ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `Company_id`;
 ALTER TABLE `tbStatisticsDevice` 
 ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `devno`;
+ALTER TABLE `tbanalysis` 
+ADD COLUMN `sync_id` int(11) NULL DEFAULT 0 COMMENT '同步id,-1,不需要' AFTER `id`;
 
 
 
@@ -119,3 +121,34 @@ DELETE FROM tbDevice WHERE Devno="38A194E99D2D7AD9";
 DELETE FROM tbdevicestatus WHERE devicenum = "38A194E99D2D7AD9";
 DELETE FROM tbpushrec WHERE Devno="38A194E99D2D7AD9";
 DELETE FROM tbwallet WHERE wallet_id in (SELECT * FROM (SELECT wallet_id FROM tbwallet ORDER BY wallet_id desc LIMIT 2)s)
+
+
+
+
+TRUNCATE TABLE `tborder`;
+TRUNCATE TABLE `tbenterprise`;
+TRUNCATE TABLE `tbUser`;
+TRUNCATE TABLE `tbUserinfo`;
+TRUNCATE TABLE `tbDevice`;
+TRUNCATE TABLE `tbcontrollist`;
+TRUNCATE TABLE `tbdeviceflow`;
+TRUNCATE TABLE `tbDevicePay`;
+TRUNCATE TABLE `tbdevicestatus`;
+TRUNCATE TABLE `tbdevicelimit`;
+TRUNCATE TABLE `tbmakeaddver`;
+TRUNCATE TABLE `tbVedio`;
+TRUNCATE TABLE `tbanalysis`;
+TRUNCATE TABLE `tbpushrec`;
+TRUNCATE TABLE `tbstock`;
+TRUNCATE TABLE `tborder`;
+TRUNCATE TABLE `tborder_item`;
+TRUNCATE TABLE `tborder_log`;
+TRUNCATE TABLE `tbwallet`;
+TRUNCATE TABLE `tbwallet_log`;
+TRUNCATE TABLE `tbflowcord`;
+TRUNCATE TABLE `tbflowrecord`;
+TRUNCATE TABLE `tbStatisticsDevice`;
+
+
+
+INSERT INTO sync_play (from_uid,to_uid,to_enterprise_id,to_parent_enterprise) SELECT * FROM (SELECT u.sync_id from_uid,u.uid to_uid, u.Company_id to_enterprise_id,e.ParentID to_parent_enterprise FROM tbenterprise e LEFT JOIN tbUser u ON u.Company_id=e.id WHERE e.sync_id > 0 AND u.Company_id > 0) AS s 

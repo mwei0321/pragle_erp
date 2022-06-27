@@ -71,7 +71,7 @@ class EnterpriseUserSrv extends SyncBaseSrv
         $info = (new Query())->from(TableMap::TbEnterprise)
             ->where([
                 'id'      => $syncBaseBeans->from_enterprise_id,
-                "sync_id" => 0,
+                // "sync_id" => 0,
             ])->one($this->syncFromDB);
         if (!$info || !isset($info['id'])) {
             return -1;
@@ -259,7 +259,7 @@ class EnterpriseUserSrv extends SyncBaseSrv
             ->select("uid")
             ->where([
                 'Company_id' => $syncBaseBeans->from_enterprise_id,
-                "sync_id"    => 0,
+                // "sync_id"    => 0,
             ])
             ->all($this->syncFromDB);
 
