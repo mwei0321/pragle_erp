@@ -21,7 +21,6 @@ use system\beans\consult\ConsultBeans;
 
 class ConsultController extends InitController
 {
-
     use BindBeanParamsTrait;
 
     /**
@@ -60,13 +59,16 @@ class ConsultController extends InitController
             "email" => $consultBeans->email,
             "phone" => $consultBeans->phone,
         ];
+        // 实例化对象
+        $srvObj = ServiceFactory::getInstance("BaseDB", TableMap::Consult);
+
         if ($consultBeans->id) {
             $data["utime"] = time();
             // 实例化对象并调用
-            $result = ServiceFactory::getInstance("BaseDB", TableMap::Consult)->updateById($consultBeans->id, $data);
+            $result = $srvObj->updateById($consultBeans->id, $data);
         } else {
             $data["ctime"] = time();
-            $result = ServiceFactory::getInstance("BaseDB", TableMap::Consult)->insert($consultBeans->id, $data);
+            $result = $srvObj->insert($data);
         }
         if ($result === false) {
             return $this->reJson([], "insert fail");

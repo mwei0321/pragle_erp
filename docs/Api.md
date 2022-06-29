@@ -967,6 +967,78 @@
 }
 ```
 
+### 咨询
+
+#### 1. 咨询列表
+
+请求：`/erpapi/consult/list`
+
+请求参数：
+
+| 参数名    | 类型 | 必需 | 值   | 说明 |
+| --------- | ---- | ---- | ---- | ---- |
+| page      | int  | 否   | 1    | 页码 |
+| page_size | int  | 否   | 1    | 条数 |
+
+返回参数：
+
+| 参数名       | 类型   | 说明     |
+| ------------ | ------ | -------- |
+| consult_name | string | 联系姓名 |
+| consult_nike | string | 联系称呼 |
+| company_name | string | 公司名称 |
+| email        | string | 邮箱地址 |
+| phone        | string | 联系电话 |
+| ctime        | int    | 创建时间 |
+
+
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": {
+        "items": [
+            {
+                "id": 1,
+                "consult_name": "test",
+                "consult_nike": "test1",
+                "company_name": "test2",
+                "email": "test@tes.com",
+                "phone": "12345561234",
+                "is_consult": 0,
+                "consult_content": null,
+                "consult_staff": 0,
+                "utime": 1656515827,
+                "ctime": 1656515790
+            }
+        ],
+        "count": 1
+    },
+    "page": []
+}
+```
+
+#### 1. 咨询添加,修改
+
+请求：`/erpapi/consult/update`
+
+请求参数：
+
+| 参数名       | 类型   | 必填 | 值            | 说明               |
+| ------------ | ------ | ---- | ------------- | ------------------ |
+| consult_name | string | 是   | consult_name  | 联系姓名           |
+| consult_nike | string | 是   | consult_nike  | 联系称呼联系称呼否 |
+| company_name | string | 是   | company_name  | 公司名称           |
+| email        | string | 是   | test@test.com | 邮箱地址           |
+| phone        | string | 是   | 13645671234   | 联系电话           |
+
+请求参数：
+
+```json
+{"code":200,"msg":"return success!","data":[],"page":[]}
+```
+
 
 
 

@@ -23,4 +23,5 @@ class ConsultBeans extends BaseBean
     public $company_name = ''; // 公司名称
     public $email = ''; // 邮箱地址
     public $phone = ''; // 电话
+    public $is_consult = ''; // 是否咨询
 }
