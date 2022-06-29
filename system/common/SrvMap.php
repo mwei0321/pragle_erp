@@ -1,11 +1,13 @@
 <?php
-
-/**
- * 服务地图
- * @Author: MaWei
- * @Date:   2021-10-27
- * @Last Modified by: MaWei
- * @Last Modified time: 2022-05-29 16:12:09
+/*
+ * @Author: MaWei 1123265518@qq.com
+ * @Date: 2022-06-21
+ * @LastEditors: MaWei 1123265518@qq.com
+ * @LastEditTime: 2022-06-29
+ * @FilePath: \Pragle_erp\system\common\SrvMap.php
+ * @Description: 服务地图
+ * 
+ * Copyright (c) 2022 by MaWei 1123265518@qq.com, All Rights Reserved. 
  */
 
 namespace system\common;
@@ -28,6 +30,7 @@ class SrvMap
     public $OrderSrv              = 'system\services\order\OrderServices';
     public $DepartmentSrv         = 'system\services\user\DepartmentServices';
     public $ActionStatSrv         = 'system\services\statistic\ActionStatServices';
+    public $ConsultSrv            = 'system\services\statistic\ConsultServices';
 
     // 定时任务
     public $EmailCronSrv          = 'system\services\cron\EmailCronServices';
@@ -42,7 +45,7 @@ class SrvMap
     public $SyncDeviceSrv         = "system\services\syncdata\DeviceSrv";
     public $SyncMaterialSrv       = "system\services\syncdata\MaterialSrv";
     public $SyncOrderSrv          = "system\services\syncdata\OrderSrv";
-    public $SyncPlaySrv          = "system\services\syncdata\PlaySrv";
+    public $SyncPlaySrv           = "system\services\syncdata\PlaySrv";
     public $SyncWalletSrv         = "system\services\syncdata\WalletSrv";
     public $SyncFlowSrv           = "system\services\syncdata\FlowSrv";
 

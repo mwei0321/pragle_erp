@@ -1,11 +1,13 @@
 <?php
-
-/**
- * 表名定义
- * @Author: MaWei
- * @Date:   2021-10-26
- * @Last Modified by: MaWei
- * @Last Modified time: 2022-06-19 20:07:46
+/*
+ * @Author: MaWei 1123265518@qq.com
+ * @Date: 2022-06-29
+ * @LastEditors: MaWei 1123265518@qq.com
+ * @LastEditTime: 2022-06-29
+ * @FilePath: \Pragle_erp\system\common\TableMap.php
+ * @Description: 表名定义
+ * 
+ * Copyright (c) 2022 by MaWei 1123265518@qq.com, All Rights Reserved. 
  */
 
 namespace system\common;
@@ -37,6 +39,7 @@ class TableMap
 	const OrderDetail             = "order_detail";
 	const Product                 = "product";
 	const ActionYear              = "action_year";
+	const Consult                 = "consult";
 
 	// dbDate 库
 	const TaskQueue               = "task_queue";
