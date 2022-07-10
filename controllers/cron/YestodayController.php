@@ -19,6 +19,12 @@ use system\beans\kpi\ActionBeans;
 class YestodayController extends InitController
 {
 
+    function actionTest()
+    {
+        echo 111;
+        exit;
+    }
+
 
     /**
      * 0 2 * * * /domedea/pragle_erp/yii yestoday/index
@@ -45,15 +51,16 @@ class YestodayController extends InitController
 
     function actionModifyday()
     {
-        for ($i = 110; $i > -1; $i--) {
+        set_time_limit(0);
+        for ($i = 180; $i > -1; $i--) {
             $day = date("Y-m-d", strtotime("-{$i} day"));
             var_dump($day);
 
             // 昨天邮件统计 
             ServiceFactory::getInstance("EmailCronSrv")->getYesterdayEmailStatistics($day);
-            // // 昨天新跟进动作统计
+            // 昨天新跟进动作统计
             ServiceFactory::getInstance("FollowCronSrv")->getYesterdayActionFollow($day);
-            // // 昨天旧跟进动作统计
+            // 昨天旧跟进动作统计
             ServiceFactory::getInstance("FollowCronSrv")->getYesterdayOldFollow($day);
             // 昨天客户统计
             ServiceFactory::getInstance("CustomerCronSrv")->getYesterdayCustomerStatistics($day);
@@ -62,10 +69,12 @@ class YestodayController extends InitController
 
     function actionModifyscore()
     {
+        set_time_limit(0);
+        ini_set('memory_limit', '512M');
         $actionBeans = new \system\beans\kpi\ActionBeans();
         $actionBeans->cycle = 1;
 
-        for ($i = 60; $i > 0; $i--) {
+        for ($i = 180; $i > 0; $i--) {
             $day = date("Y-m-d", strtotime("-{$i} day"));
             var_dump($day);
 

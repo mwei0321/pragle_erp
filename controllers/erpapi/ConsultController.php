@@ -3,8 +3,8 @@
  * @Author: MaWei 1123265518@qq.com
  * @Date: 2022-06-29
  * @LastEditors: MaWei 1123265518@qq.com
- * @LastEditTime: 2022-06-29
- * @FilePath: \Pragle_erp\controllers\erpapi\ConsultController.php
+ * @LastEditTime: 2022-07-10
+ * @FilePath: \pragle-erp\controllers\erpapi\ConsultController.php
  * @Description: 咨询
  * 
  * Copyright (c) 2022 by MaWei 1123265518@qq.com, All Rights Reserved. 
@@ -18,6 +18,7 @@ use GuzzleHttp\Psr7\Query;
 use system\common\{ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
 use system\beans\consult\ConsultBeans;
+use Hashids\Hashids;
 
 class ConsultController extends InitController
 {
@@ -52,12 +53,17 @@ class ConsultController extends InitController
      */
     function actionUpdate(ConsultBeans $consultBeans)
     {
+
+        $hashids = new Hashids("domedea_website", 32);
+        $tmp = $hashids->decode($consultBeans->identity);
+        $enterpriseId = $tmp[0] ?? 0;
         $data = [
-            "consult_name" => $consultBeans->consult_name,
-            "consult_nike" => $consultBeans->consult_nike,
-            "company_name" => $consultBeans->company_name,
-            "email" => $consultBeans->email,
-            "phone" => $consultBeans->phone,
+            "enterprise_id" => $enterpriseId,
+            "consult_name"  => $consultBeans->consult_name,
+            "consult_nike"  => $consultBeans->consult_nike,
+            "company_name"  => $consultBeans->company_name,
+            "email"         => $consultBeans->email,
+            "phone"         => $consultBeans->phone,
         ];
         // 实例化对象
         $srvObj = ServiceFactory::getInstance("BaseDB", TableMap::Consult);

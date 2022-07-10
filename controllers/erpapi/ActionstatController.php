@@ -37,7 +37,6 @@ class ActionstatController extends InitController
 
         // 提取结果
         $list = ServiceFactory::getInstance("ActionStatSrv")->getActionStatisticListForDate($statBeans);
-
         // 返回
         return $this->reJson([
             'items' => $list,

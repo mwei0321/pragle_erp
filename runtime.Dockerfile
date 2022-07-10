@@ -9,7 +9,7 @@ RUN rm /etc/apt/sources.list \
     && apt-get install -y --no-install-recommends cron git unzip libzip-dev openssl libssl-dev libpng-dev curl \
     && rm -r /var/lib/apt/lists/* \
     && pecl install redis \
-    && docker-php-ext-install mysqli pdo_mysql gd zip \
+    && docker-php-ext-install mysqli pdo_mysql gd zip bcmath \
     && docker-php-source delete \
     && a2enmod rewrite \
     && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \

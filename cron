@@ -1,7 +1,23 @@
-15 8 * * * /usr/local/bin/php /var/www/html/yii yestoday/index
-25 8 * * * /usr/local/bin/php /var/www/html/yii action/everyday
-30 8 1-12 * * /usr/local/bin/php /var/www/html/yii action/everymonth
-40 8 * * 1 /usr/local/bin/php /var/www/html/yii action/everyweek
-
-
-* * * * * curl -o /var/www/html/crontest.txt https://industryapi.domedea.com/erpapi/syncdata/sync
+### 
+# 15 8 * * * /usr/local/bin/php /var/www/html/yii yestoday/index
+# 25 8 * * * /usr/local/bin/php /var/www/html/yii action/everyday
+# 30 8 1-12 * * /usr/local/bin/php /var/www/html/yii action/everymonth
+# 40 8 * * 1 /usr/local/bin/php /var/www/html/yii action/everyweek
+* * * * * curl http://localhost:8080/cron/action/test >> /var/www/html/web/tt.html
+15 8 * * * curl -o /var/www/html/cronlog.txt http://localhost:8080/cron/yestoday/index
+25 8 * * * curl -o /var/www/html/cronlog.txt http://localhost:8080/cron/action/everyday
+30 8 1-12 * * curl -o /var/www/html/cronlog.txt http://localhost:8080/cron/action/everymonth
+40 8 * * 1 curl -o /var/www/html/cronlog.txt http://localhost:8080/cron/action/everyweek
+# * * * * * curl -o /var/www/html/crontest.txt https://industryapi.domedea.com/erpapi/syncdata/sync
+# * * * * * curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 5; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 10; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 15; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 20; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 25; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 30; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 35; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 40; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 45; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 50; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt
+# * * * * * sleep 55; curl https://industryapi.domedea.com/erpapi/syncdata/sync >> /var/www/html/synclog.txt

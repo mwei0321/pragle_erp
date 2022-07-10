@@ -11,7 +11,7 @@
 namespace app\controllers\cron;
 
 use app\controllers\InitController;
-use system\common\{ServiceFactory, TableMap};
+use system\common\{HelperFuns, ServiceFactory, TableMap};
 use system\traits\BindBeanParamsTrait;
 use system\beans\kpi\ActionBeans;
 
@@ -27,7 +27,6 @@ class ActionController extends InitController
      */
     function actionEveryday()
     {
-
         $actionBeans = new ActionBeans();
         $actionBeans->cycle = 1;
         // 员工每天完成统计
