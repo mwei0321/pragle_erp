@@ -3,8 +3,8 @@
  * @Author: MaWei 1123265518@qq.com
  * @Date: 2022-06-29
  * @LastEditors: MaWei 1123265518@qq.com
- * @LastEditTime: 2022-06-29
- * @FilePath: \Pragle_erp\system\services\consult\ConsultServices.php
+ * @LastEditTime: 2022-07-10
+ * @FilePath: \pragle-erp\system\services\consult\ConsultServices.php
  * @Description: 联系
  * 
  * Copyright (c) 2022 by MaWei 1123265518@qq.com, All Rights Reserved. 
@@ -29,7 +29,7 @@ class ConsultServices
     function getConsultList(ConsultBeans $consultBeans)
     {
         // 字段
-        $field = '*';
+        $field = 'id,enterprise_id,name,contact,description,ctime';
 
         // 构建条件
         $query = (new Query())->select($field)
@@ -39,7 +39,7 @@ class ConsultServices
         if ($consultBeans->keyword) {
             $query->andWhere([
                 "or",
-                ["company_name", "%" . $consultBeans->keyword . "%"],
+                ["name", "%" . $consultBeans->keyword . "%"],
                 ["email", "%" . $consultBeans->keyword . "%"],
                 ["phone", "%" . $consultBeans->keyword . "%"],
             ]);
@@ -54,7 +54,7 @@ class ConsultServices
         $consultBeans->page($count);
 
         // 排序提取
-        $list = $query->orderBy("utime DESC")
+        $list = $query->orderBy("ctime DESC")
             ->limit($consultBeans->limit)
             ->offset($consultBeans->offset)
             ->all();

@@ -15,14 +15,22 @@ use system\beans\user\DepartmentBeans;
 class DepartmentServices
 {
 
-    function getDepartmentStaffById($_departmentId) {
-        $list = (new Query())->from(TableMap::Group)
+    /**
+     * 部门下的员工ids
+     * @param  [type] $_departmentId
+     * date: 2022-07-10 16:17:52
+     * @author  <mawei.live>
+     * @return array
+     */
+    function getDepartmentStaffById($_departmentId)
+    {
+        $list = (new Query())->from(TableMap::User)
             ->select("id")
             ->where([
                 "department" => $_departmentId,
             ])->all();
 
-        return $list ? array_column($list,"id") : [];
+        return $list ? array_column($list, "id") : [];
     }
 
     /**
@@ -30,7 +38,7 @@ class DepartmentServices
      * @param  [type] $_departmentId
      * date: 2022-04-06 11:42:09
      * @author  <mawei.live>
-     * @return void
+     * @return array
      */
     function getChildDepartmentById($_departmentId)
     {

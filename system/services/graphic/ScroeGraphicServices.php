@@ -27,18 +27,18 @@ class ScroeGraphicServices
     function getStaffMonthScore(ScoreBeans $scoreParams)
     {
         // 字段
-        $field = "`staff_id`,`month`,SUM(`score`) AS `cnt`";
+        $field = "`staff_id`,`month`,SUM(`ds`.`score`) AS `cnt`,first_name,last_name";
 
         // 提取条件构建
         $query = $this->_staffScoreQuery($scoreParams);
-        if(!$query) {
+        if (!$query) {
             return [];
         }
 
         // 提取结果 
         $result = $query->select($field)
             ->groupBy("staff_id,month")
-            ->orderBy("score DESC")
+            ->orderBy("cnt DESC")
             ->all();
         if (!$result) {
             return [];
@@ -56,7 +56,8 @@ class ScroeGraphicServices
         foreach ($result as $k => $v) {
             $exsit                = array_combine(array_column($v, "month"), array_column($v, "cnt"));
             $score                = array_merge($month, $exsit);
-            $data[$k]['name']     = $userObj->getFieldValById($v[0]["staff_id"]);
+            // $tmp = $userObj->getInfoById($v[0]["staff_id"], "first_name,last_name");
+            $data[$k]['name']     = ($v[0]["first_name"] ?? "") . ' ' . ($v[0]["last_name"] ?? "");
             $data[$k]['staff_id'] = $v[0]["staff_id"];
             $data[$k]['count']    = $score ? array_values($score) : ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"];
         }
@@ -96,27 +97,32 @@ class ScroeGraphicServices
     private function _staffScoreQuery(ScoreBeans $scoreParams)
     {
         // 构建
-        $query = (new Query())->from(TableMap::DepartmentAndStaffScore)
+        $query = (new Query())->from(TableMap::DepartmentAndStaffScore . ' AS ds')
+            ->leftJoin(TableMap::User . " AS u", "u.id = ds.staff_id")
             ->where([
-                "enterprise_id" => $scoreParams->enterprise_id,
-                "type"          => 1,
+                "ds.enterprise_id" => $scoreParams->enterprise_id,
+                "ds.type"          => 1,
+                "u.state"          => 1,
             ]);
 
         // 部门
         if ($scoreParams->department_id > 0) {
-            // 提取部门下的人
-            $staffId = (new Query())->from(TableMap::GroupMember)
-                ->where([
-                    'group_id' => $scoreParams->department_id,
-                    "type"     => 2,
-                ])->all();
-            // 添加员工条件
-            if ($staffId) {
-                $staffId = array_column($staffId, 'target_id');
-                $query->andWhere(['in', "obj_id", $staffId]);
-            } else {
-                return null;
-            }
+            $query->andWhere([
+                'department' => $scoreParams->department_id,
+            ]);
+            // // 提取部门下的人
+            // $staffId = (new Query())->from(TableMap::User)
+            //     ->where([
+            //         'department' => $scoreParams->department_id,
+            //         "state"     => 1,
+            //     ])->all();
+            // // 添加员工条件
+            // if ($staffId) {
+            //     $staffId = array_column($staffId, 'target_id');
+            //     $query->andWhere(['in', "obj_id", $staffId]);
+            // } else {
+            //     return null;
+            // }
         }
 
         // 年
@@ -146,7 +152,7 @@ class ScroeGraphicServices
 
         // 提取条件构建
         $query = $this->_departmentScoreQuery($scoreParams);
-        if(!$query) {
+        if (!$query) {
             return [];
         }
 

@@ -18,12 +18,10 @@ class ConsultBeans extends BaseBean
 {
     public $id = 0;
     public $enterprise_id = 0; // 企业id
-    public $keyword = ""; // 关键字
-    public $consult_name = ""; // 姓名
-    public $consult_nike = ""; // 称谓
-    public $company_name = ''; // 公司名称
-    public $email = ''; // 邮箱地址
-    public $phone = ''; // 电话
+    public $keyword = ''; // 搜索
+    public $name = ""; // 姓名
+    public $contact = ''; // 联系方式
+    public $description = ''; // 邮箱地址
     public $is_consult = ''; // 是否咨询
     public $identity = ''; // 
 }

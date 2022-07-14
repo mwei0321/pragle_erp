@@ -59,11 +59,9 @@ class ConsultController extends InitController
         $enterpriseId = $tmp[0] ?? 0;
         $data = [
             "enterprise_id" => $enterpriseId,
-            "consult_name"  => $consultBeans->consult_name,
-            "consult_nike"  => $consultBeans->consult_nike,
-            "company_name"  => $consultBeans->company_name,
-            "email"         => $consultBeans->email,
-            "phone"         => $consultBeans->phone,
+            "name"          => $consultBeans->name,
+            "contact"       => $consultBeans->contact,
+            "description"   => $consultBeans->description,
         ];
         // 实例化对象
         $srvObj = ServiceFactory::getInstance("BaseDB", TableMap::Consult);

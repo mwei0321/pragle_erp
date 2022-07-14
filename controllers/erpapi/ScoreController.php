@@ -32,10 +32,10 @@ class ScoreController extends InitController
 
         $result = [];
         switch ($scoreParams->type) {
-            case 1:
+            case 1: // 个人
                 $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getStaffMonthScore($scoreParams);
                 break;
-            case 2:
+            case 2: // 团队
                 $result = ServiceFactory::getInstance("ScoreGraphiSrv")->getDepartmentMonthScore($scoreParams);
                 break;
             default:
