@@ -1,0 +1,93 @@
+<<<<<----<<<<<----<<<<<----<start>------<group:0;email:408849576@qq.com>-----<start>------>>>>>
+>>----<start>------<uid:144772>-----<start>------<<<<
+DELETE FROM `tbmakeaddver` WHERE `uid` = 144770
+DELETE FROM `tbUser` WHERE `uid` = 144770
+DELETE FROM `tbUserinfo` WHERE `uid` = 144770
+DELETE FROM `tbenterprise` WHERE `id` = 147412
+UPDATE `tbDevice` SET `uid` = 144772,`CpID` = 708,`Company_id`=147411 WHERE `Company_id` = 147412
+UPDATE `sync_modify` SET `utime` = 1660383221,`status` = 1 WHERE `id` = 2
+>>>>>----<end>------<uid:144772>-----<end>-----<<<<
+
+>>----<start>------<uid:144772>-----<start>------<<<<
+DELETE FROM `tbmakeaddver` WHERE `uid` = 144782
+DELETE FROM `tbUser` WHERE `uid` = 144782
+DELETE FROM `tbUserinfo` WHERE `uid` = 144782
+DELETE FROM `tbenterprise` WHERE `id` = 147416
+UPDATE `tbDevice` SET `uid` = 144772,`CpID` = 708,`Company_id`=147411 WHERE `Company_id` = 147416
+UPDATE `sync_modify` SET `utime` = 1660383222,`status` = 1 WHERE `id` = 3
+>>>>>----<end>------<uid:144772>-----<end>-----<<<<
+
+>>----<start>------<uid:144772>-----<start>------<<<<
+DELETE FROM `tbmakeaddver` WHERE `uid` = 144774
+DELETE FROM `tbUser` WHERE `uid` = 144774
+DELETE FROM `tbUserinfo` WHERE `uid` = 144774
+DELETE FROM `tbenterprise` WHERE `id` = 147417
+UPDATE `tbDevice` SET `uid` = 144772,`CpID` = 708,`Company_id`=147411 WHERE `Company_id` = 147417
+UPDATE `sync_modify` SET `utime` = 1660383223,`status` = 1 WHERE `id` = 4
+>>>>>----<end>------<uid:144772>-----<end>-----<<<<
+
+>>----<start>------<uid:144772>-----<start>------<<<<
+DELETE FROM `tbmakeaddver` WHERE `uid` = 144777
+DELETE FROM `tbUser` WHERE `uid` = 144777
+DELETE FROM `tbUserinfo` WHERE `uid` = 144777
+DELETE FROM `tbenterprise` WHERE `id` = 147415
+UPDATE `tbDevice` SET `uid` = 144772,`CpID` = 708,`Company_id`=147411 WHERE `Company_id` = 147415
+UPDATE `sync_modify` SET `utime` = 1660383223,`status` = 1 WHERE `id` = 5
+>>>>>----<end>------<uid:144772>-----<end>-----<<<<
+
+>>----<start>------<uid:144772>-----<start>------<<<<
+DELETE FROM `tbmakeaddver` WHERE `uid` = 144778
+DELETE FROM `tbUser` WHERE `uid` = 144778
+DELETE FROM `tbUserinfo` WHERE `uid` = 144778
+DELETE FROM `tbenterprise` WHERE `id` = 147407
+UPDATE `tbDevice` SET `uid` = 144772,`CpID` = 708,`Company_id`=147411 WHERE `Company_id` = 147407
+UPDATE `sync_modify` SET `utime` = 1660383224,`status` = 1 WHERE `id` = 6
+>>>>>----<end>------<uid:144772>-----<end>-----<<<<
+
+>>----<start>------<uid:144772>-----<start>------<<<<
+DELETE FROM `tbmakeaddver` WHERE `uid` = 144786
+DELETE FROM `tbUser` WHERE `uid` = 144786
+DELETE FROM `tbUserinfo` WHERE `uid` = 144786
+DELETE FROM `tbenterprise` WHERE `id` = 147414
+UPDATE `tbDevice` SET `uid` = 144772,`CpID` = 708,`Company_id`=147411 WHERE `Company_id` = 147414
+UPDATE `sync_modify` SET `utime` = 1660383225,`status` = 1 WHERE `id` = 7
+>>>>>----<end>------<uid:144772>-----<end>-----<<<<
+
+>>----<start>------<uid:144772>-----<start>------<<<<
+DELETE FROM `tbmakeaddver` WHERE `uid` = 144784
+DELETE FROM `tbUser` WHERE `uid` = 144784
+DELETE FROM `tbUserinfo` WHERE `uid` = 144784
+DELETE FROM `tbenterprise` WHERE `id` = 147420
+UPDATE `tbDevice` SET `uid` = 144772,`CpID` = 708,`Company_id`=147411 WHERE `Company_id` = 147420
+UPDATE `sync_modify` SET `utime` = 1660383226,`status` = 1 WHERE `id` = 8
+>>>>>----<end>------<uid:144772>-----<end>-----<<<<
+
+>>----<start>------<uid:144772>-----<start>------<<<<
+DELETE FROM `tbmakeaddver` WHERE `uid` = 144773
+DELETE FROM `tbUser` WHERE `uid` = 144773
+DELETE FROM `tbUserinfo` WHERE `uid` = 144773
+DELETE FROM `tbenterprise` WHERE `id` = 147409
+UPDATE `tbDevice` SET `uid` = 144772,`CpID` = 708,`Company_id`=147411 WHERE `Company_id` = 147409
+UPDATE `sync_modify` SET `utime` = 1660383226,`status` = 1 WHERE `id` = 9
+>>>>>----<end>------<uid:144772>-----<end>-----<<<<
+
+>>----<start>------<uid:144772>-----<start>------<<<<
+DELETE FROM `tbmakeaddver` WHERE `uid` = 144794
+DELETE FROM `tbUser` WHERE `uid` = 144794
+DELETE FROM `tbUserinfo` WHERE `uid` = 144794
+DELETE FROM `tbenterprise` WHERE `id` = 147410
+UPDATE `tbDevice` SET `uid` = 144772,`CpID` = 708,`Company_id`=147411 WHERE `Company_id` = 147410
+UPDATE `sync_modify` SET `utime` = 1660383227,`status` = 1 WHERE `id` = 10
+>>>>>----<end>------<uid:144772>-----<end>-----<<<<
+
+>>----<start>------<uid:144772>-----<start>------<<<<
+DELETE FROM `tbmakeaddver` WHERE `uid` = 144805
+DELETE FROM `tbUser` WHERE `uid` = 144805
+DELETE FROM `tbUserinfo` WHERE `uid` = 144805
+DELETE FROM `tbenterprise` WHERE `id` = 147413
+UPDATE `tbDevice` SET `uid` = 144772,`CpID` = 708,`Company_id`=147411 WHERE `Company_id` = 147413
+UPDATE `sync_modify` SET `utime` = 1660383228,`status` = 1 WHERE `id` = 11
+>>>>>----<end>------<uid:144772>-----<end>-----<<<<
+
+<<<<<----<<<<<----<<<<<----<end>------<group:0;uid:144772>------<end>----->>>>>
+
