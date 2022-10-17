@@ -55,10 +55,10 @@ class PlaySrv extends SyncBaseSrv
                         continue;
                     }
                     // 如果查询的素材和原素材数不相同,跳过
-                    if (count($mIds) != count($mNewIds)) {
-                        $this->syncFromDB->createCommand()->update(TableMap::TbMakeAddver, ["sync_id" => -2], ['id' => $old])->execute();
-                        continue;
-                    }
+                    // if (count($mIds) != count($mNewIds)) {
+                    //     $this->syncFromDB->createCommand()->update(TableMap::TbMakeAddver, ["sync_id" => -2], ['id' => $old])->execute();
+                    //     continue;
+                    // }
 
                     // 新的素材
                     $newIdsStr = str_replace($mIds, array_values($mNewIds), $v['media_id']);
@@ -102,7 +102,6 @@ class PlaySrv extends SyncBaseSrv
         while ($jump) {
             $offset = $cnt * 100;
             $playlist = (new Query())->from(TableMap::TbPlayList)->where(['Uid' => $syncBaseBeans->from_uid])->offset($offset)->limit(100)->all($this->syncFromDB);
-            var_dump($playlist);
             if ($playlist) {
                 foreach ($playlist as $v) {
                     $old             = $v['Pid'];
