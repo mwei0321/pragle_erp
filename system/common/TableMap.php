@@ -3,7 +3,7 @@
  * @Author: MaWei 1123265518@qq.com
  * @Date: 2022-06-29
  * @LastEditors: MaWei 1123265518@qq.com
- * @LastEditTime: 2022-06-29
+ * @LastEditTime: 2022-07-04
  * @FilePath: \Pragle_erp\system\common\TableMap.php
  * @Description: 表名定义
  * 
@@ -40,11 +40,18 @@ class TableMap
 	const Product                 = "product";
 	const ActionYear              = "action_year";
 	const Consult                 = "consult";
+	// 商品表
+	const GoodsAttr               = "goods_attribute";
+	const GoodsAttrCate           = "";
+
+	// 属性
+	const AttributeName           = "attribute_name";
+	const AttributeValue          = "attribute_name";
+	const AttributeGroup          = "attribute_group";
 
 	// dbDate 库
 	const TaskQueue               = "task_queue";
 	const TaskDistribute          = "task_distribute";
-
 
 	// dbcenter库
 	// 企业用户

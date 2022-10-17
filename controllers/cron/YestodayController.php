@@ -36,13 +36,13 @@ class YestodayController extends InitController
     function actionIndex()
     {
         // 昨天邮件统计 
-        // ServiceFactory::getInstance("EmailCronSrv")->getYesterdayEmailStatistics();
+        ServiceFactory::getInstance("EmailCronSrv")->getYesterdayEmailStatistics();
         // 昨天新跟进动作统计
-        // ServiceFactory::getInstance("FollowCronSrv")->getYesterdayActionFollow();
+        ServiceFactory::getInstance("FollowCronSrv")->getYesterdayActionFollow();
         // 昨天旧跟进动作统计
-        // ServiceFactory::getInstance("FollowCronSrv")->getYesterdayOldFollow();
+        ServiceFactory::getInstance("FollowCronSrv")->getYesterdayOldFollow();
         // 昨天客户统计
-        // ServiceFactory::getInstance("CustomerCronSrv")->getYesterdayCustomerStatistics();
+        ServiceFactory::getInstance("CustomerCronSrv")->getYesterdayCustomerStatistics();
 
         // 订单销售统计
         ServiceFactory::getInstance("OrderCronSrv")->getYesterdayMarket();
@@ -51,6 +51,7 @@ class YestodayController extends InitController
 
     function actionModifyday()
     {
+        exit;
         set_time_limit(0);
         for ($i = 180; $i > -1; $i--) {
             $day = date("Y-m-d", strtotime("-{$i} day"));
@@ -69,6 +70,7 @@ class YestodayController extends InitController
 
     function actionModifyscore()
     {
+        exit;
         set_time_limit(0);
         ini_set('memory_limit', '512M');
         $actionBeans = new \system\beans\kpi\ActionBeans();
