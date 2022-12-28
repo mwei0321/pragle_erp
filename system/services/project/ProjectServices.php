@@ -20,7 +20,7 @@ class ProjectServices
     {
 
         // 构建查询
-        $query = (new Query())->from(TableMap::Project);
+        $query = (new Query())->from(TableMap::Project)->where(["is_del" => 0]);
 
         // 跟进员工
         if ($projectBeans->staff_id > 0) {

@@ -60,6 +60,28 @@ class ProjectController extends InitController
     }
 
     /**
+     * 更新状态 
+     *
+     * @param  ProjectBeans $projectBeans
+     * date: 2022-12-28 15:07:38
+     * @author  <mawei.live>
+     * @return void
+     */
+    function actionState(ProjectBeans $projectBeans)
+    {
+        if ($projectBeans->id < 1 || !in_array($projectBeans->state, [1, 2, 3, 4, 5])) {
+            return $this->reJson($projectBeans->toArray(), "param error", 400);
+        }
+
+        // 实例化对象并调用
+        if (ServiceFactory::getInstance("BaseDB", TableMap::Project)->updateById($projectBeans->id, ["state" => $projectBeans->state, "utime" => time()]) === false) {
+            return $this->reJson([], 'delete fail', 400);
+        }
+
+        return $this->reJson();
+    }
+
+    /**
      * 项目跟进入库
      *
      * @param  ProjectBeans $projectBeans
@@ -112,7 +134,7 @@ class ProjectController extends InitController
         }
 
         // 实例化对象并调用
-        if (ServiceFactory::getInstance("BaseDB", TableMap::Order)->delById($projectBeans->id, ["is_delete" => 1, "updated_at" => time()]) === false) {
+        if (ServiceFactory::getInstance("BaseDB", TableMap::Project)->delById($projectBeans->id, ["is_del" => 1, "utime" => time()]) === false) {
             return $this->reJson([], 'delete fail', 400);
         }
 
