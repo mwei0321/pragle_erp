@@ -1019,7 +1019,7 @@
 }
 ```
 
-#### 1. 咨询添加,修改
+#### 2. 咨询添加,修改
 
 请求：`/erpapi/consult/update`
 
@@ -1041,22 +1041,222 @@
 
 
 
+### 项目跟进
 
+#### 1. 项目跟进列表
 
-今天修改问题
+请求：`erpapi/project/getlist`
 
-1.已修复
+请求方式: `Get`
 
-2.需要农林加参数
+请求参数：
 
-3.不清楚具体需求,现在能选择人
+| 参数名                 | 类型 | 必需 | 值   | 说明                                                  |
+| ---------------------- | ---- | ---- | ---- | ----------------------------------------------------- |
+| staff_id               | int  | 否   | 1    | 员工id                                                |
+| state                  | int  | 否   | 1    | 跟进状态 ( 1成交，2丢失，3跟进中，4无回应，5项目推迟) |
+| customer_enterprise_id | int  | 否   | 1    | 客户企业id搜索                                        |
+| product_id             | int  | 否   | 1    | 产品id搜索                                            |
+| page                   | int  | 否   | 1    | 页码                                                  |
+| page_size              | int  | 否   | 1    | 条数                                                  |
 
-5.已修复
+返回参数：
 
-7.接口已写,需农林接入
+| 参数名                 | 类型   | 说明                                           |      |
+| ---------------------- | ------ | ---------------------------------------------- | ---- |
+| id                     | string | id                                             |      |
+| staff_id               | string | 跟进员工id                                     |      |
+| enterprise_id          | string | 跟进员工企业id                                 |      |
+| customer_id            | string | 客户联系人id                                   |      |
+| customer_enterprise_id | string | 客户企业id                                     |      |
+| name                   | string | 项目名称                                       |      |
+| imgs                   | string | 项目图片                                       |      |
+| country                | string | 国家                                           |      |
+| province               | string | 省                                             |      |
+| city                   | string | 市/区                                          |      |
+| district               | string | 县                                             |      |
+| start_at               | string | 项目开始时间                                   |      |
+| end_at                 | string | 项目结束时间                                   |      |
+| follow_times           | string | 跟进次数                                       |      |
+| level                  | string | 项目级别，1重大，2重点，3重要，4普通           |      |
+| state                  | string | 状态 1成交，2丢失，3跟进中，4无回应，5项目推迟 |      |
+| amount                 | string | 项目金额，单位为元                             |      |
+| product_id             | string | 关注产品id                                     |      |
+| product_area           | string | 产品面积                                       |      |
+| description            | string | 描述                                           |      |
+| ctime                  | string | 创建时间                                       |      |
+| utime                  | string | 更新时间                                       |      |
 
-8.农林修
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": {
+        "items": [
+            {
+                "id": "2",
+                "staff_id": "1",
+                "enterprise_id": "1",
+                "customer_id": "1",
+                "customer_enterprise_id": null,
+                "name": "测试项目",
+                "imgs": null,
+                "country": "1",
+                "province": "30001",
+                "city": "10001",
+                "district": "40001",
+                "start_at": "1577808000",
+                "end_at": "1588780800",
+                "follow_times": "0",
+                "level": "1",
+                "state": "3",
+                "amount": "100.00",
+                "product_id": "0",
+                "product_area": "500.00",
+                "description": null,
+                "ctime": "1588838282",
+                "utime": "0"
+            }
+        ],
+        "count": "1"
+    },
+    "page": []
+}
+```
 
-9.已按要求修复
+#### 2. 项目跟进详情
 
-10.明天完成
+请求：`/erpapi/project/getinfo`
+
+请求方式: `Get`
+
+请求参数：
+
+| 参数名 | 类型 | 必需 | 值   | 说明   |
+| ------ | ---- | ---- | ---- | ------ |
+| id     | int  | 否   | 1    | 项目id |
+
+返回参数：
+
+| 参数名                 | 类型   | 说明                                           |      |
+| ---------------------- | ------ | ---------------------------------------------- | ---- |
+| id                     | string | id                                             |      |
+| staff_id               | string | 跟进员工id                                     |      |
+| enterprise_id          | string | 跟进员工企业id                                 |      |
+| customer_id            | string | 客户联系人id                                   |      |
+| customer_enterprise_id | string | 客户企业id                                     |      |
+| name                   | string | 项目名称                                       |      |
+| imgs                   | string | 项目图片                                       |      |
+| country                | string | 国家                                           |      |
+| province               | string | 省                                             |      |
+| city                   | string | 市/区                                          |      |
+| district               | string | 县                                             |      |
+| start_at               | string | 项目开始时间                                   |      |
+| end_at                 | string | 项目结束时间                                   |      |
+| follow_times           | string | 跟进次数                                       |      |
+| level                  | string | 项目级别，1重大，2重点，3重要，4普通           |      |
+| state                  | string | 状态 1成交，2丢失，3跟进中，4无回应，5项目推迟 |      |
+| amount                 | string | 项目金额，单位为元                             |      |
+| product_id             | string | 关注产品id                                     |      |
+| product_area           | string | 产品面积                                       |      |
+| description            | string | 描述                                           |      |
+| ctime                  | string | 创建时间                                       |      |
+| utime                  |        |                                                |      |
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": {
+        "id": "2",
+        "staff_id": "1",
+        "enterprise_id": "1",
+        "customer_id": "1",
+        "customer_enterprise_id": null,
+        "name": "测试项目",
+        "imgs": null,
+        "country": "1",
+        "province": "30001",
+        "city": "10001",
+        "district": "40001",
+        "start_at": "1577808000",
+        "end_at": "1588780800",
+        "follow_times": "0",
+        "level": "1",
+        "state": "3",
+        "amount": "100.00",
+        "product_id": "0",
+        "product_area": "500.00",
+        "description": null,
+        "ctime": "1588838282",
+        "utime": "0"
+    },
+    "page": []
+}
+```
+
+#### 3. 项目跟进创建,更新
+
+请求：`/erpapi/project/update`
+
+请求方式: `Post`
+
+请求参数：
+
+| 参数名                 | 类型   | 说明                                           |      |
+| ---------------------- | ------ | ---------------------------------------------- | ---- |
+| id                     | int    | id 注意:有`id`为更新, 无`id`或者`0`为新增      |      |
+| staff_id               | int    | 跟进员工id                                     |      |
+| enterprise_id          | int    | 跟进员工企业id                                 |      |
+| customer_id            | int    | 客户联系人id                                   |      |
+| customer_enterprise_id | int    | 客户企业id                                     |      |
+| name                   | string | 项目名称                                       |      |
+| imgs                   | string | 项目图片 注意:多张有逗号隔开                   |      |
+| country                | int    | 国家                                           |      |
+| province               | int    | 省                                             |      |
+| city                   | int    | 市/区                                          |      |
+| district               | int    | 县                                             |      |
+| start_at               | int    | 项目开始时间                                   |      |
+| end_at                 | int    | 项目结束时间                                   |      |
+| follow_times           | int    | 跟进次数                                       |      |
+| level                  | int    | 项目级别，1重大，2重点，3重要，4普通           |      |
+| state                  | int    | 状态 1成交，2丢失，3跟进中，4无回应，5项目推迟 |      |
+| amount                 | float  | 项目金额，单位为元                             |      |
+| product_id             | int    | 关注产品id                                     |      |
+| product_area           | string | 产品面积                                       |      |
+| description            | string | 描述                                           |      |
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": {},
+    "page": []
+}
+```
+
+#### 4. 项目跟进详情
+
+请求：`/erpapi/project/delete`
+
+请求方式: `Get`
+
+请求参数：
+
+| 参数名 | 类型 | 必需 | 值   | 说明   |
+| ------ | ---- | ---- | ---- | ------ |
+| id     | int  | 否   | 1    | 项目id |
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": {},
+    "page": []
+}
+```
+

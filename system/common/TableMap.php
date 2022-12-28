@@ -89,4 +89,9 @@ class TableMap
 	const TbFlowRecord            = "tbflowrecord"; #
 	const TbStatisticsDevice      = "tbStatisticsDevice";
 	const UserActive              = "user_active";
+
+	// 项目跟进
+	const Project                 = "project";
+	const ProjectCommodity        = "project_commodity";
+	const ProjectCompetitor       = "project_competitor";
 }

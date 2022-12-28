@@ -31,6 +31,7 @@ class SrvMap
     public $DepartmentSrv         = 'system\services\user\DepartmentServices';
     public $ActionStatSrv         = 'system\services\statistic\ActionStatServices';
     public $ConsultSrv            = 'system\services\consult\ConsultServices';
+    public $ProjectSrv            = 'system\services\project\ProjectServices';
 
     // 定时任务
     public $EmailCronSrv          = 'system\services\cron\EmailCronServices';
