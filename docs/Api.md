@@ -1284,3 +1284,192 @@
 }
 ```
 
+### 视频
+
+#### 1. 视频列表
+
+请求：`erpapi/video/getlist`
+
+请求方式: `Get`
+
+请求参数：
+
+| 参数名        | 类型 | 必需 | 值   | 说明                |
+| ------------- | ---- | ---- | ---- | ------------------- |
+| enterprise_id | int  | 是   | 1    | 企业id              |
+| status        | int  | 否   | 1    | 状态 0. 禁用 1.启用 |
+| group_id      | int  | 否   | 1    | 分组id              |
+| language      | int  | 否   | 1    | 语言                |
+| page          | int  | 否   | 1    | 页码                |
+| page_size     | int  | 否   | 1    | 条数                |
+
+返回参数：
+
+| 参数名        | 类型   | 说明     |
+| ------------- | ------ | -------- |
+| id            | string | id       |
+| enterprise_id | string | 企业id   |
+| group_id      | string | 分组id   |
+| title         | string | 标题     |
+| publish_time  | string | 发布时间 |
+| status        | string | 状态     |
+| language      | string | 语言     |
+| keyword       | string | 关键字   |
+| intro         | string | 视频简介 |
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": {
+        "items": [
+            {
+                "id": "1",
+                "enterprise_id": "123",
+                "group_id": "12",
+                "title": "这是一个视频",
+                "publish_time": "2147483647",
+                "status": "0",
+                "language": "1",
+                "keyword": "12312",
+                "intro": "123123",
+                "url": "12313212",
+                "staff_id": "12312",
+                "utime": "1675062878",
+                "ctime": "1675062804"
+            }
+        ],
+        "count": "1"
+    },
+    "page": []
+}
+```
+
+#### 2. 视频详情
+
+请求：`/erpapi/video/getinfo`
+
+请求参数：
+
+| 参数名 | 类型 | 必需 | 值   | 说明   |
+| ------ | ---- | ---- | ---- | ------ |
+| id     | int  | 是   | 1    | 项目id |
+
+返回参数：
+
+| 参数名        | 类型   | 说明     |
+| ------------- | ------ | -------- |
+| id            | string | id       |
+| enterprise_id | string | 企业id   |
+| group_id      | string | 分组id   |
+| title         | string | 标题     |
+| publish_time  | string | 发布时间 |
+| status        | string | 状态     |
+| language      | string | 语言     |
+| keyword       | string | 关键字   |
+| intro         | string | 视频简介 |
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": {
+        "id": "1",
+        "enterprise_id": "123",
+        "group_id": "12",
+        "title": "这是一个视频",
+        "publish_time": "2147483647",
+        "status": "0",
+        "language": "1",
+        "keyword": "12312",
+        "intro": "123123",
+        "url": "12313212",
+        "staff_id": "12312",
+        "is_del": "0",
+        "utime": "1675062878",
+        "ctime": "1675062804"
+    },
+    "page": []
+}
+```
+
+#### 3. 视频创建,更新
+
+请求：`/erpapi/video/update`
+
+请求方式: `Post`
+
+请求参数：
+
+| 参数名        | 类型   | 说明                |
+| ------------- | ------ | ------------------- |
+| id            | string | id                  |
+| enterprise_id | string | 企业id              |
+| group_id      | string | 分组id              |
+| title         | string | 标题                |
+| publish_time  | string | 发布时间            |
+| status        | string | 状态 0. 禁用 1.启用 |
+| language      | string | 语言                |
+| keyword       | string | 关键字              |
+| intro         | string | 视频简介            |
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": [],
+    "page": []
+}
+```
+
+#### 4. 视频删除
+
+请求：`/erpapi/video/delete`
+
+请求方式: `Get`
+
+请求参数：
+
+| 参数名 | 类型 | 必需 | 值   | 说明   |
+| ------ | ---- | ---- | ---- | ------ |
+| id     | int  | 是   | 1    | 项目id |
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": {},
+    "page": []
+}
+```
+
+#### 5. 视频状态更新
+
+请求：`/erpapi/video/status`
+
+请求方式: `Get`
+
+请求参数：
+
+| 参数名 | 类型 | 必需 | 值   | 说明                |
+| ------ | ---- | ---- | ---- | ------------------- |
+| id     | int  | 是   | 1    | 项目id              |
+| status | int  | 是   | 1    | 状态 0. 禁用 1.启用 |
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": {},
+    "page": []
+}
+```
+

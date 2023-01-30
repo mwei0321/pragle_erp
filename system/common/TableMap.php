@@ -94,4 +94,7 @@ class TableMap
 	const Project                 = "project";
 	const ProjectCommodity        = "project_commodity";
 	const ProjectCompetitor       = "project_competitor";
+
+	// 视频
+	const Video                   = "video";
 }
