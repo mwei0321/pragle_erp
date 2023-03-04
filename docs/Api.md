@@ -1065,7 +1065,7 @@
 | 参数名                 | 类型   | 说明                                           |      |
 | ---------------------- | ------ | ---------------------------------------------- | ---- |
 | id                     | string | id                                             |      |
-| staff_id               | string | 跟进员工id                                     |      |
+| staff_id               | array | 跟进员工id                                     |      |
 | enterprise_id          | string | 跟进员工企业id                                 |      |
 | customer_id            | string | 客户联系人id                                   |      |
 | customer_enterprise_id | string | 客户企业id                                     |      |
@@ -1141,7 +1141,7 @@
 | 参数名                 | 类型   | 说明                                           |      |
 | ---------------------- | ------ | ---------------------------------------------- | ---- |
 | id                     | string | id                                             |      |
-| staff_id               | string | 跟进员工id                                     |      |
+| staff_id               | array | 跟进员工id                                     |      |
 | enterprise_id          | string | 跟进员工企业id                                 |      |
 | customer_id            | string | 客户联系人id                                   |      |
 | customer_enterprise_id | string | 客户企业id                                     |      |
@@ -1206,7 +1206,7 @@
 | 参数名                 | 类型   | 说明                                           |      |
 | ---------------------- | ------ | ---------------------------------------------- | ---- |
 | id                     | int    | id 注意:有`id`为更新, 无`id`或者`0`为新增      |      |
-| staff_id               | int    | 跟进员工id                                     |      |
+| staff_id               | array    | 跟进员工id                                     |      |
 | enterprise_id          | int    | 跟进员工企业id                                 |      |
 | customer_id            | int    | 客户联系人id                                   |      |
 | customer_enterprise_id | int    | 客户企业id                                     |      |

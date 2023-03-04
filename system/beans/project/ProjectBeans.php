@@ -8,11 +8,12 @@ use system\common\BaseBean;
 class ProjectBeans extends BaseBean
 {
     public $id                     = 0;
-    public $staff_id               = 0; // 负责人id
+    public $staff_id               = []; // 负责人id
     public $enterprise_id          = 0; // 负责人企业id
     public $customer_id            = 0; // 顾客联系人id
     public $customer_enterprise_id = 0; // 顾客企业id
     public $name                   = ''; // 项目名称
+    public $imgs                   = ''; // 项目图片
     public $country                = ''; // 国家
     public $province               = ''; // 省
     public $city                   = ''; // 市/区

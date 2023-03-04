@@ -55,6 +55,7 @@ class ProjectController extends InitController
 
         // 提取详情
         $info = (new Query())->from(TableMap::Project)->where(["id" => $projectBeans->id])->one();
+        $info['staff_id'] && $info['staff_id'] = json_decode($info['staff_id']);
 
         return $this->reJson($info);
     }
@@ -94,8 +95,14 @@ class ProjectController extends InitController
         // 初始化数据库
         $dbObj = ServiceFactory::getInstance('BaseDB', TableMap::Project);
 
+        // 参数错误
+        if (is_array($projectBeans->staff_id)) {
+            return $this->reJson(["staff_id" => $projectBeans->staff_id], '参数错误', 400);
+        }
+
         // 转存数据
         $data = $projectBeans->toArray();
+        $data['staff_id'] = json_encode($projectBeans->staff_id);
 
         // 开启事务
         $connection = \Yii::$app->db->beginTransaction();

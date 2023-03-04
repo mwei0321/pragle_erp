@@ -23,8 +23,8 @@ class ProjectServices
         $query = (new Query())->from(TableMap::Project)->where(["is_del" => 0]);
 
         // 跟进员工
-        if ($projectBeans->staff_id > 0) {
-            $query->where("staff_id", $projectBeans->staff_id);
+        if (intval($projectBeans->staff_id) > 0) {
+            $query->where(new Expression('FIND_IN_SET(' . $projectBeans->staff_id . ', staff_id)'));
         }
 
         // 跟进状态 1成交，2丢失，3跟进中，4无回应，5项目推迟
