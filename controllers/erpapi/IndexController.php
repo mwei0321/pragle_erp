@@ -13,9 +13,9 @@
 namespace app\controllers\erpapi;
 
 use yii\web\Controller;
-use services\common\{ServiceFactory, TableMap};
+use system\common\{ServiceFactory, HelperFuns, TableMap};
 use services\traits\BindBeanParamsTrait;
-use system\common\HelperFuns;
+use yii\db\Query;
 
 class IndexController extends Controller
 {
@@ -46,8 +46,44 @@ class IndexController extends Controller
             "app/Jobs/PushTaskQueue.php",
         ];
 
-        $path = "D:/Code/Ancda/PHP/ancda_crm/";
+        $path = "E:/GoCode/ancda/ancda_crm/";
 
-        var_dump(HelperFuns::copyFile($path, $a));
+        $list = HelperFuns::copyFile($path, $a);
+        var_dump($list['count'], sort($list['list']));
+        exit();
+    }
+
+    function actionSt()
+    {
+        $day = date("Y-m-d");
+        $table = "tbPlayLog" . date("Ymd");
+        $list = (new Query())->from($table)
+            ->select("`devno`,count(`tplid`) adv_num,SUM(`end`-`start`) play_time")
+            ->groupBy("devno")
+            ->all(\Yii::$app->dbdata);
+
+        var_dump($list);
+        exit();
+
+        foreach ($list as $v) {
+            $v['date'] = $day;
+            $result = \Yii::$app->db->createCommand()->insert(TableMap::DeviceAdvStatistic, $v)->execute();
+            if ($result === false) {
+                HelperFuns::writeLog("error:" . json_encode($v), "advdevstatistic.log", "insert new cornDevAdvStatistic");
+            }
+        }
+
+        $list = (new Query())->from($table)
+            ->select("`tplid` adv_id,count(`devno`) device_num,SUM(`end`-`start`) play_time")
+            ->groupBy("tplid")
+            ->all(\Yii::$app->dbdata);
+
+        foreach ($list as $v) {
+            $v['date'] = $day;
+            $result = \Yii::$app->db->createCommand()->insert(TableMap::AdvDeviceStatistic, $v)->execute();
+            if ($result === false) {
+                HelperFuns::writeLog("error:" . json_encode($v), "advdevstatistic.log", "insert new cornAdvDevStatistic");
+            }
+        }
     }
 }

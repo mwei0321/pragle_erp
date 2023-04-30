@@ -1473,3 +1473,116 @@
 }
 ```
 
+### 设备，广告统计
+
+#### 1. 设备播放统计列表
+
+请求：`erpapi/devadv/getdev`
+
+请求方式: `Get`
+
+请求参数：
+
+| 参数名    | 类型   | 必需 | 值               | 说明     |
+| --------- | ------ | ---- | ---------------- | -------- |
+| stime     | string | 否   | 2023-04-20       | 开始时间 |
+| etime     | string | 否   | 2023-04-20       | 结束时间 |
+| dev_no    | string | 否   | FE4BA59DD1D5836E | 设备号   |
+| page      | int    | 否   | 1                | 页码     |
+| page_size | int    | 否   | 1                | 条数     |
+
+返回参数：
+
+| 参数名          | 类型   | 说明            |
+| --------------- | ------ | --------------- |
+| id              | string | id              |
+| devno           | string | 企业id          |
+| dev_type        | string | 设备类型        |
+| adv_id          | int    | 广告id          |
+| play_num        | int    | 播放次数        |
+| play_time       | int    | 播放时间 （秒） |
+| enterprise_name | string | 企业名          |
+| enterprise_nike | string | 企业简称        |
+| device_name     | string | 设备名          |
+| adv_name        | string | 广告名          |
+
+
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": [
+        {
+            "id": 190818,
+            "devno": "FE4BA59DD1D5836E",
+            "adv_id": 110180,
+            "play_num": 1152,
+            "play_time": 17247,
+            "enterprise_name": "sgdaikin2",
+            "enterprise_nike": "",
+            "device_name": "WM Centrepoint",
+            "dev_no": "FE4BA59DD1D5836E",
+            "dev_type": "4",
+            "adv_name": ""
+        },
+    ],
+    "page": []
+}
+```
+
+#### 2. 广告播放统计列表
+
+请求：`erpapi/devadv/getadv`
+
+请求方式: `Get`
+
+请求参数：
+
+| 参数名    | 类型   | 必需 | 值         | 说明     |
+| --------- | ------ | ---- | ---------- | -------- |
+| stime     | string | 否   | 2023-04-20 | 开始时间 |
+| etime     | string | 否   | 2023-04-20 | 结束时间 |
+| adv_id    | int    | 否   | 12         | 广告id   |
+| page      | int    | 否   | 1          | 页码     |
+| page_size | int    | 否   | 1          | 条数     |
+
+返回参数：
+
+| 参数名          | 类型   | 说明            |
+| --------------- | ------ | --------------- |
+| id              | string | id              |
+| devno           | string | 企业id          |
+| dev_type        | string | 设备类型        |
+| adv_id          | int    | 广告id          |
+| play_num        | int    | 播放次数        |
+| play_time       | int    | 播放时间 （秒） |
+| enterprise_name | string | 企业名          |
+| enterprise_nike | string | 企业简称        |
+| device_name     | string | 设备名          |
+| adv_name        | string | 广告名          |
+
+
+
+```json
+{
+    "code": 200,
+    "msg": "return success!",
+    "data": [
+        {
+            "id": 190818,
+            "devno": "FE4BA59DD1D5836E",
+            "adv_id": 110180,
+            "play_num": 1152,
+            "play_time": 17247,
+            "enterprise_name": "sgdaikin2",
+            "enterprise_nike": "",
+            "device_name": "WM Centrepoint",
+            "dev_no": "FE4BA59DD1D5836E",
+            "dev_type": "4",
+            "adv_name": ""
+        },
+    ],
+    "page": []
+}
+```

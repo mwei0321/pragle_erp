@@ -71,6 +71,7 @@ class TableMap
 	const TbVedio                 = "tbVedio";
 	const TbAnalysis              = "tbanalysis";
 	// 节目
+	const TbAddver                = "tbaddver";
 	const TbMakeAddver            = "tbmakeaddver"; // 节日主表 1
 	const TbPlayBase              = "tbplaybase";
 	const TbPlayList              = "tbplaylist"; // 播放列表
@@ -97,4 +98,8 @@ class TableMap
 
 	// 视频
 	const Video                   = "video";
+
+	// 设备，节目统计
+	const DeviceAdvStatistic      = "device_adv_statistic";
+	const AdvDeviceStatistic      = "adv_device_statistic";
 }

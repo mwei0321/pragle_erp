@@ -51,6 +51,8 @@ class SrvMap
     public $SyncWalletSrv         = "system\services\syncdata\WalletSrv";
     public $SyncFlowSrv           = "system\services\syncdata\FlowSrv";
 
+    // 统计
+    public $DeviceAdvSrv          = "system\services\statistic\DeviceAdvSrv";
 
     // 引用旧的代码
 

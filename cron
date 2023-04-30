@@ -5,6 +5,7 @@
 # 40 8 * * 1 /usr/local/bin/php /var/www/html/yii action/everyweek
 * * * * * curl http://localhost:8080/cron/action/test >> /var/www/html/web/tt.html
 15 8 * * * curl -o /var/www/html/cronlog.txt http://localhost:8080/cron/yestoday/index
+15 1 * * * curl -o /var/www/html/cronlog.txt http://localhost:8080/cron/devadv/everyday
 25 8 * * * curl -o /var/www/html/cronlog.txt http://localhost:8080/cron/action/everyday
 30 8 1-12 * * curl -o /var/www/html/cronlog.txt http://localhost:8080/cron/action/everymonth
 40 8 * * 1 curl -o /var/www/html/cronlog.txt http://localhost:8080/cron/action/everyweek

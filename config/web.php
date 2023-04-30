@@ -84,6 +84,13 @@ $config = [
             'password' => $MYSQL_PASSWORD,
             'charset' => 'utf8',
         ],
+        'dbcenter' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => $MYSQL_DB_CENTER_TO_DSN,
+            'username' => $MYSQL_USERNAME,
+            'password' => $MYSQL_PASSWORD,
+            'charset' => 'utf8',
+        ],
         'dbcenter_from' => [
             'class' => 'yii\db\Connection',
             'dsn' => $MYSQL_DB_CENTER_FROM_DSN,

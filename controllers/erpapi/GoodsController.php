@@ -15,4 +15,6 @@ class GoodsController extends InitController
     function actionIndex() {
         
     }
+
+
 }
