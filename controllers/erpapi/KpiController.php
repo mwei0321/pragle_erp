@@ -76,7 +76,7 @@ class KpiController extends InitController
         return $this->reJson($year);
     }
 
-    function actionAddyear(KpiBeans $kpiParams)
+    function actionUpyear(KpiBeans $kpiParams)
     {
         if (ServiceFactory::getInstance("BaseDB", TableMap::ActionYear)->insert(['year' => $kpiParams->year]) < 1) {
             return $this->reJson([], "fail", 400);
@@ -178,7 +178,8 @@ class KpiController extends InitController
         return $this->reJson($list);
     }
 
-    function actionGetkpiactiontree(KpiBeans $kpiBeans) {
+    function actionGetkpiactiontree(KpiBeans $kpiBeans)
+    {
         $list = ServiceFactory::getInstance("ActionKpiSrv")->getKpiActionOptionTree($kpiBeans);
 
         return $this->reJson($list);

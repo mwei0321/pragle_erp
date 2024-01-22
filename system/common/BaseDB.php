@@ -158,6 +158,25 @@ class BaseDB
     }
 
     /**
+     * 基于条件更新数据
+     * @param  array $_data 更新的数据
+     * @param  string $_condition 条件
+     * @param  string $_tableName 表名
+     * @return [type] [description]
+     * @Date   2019-03-26T19:15:33+0800
+     * @Author MaWei
+     * @Link   http://www.mawei.live
+     */
+    function updateByCondition($_condition, $_data,  $_tableName = null)
+    {
+        $tableName = $_tableName ? $_tableName : $this->tableName;
+        return \Yii::$app->db->createCommand()
+            ->update($tableName, $_data, $_condition)
+            ->execute();
+    }
+
+
+    /**
      * 返回总数
      * @param  string $_tableName 表名
      * @param  array $_where 条件

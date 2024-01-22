@@ -29,9 +29,22 @@ class ProjectController extends InitController
      */
     function actionGetlist(ProjectBeans $projectBeans)
     {
-
         // 提取列表
         $list = ServiceFactory::getInstance("ProjectSrv")->getList($projectBeans);
+        foreach ($list as $k => $v) {
+            $list[$k]['id']           = intval($v['id']) ?? 0;
+            $list[$k]['staff_id']     = intval($v['staff_id']) ?? 0;
+            $list[$k]['customer_id']  = intval($v['customer_id']) ?? 0;
+            $list[$k]['series_id']    = intval($v['series_id']) ?? 0;
+            $list[$k]['modal_id']     = intval($v['modal_id']) ?? 0;
+            $list[$k]['area']         = intval($v['area']) ?? 0;
+            $list[$k]['create_at']    = intval($v['create_at']) ?? 0;
+            $list[$k]['state']        = intval($v['state']) ?? 0;
+            $list[$k]['level']        = intval($v['level']) ?? 0;
+            $list[$k]['start_at']     = intval($v['start_at']) ?? 0;
+            $list[$k]['end_at']       = intval($v['end_at']) ?? 0;
+            $list[$k]['follow_times'] = intval($v['follow_times']) ?? 0;
+        }
 
         return $this->reJson([
             'items' => $list,
@@ -118,6 +131,20 @@ class ProjectController extends InitController
             //失败回滚
             $connection->rollback();
             return $this->reJson([$result], '数据入库失败!', 400);
+        }
+
+        // 修改客户state
+        if ($projectBeans->customer_id) {
+            $result = $dbObj->updateById([
+                "and",
+                ["id" => $projectBeans->customer_id],
+                ["state", "<", 3]
+            ], ["state" => 1, "state_time" => time()], TableMap::Enterprise);
+            if ($result === false) {
+                //失败回滚
+                $connection->rollback();
+                return $this->reJson([], '数据入库失败!', 400);
+            }
         }
 
         // 提交事务

@@ -23,7 +23,7 @@ class ProjectServices
         $query = (new Query())->from(TableMap::Project)->where(["is_del" => 0]);
 
         // 跟进员工
-        if (intval($projectBeans->staff_id) > 0) {
+        if (count($projectBeans->staff_id) > 0) {
             $query->where(new Expression('FIND_IN_SET(' . $projectBeans->staff_id . ', staff_id)'));
         }
 

@@ -43,4 +43,37 @@ class ActionstatController extends InitController
             'count' => $statBeans->count,
         ]);
     }
+
+    /**
+     * 返回动作统计
+     *
+     * @param  ActionStatBeans $statBeans
+     * date: 2024-01-21 12:35:21
+     * @author  <mawei.live>
+     * @return void
+     */
+    function actionStatweek(ActionStatBeans $statBeans)
+    {
+        // 参数过滤
+        if ($statBeans->enterprise_id < 1) {
+            return $this->reJson([$statBeans], 'param error', 400);
+        }
+
+        // 时间
+        if ($statBeans->stime && $statBeans->etime) {
+            $statBeans->stime = date('Y-m-d H:i:s', $statBeans->stime);
+            $statBeans->etime = date('Y-m-d H:i:s', $statBeans->etime);
+        } else {
+            $statBeans->stime = date('Y-m-d H:i:s', strtotime("-3 month"));
+            $statBeans->etime = date('Y-m-d H:i:s');
+        }
+
+        // 提取结果
+        $list = ServiceFactory::getInstance("ActionStatSrv")->getActionStatByWeek($statBeans);
+        // 返回
+        return $this->reJson([
+            'items' => $list,
+            'count' => $statBeans->count,
+        ]);
+    }
 }

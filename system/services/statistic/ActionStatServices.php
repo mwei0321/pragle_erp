@@ -95,6 +95,73 @@ class ActionStatServices
     }
 
     /**
+     * 基于周期统计
+     *
+     * @param  \system\beans\statistic\ActionStatBeans $statBeans
+     * date: 2024-01-21 14:14:54
+     * @author  <mawei.live>
+     * @return void
+     */
+    function getActionStatByWeek(ActionStatBeans $statBeans)
+    {
+        // 字段
+        $field = "c.id AS action_id,c.parent_id,project_name name,group_id,state,ad.value";
+
+        // 构建查询
+        $query = (new Query())->from(TableMap::Config . ' AS c')
+            ->where([
+                'and',
+                ['in', 'c.group_id', SrvConfig::$ActionGroup],
+                // [">", "c.parent_id", 0]
+            ]);
+
+        // 条件搜索
+        $adQuery = (new Query())->from(TableMap::ActionDayStatisticsLog)
+            ->where([
+                "enterprise_id" => $statBeans->enterprise_id,
+            ])
+            ->select("action_id,SUM(`value`) value")
+            ->groupBy("action_id,week_idx");
+
+
+        // 时间段
+        if ($statBeans->stime && $statBeans->etime) {
+            $adQuery->andWhere([">=", "ctime", strtotime($statBeans->stime)])
+                ->andWhere(["<=", "ctime", strtotime($statBeans->etime)]);
+        }
+
+
+        // 部门搜索
+        if ($statBeans->department_id > 0) {
+            // 提取部门下级
+            $departmentBeans = (new \system\beans\user\DepartmentBeans());
+            $departmentBeans->enterprise_id = $statBeans->enterprise_id;
+            $departmentList = ServiceFactory::getInstance("DepartmentSrv")->getDepartmentList($departmentBeans);
+            $departmentIds = $departmentList[$statBeans->department_id]['child_ids'] ?? [];
+            $departmentIds[] = $statBeans->department_id;
+
+            // 部门搜索
+            $adQuery->andWhere(["IN", "department_id", $departmentIds]);
+        }
+
+        // 员工搜索
+        if ($statBeans->staff_id > 0) {
+            $adQuery->andWhere(["staff_id" => $statBeans->staff_id]);
+        }
+
+        // 提示列表
+        $list = $query->select($field)
+            ->leftJoin(["ad" => $adQuery], "ad.action_id = c.id")
+            ->limit($statBeans->limit)
+            ->offset($statBeans->offset)
+            ->all();
+        $list = $this->mergeGroup($list);
+
+        return $list;
+    }
+
+
+    /**
      * 分类合并排序
      * @param  [type] $_list
      * date: 2022-05-09 14:46:30
