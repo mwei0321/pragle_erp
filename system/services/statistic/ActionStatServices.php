@@ -105,18 +105,10 @@ class ActionStatServices
     function getActionStatByWeek(ActionStatBeans $statBeans)
     {
         // 字段
-        $field = "c.id AS action_id,c.parent_id,project_name name,group_id,state,ad.value";
-
-        // 构建查询
-        $query = (new Query())->from(TableMap::Config . ' AS c')
-            ->where([
-                'and',
-                ['in', 'c.group_id', SrvConfig::$ActionGroup],
-                // [">", "c.parent_id", 0]
-            ]);
+        $field = "*";
 
         // 条件搜索
-        $adQuery = (new Query())->from(TableMap::ActionDayStatisticsLog)
+        $query = (new Query())->from(TableMap::ActionDayStatisticsLog)
             ->where([
                 "enterprise_id" => $statBeans->enterprise_id,
             ])
@@ -126,7 +118,7 @@ class ActionStatServices
 
         // 时间段
         if ($statBeans->stime && $statBeans->etime) {
-            $adQuery->andWhere([">=", "ctime", strtotime($statBeans->stime)])
+            $query->andWhere([">=", "ctime", strtotime($statBeans->stime)])
                 ->andWhere(["<=", "ctime", strtotime($statBeans->etime)]);
         }
 
@@ -141,23 +133,42 @@ class ActionStatServices
             $departmentIds[] = $statBeans->department_id;
 
             // 部门搜索
-            $adQuery->andWhere(["IN", "department_id", $departmentIds]);
+            $query->andWhere(["IN", "department_id", $departmentIds]);
         }
 
         // 员工搜索
         if ($statBeans->staff_id > 0) {
-            $adQuery->andWhere(["staff_id" => $statBeans->staff_id]);
+            $query->andWhere(["staff_id" => $statBeans->staff_id]);
         }
 
         // 提示列表
-        $list = $query->select($field)
-            ->leftJoin(["ad" => $adQuery], "ad.action_id = c.id")
-            ->limit($statBeans->limit)
-            ->offset($statBeans->offset)
-            ->all();
-        $list = $this->mergeGroup($list);
+        $list = $query->select($field)->all();
+        $list = HelperFuns::fieldtokey($list, 'action_id');
 
-        return $list;
+        // 提取动作列表
+        $actionList = ServiceFactory::getInstance("BaseDB")->getListByCondition(
+            ["in", 'group_id', SrvConfig::$ActionGroup],
+            "project_name,state",
+            TableMap::Config,
+            "interior_rank asc",
+        );
+
+        $data = [];
+        foreach ($actionList as $k => $v) {
+            $data[$k]['action_id'] = $v['id'] ?? 0;
+            $data[$k]['name'] = $v['project_name'] ?? '';
+            $data[$k]['parent_id'] = $v['parent_id'] ?? 0;
+            $data[$k]['group_id'] = $v['group_id'] ?? 0;
+            $data[$k]['state'] = $v['state'] ?? 0;
+            if (isset($list[$v['id']])) {
+                $data[$k]['value'] = $list[$v['id']]['value'] ?? 0;
+                $data[$k]['week_idx'] = $list[$v['id']]['week_idx'] ?? 0;
+                $data[$k]['date'] = date("Y-m-d", ($list[$v['id']]['ctime'] ?? 0));
+            }
+        }
+        $data = $this->mergeGroup($data);
+
+        return $data;
     }
 
 
